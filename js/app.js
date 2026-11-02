@@ -326,6 +326,51 @@
     els.closeMobNotebooksHubBtn = document.getElementById('closeMobNotebooksHubBtn');
     els.mobOpenNotepadCard = document.getElementById('mobOpenNotepadCard');
     els.mobOpenAtlasCard = document.getElementById('mobOpenAtlasCard');
+
+    // Barra Superiore Compatta Mobile & Tendina Strumenti
+    els.mobileCompactTopBar = document.getElementById('mobileCompactTopBar');
+    els.mobSampleTag = document.getElementById('mobSampleTag');
+    els.mobScoreVal = document.getElementById('mobScoreVal');
+    els.mobErrorsVal = document.getElementById('mobErrorsVal');
+    els.mobMenuToggleBtn = document.getElementById('mobMenuToggleBtn');
+    els.mobileHudDrawer = document.getElementById('mobileHudDrawer');
+    els.closeMobDrawerBtn = document.getElementById('closeMobDrawerBtn');
+    els.mobToggleRealisticTile = document.getElementById('mobToggleRealisticTile');
+    els.mobRealisticStatus = document.getElementById('mobRealisticStatus');
+    els.mobToggleDeviceTile = document.getElementById('mobToggleDeviceTile');
+    els.mobDevTileIcon = document.getElementById('mobDevTileIcon');
+    els.mobDevTileStatus = document.getElementById('mobDevTileStatus');
+    els.mobToggleSoundTile = document.getElementById('mobToggleSoundTile');
+    els.mobSoundTileIcon = document.getElementById('mobSoundTileIcon');
+    els.mobSoundTileStatus = document.getElementById('mobSoundTileStatus');
+    els.mobSkipSampleTile = document.getElementById('mobSkipSampleTile');
+    els.mobShareTile = document.getElementById('mobShareTile');
+    els.mobTotalScoreEl = document.getElementById('mobTotalScoreEl');
+    els.mobSolvedRatioEl = document.getElementById('mobSolvedRatioEl');
+
+    // Tendine Spazio Microscopio, Test e Diagnosi
+    els.mobileViewPickerWrap = document.getElementById('mobileViewPickerWrap');
+    els.mobileViewSelect = document.getElementById('mobileViewSelect');
+    els.mcAdvancedToggleBtn = document.getElementById('mcAdvancedToggleBtn');
+    els.mcAdvancedArrow = document.getElementById('mcAdvancedArrow');
+    els.mcAdvancedDrawer = document.getElementById('mcAdvancedDrawer');
+    els.mobileCatDropdownWrap = document.getElementById('mobileCatDropdownWrap');
+    els.mobileCategorySelect = document.getElementById('mobileCategorySelect');
+    els.mobileSpeciesDropdownWrap = document.getElementById('mobileSpeciesDropdownWrap');
+    els.mobileSpeciesSelect = document.getElementById('mobileSpeciesSelect');
+
+    // Tendina Ispezione Ravvicinata Sliders & Steppers
+    els.modalMacroStepDown = document.getElementById('modalMacroStepDown');
+    els.modalMacroStepUp = document.getElementById('modalMacroStepUp');
+    els.modalMicroStepDown = document.getElementById('modalMicroStepDown');
+    els.modalMicroStepUp = document.getElementById('modalMicroStepUp');
+    els.modalMcAdvancedToggleBtn = document.getElementById('modalMcAdvancedToggleBtn');
+    els.modalMcAdvancedArrow = document.getElementById('modalMcAdvancedArrow');
+    els.modalMcAdvancedDrawer = document.getElementById('modalMcAdvancedDrawer');
+
+    // Tendina Sezioni Atlante
+    els.mobileAtlasFilterWrap = document.getElementById('mobileAtlasFilterWrap');
+    els.mobileAtlasSectionSelect = document.getElementById('mobileAtlasSectionSelect');
   }
 
   function init() {
@@ -384,6 +429,7 @@
     updateDeviceModeUIElements();
     applyDeviceMode(resolveEffectiveIsMobile(), false);
     renderAtlasCards();
+    initMobileSpeciesDropdown();
     bindEvents();
     startNewRound();
   }
@@ -658,6 +704,9 @@
     els.speciesInput.value = '';
     els.speciesInput.disabled = false;
     els.clearInputBtn.classList.add('hidden');
+    if (els.mobileSpeciesSelect) {
+      els.mobileSpeciesSelect.value = '';
+    }
     els.submitGuessBtn.disabled = false;
     els.submitGuessBtn.innerHTML = '<span>Conferma Specie</span><span class="submit-arrow">→</span>';
     hideSuggestions();
@@ -864,6 +913,14 @@
     els.modalHoodAirLabel.textContent = state.hoodAirOn ? 'ON' : 'OFF';
     els.modalHoodLightBtn.classList.toggle('active', state.hoodLightOn);
     els.modalHoodLightLabel.textContent = state.hoodLightOn ? 'ON' : 'OFF';
+
+    // Sincronizza tendina superiore Smartphone HUD
+    if (els.mobRealisticStatus) {
+      els.mobRealisticStatus.textContent = state.realisticMode ? 'ON' : 'OFF';
+      if (els.mobToggleRealisticTile) {
+        els.mobToggleRealisticTile.classList.toggle('active', state.realisticMode);
+      }
+    }
   }
 
   function syncBench3DState() {
@@ -969,11 +1026,26 @@
     renderer.stopAnimation();
     window.labAudio.setHoodHum(false);
 
+    // Ripristina sempre il canvas principale 2D sul laboratorio
+    if (els.labCanvas) {
+      renderer.useCanvas(els.labCanvas);
+    }
+
     if (state.realisticMode && bench3d && bench3d.supported) {
       syncBench3DState();
       bench3d.resetCameraSmooth();
     }
+
     updateEnvironmentControlsForView();
+
+    if (state.isMobileLayout) {
+      setMobileTab('microscope');
+    }
+
+    requestAnimationFrame(() => {
+      if (renderer) renderer.resize();
+      if (bench3d) bench3d.resize();
+    });
   }
 
   function renderStainQuickPicker() {
@@ -1050,6 +1122,41 @@
     }
     if (els.mobNotesBadge) {
       els.mobNotesBadge.textContent = state.performedTests.size;
+    }
+
+    // Barra Superiore Compatta Mobile
+    if (els.mobSampleTag) {
+      els.mobSampleTag.textContent = `#${state.sampleNumber < 10 ? '0' : ''}${state.sampleNumber || 1}`;
+    }
+    if (els.mobScoreVal) {
+      els.mobScoreVal.textContent = state.potentialScore;
+    }
+    if (els.mobErrorsVal) {
+      els.mobErrorsVal.textContent = `${state.errors}/${MAX_ERRORS}`;
+    }
+
+    // Tendina Superiore Mobile
+    if (els.mobTotalScoreEl) {
+      els.mobTotalScoreEl.textContent = `${state.totalScore} pt`;
+    }
+    if (els.mobSolvedRatioEl) {
+      els.mobSolvedRatioEl.textContent = `${state.solvedIds.size} / ${BACTERIA_DB.length}`;
+    }
+    if (els.mobRealisticStatus) {
+      els.mobRealisticStatus.textContent = state.realisticMode
+        ? 'Attualmente: ATTIVA (3D & Foto Reali)'
+        : 'Attualmente: DISATTIVA (Veloce)';
+    }
+    if (els.mobDevTileIcon && els.mobDevTileStatus) {
+      els.mobDevTileIcon.textContent = state.isMobileLayout ? '📱' : '💻';
+      els.mobDevTileStatus.textContent = state.isMobileLayout
+        ? 'Smartphone touch attivo'
+        : 'Desktop panoramico attivo';
+    }
+    if (els.mobSoundTileIcon && els.mobSoundTileStatus) {
+      const audioOn = window.labAudio && window.labAudio.enabled;
+      els.mobSoundTileIcon.textContent = audioOn ? '🔊' : '🔇';
+      els.mobSoundTileStatus.textContent = audioOn ? 'Audio lab attivo' : 'Audio disattivato';
     }
 
     if (els.fsScoreEl) els.fsScoreEl.textContent = state.potentialScore;
@@ -1129,9 +1236,36 @@
     }
   }
 
+  function populateMobileViewSelect() {
+    if (!els.mobileViewSelect) return;
+    els.mobileViewSelect.innerHTML = '';
+
+    const opt0 = document.createElement('option');
+    opt0.value = 'primary';
+    opt0.textContent = '🧫 Piastra Primaria';
+    els.mobileViewSelect.appendChild(opt0);
+
+    const allKeys = new Set([...state.performedTests.keys(), ...state.pendingTests.keys()]);
+    for (const testId of allKeys) {
+      const meta = TESTS_CATALOG.find((t) => t.id === testId);
+      if (!meta) continue;
+      const isPending = state.pendingTests.has(testId);
+      const opt = document.createElement('option');
+      opt.value = testId;
+      opt.textContent = `${meta.icon} ${meta.shortName}${isPending ? ' (in corso ⏳)' : ''}`;
+      els.mobileViewSelect.appendChild(opt);
+    }
+
+    els.mobileViewSelect.value = state.activeViewKey || 'primary';
+    if (els.mobileViewPickerWrap) {
+      els.mobileViewPickerWrap.classList.remove('hidden');
+    }
+  }
+
   function renderUnlockedViewTabs() {
     populateViewTabsBar(els.unlockedViewsBar, true);
     populateViewTabsBar(els.modalUnlockedViewsBar, false);
+    populateMobileViewSelect();
   }
 
   function getRealisticInstruction(testId) {
@@ -1189,6 +1323,9 @@
 
   function switchLabView(viewKey, startInteractive) {
     state.activeViewKey = viewKey;
+    if (els.mobileViewSelect) {
+      els.mobileViewSelect.value = viewKey;
+    }
     renderUnlockedViewTabs();
     updateEnvironmentControlsForView();
 
@@ -1486,54 +1623,98 @@
   // =========================================================================
   // ESECUZIONE TEST (RAPIDA VS REALISTICA CON SCHERMATE DEDICATE)
   // =========================================================================
+  function createTestCardElement(t) {
+    const doneRes = state.performedTests.get(t.id);
+    const pendingRes = state.pendingTests.get(t.id);
+
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className =
+      'test-card-btn' + (doneRes ? ' done' : pendingRes ? ' in-progress' : '');
+
+    const topRow = document.createElement('div');
+    topRow.className = 'test-card-top';
+
+    const nameWrap = document.createElement('div');
+    nameWrap.className = 'test-name-wrap';
+    nameWrap.innerHTML = `<span>${t.icon}</span><span>${escapeHtml(t.name)}</span>`;
+
+    const rightPill = document.createElement('span');
+    if (doneRes) {
+      rightPill.className = `obs-badge tone-${doneRes.tone || 'success'}`;
+      rightPill.textContent = doneRes.badge;
+    } else if (pendingRes) {
+      rightPill.className = 'obs-badge tone-amber';
+      rightPill.textContent = 'IN CORSO ⏳';
+    } else {
+      rightPill.className = 'test-cost-pill';
+      rightPill.textContent = state.roundEnded ? 'GRATIS' : `−${t.cost} pt`;
+    }
+
+    topRow.appendChild(nameWrap);
+    topRow.appendChild(rightPill);
+
+    const desc = document.createElement('p');
+    desc.className = 'test-desc';
+    desc.textContent = doneRes
+      ? doneRes.detail
+      : pendingRes
+      ? 'Clicca per riaprire la postazione e completare questo test.'
+      : t.principle;
+
+    card.appendChild(topRow);
+    card.appendChild(desc);
+
+    card.addEventListener('click', () => runDiagnosticTest(t));
+    return card;
+  }
+
   function renderCategoryTests() {
+    if (!els.testsListContainer) return;
     els.testsListContainer.innerHTML = '';
-    const tests = TESTS_CATALOG.filter((t) => t.category === state.activeCategory);
 
-    for (const t of tests) {
-      const doneRes = state.performedTests.get(t.id);
-      const pendingRes = state.pendingTests.get(t.id);
+    if (state.activeCategory === 'all') {
+      const categories = [
+        { id: 'stains', title: '🔬 Colorazioni al Microscopio' },
+        { id: 'biochem', title: '🫧 Prove Biochimiche ed Enzimatiche' },
+        { id: 'media', title: '🧫 Terreni Selettivi e Differenziali' }
+      ];
 
-      const card = document.createElement('button');
-      card.type = 'button';
-      card.className =
-        'test-card-btn' + (doneRes ? ' done' : pendingRes ? ' in-progress' : '');
+      categories.forEach((cat) => {
+        const tests = TESTS_CATALOG.filter((t) => t.category === cat.id);
+        const sec = document.createElement('div');
+        sec.className = 'test-accordion-section';
 
-      const topRow = document.createElement('div');
-      topRow.className = 'test-card-top';
+        const headerBtn = document.createElement('button');
+        headerBtn.type = 'button';
+        headerBtn.className = 'test-accordion-header open';
+        const doneCount = tests.filter((t) => state.performedTests.has(t.id)).length;
+        headerBtn.innerHTML = `
+          <span>${cat.title} (${doneCount}/${tests.length})</span>
+          <span class="acc-arrow">▼</span>
+        `;
 
-      const nameWrap = document.createElement('div');
-      nameWrap.className = 'test-name-wrap';
-      nameWrap.innerHTML = `<span>${t.icon}</span><span>${escapeHtml(t.name)}</span>`;
+        const bodyDiv = document.createElement('div');
+        bodyDiv.className = 'test-accordion-body';
+        tests.forEach((t) => {
+          bodyDiv.appendChild(createTestCardElement(t));
+        });
 
-      const rightPill = document.createElement('span');
-      if (doneRes) {
-        rightPill.className = `obs-badge tone-${doneRes.tone || 'success'}`;
-        rightPill.textContent = doneRes.badge;
-      } else if (pendingRes) {
-        rightPill.className = 'obs-badge tone-amber';
-        rightPill.textContent = 'IN CORSO ⏳';
-      } else {
-        rightPill.className = 'test-cost-pill';
-        rightPill.textContent = state.roundEnded ? 'GRATIS' : `−${t.cost} pt`;
+        headerBtn.addEventListener('click', () => {
+          window.labAudio.playClick();
+          const isOpen = headerBtn.classList.toggle('open');
+          bodyDiv.classList.toggle('collapsed', !isOpen);
+        });
+
+        sec.appendChild(headerBtn);
+        sec.appendChild(bodyDiv);
+        els.testsListContainer.appendChild(sec);
+      });
+    } else {
+      const tests = TESTS_CATALOG.filter((t) => t.category === state.activeCategory);
+      for (const t of tests) {
+        els.testsListContainer.appendChild(createTestCardElement(t));
       }
-
-      topRow.appendChild(nameWrap);
-      topRow.appendChild(rightPill);
-
-      const desc = document.createElement('p');
-      desc.className = 'test-desc';
-      desc.textContent = doneRes
-        ? doneRes.detail
-        : pendingRes
-        ? 'Clicca per riaprire la postazione e completare questo test.'
-        : t.principle;
-
-      card.appendChild(topRow);
-      card.appendChild(desc);
-
-      card.addEventListener('click', () => runDiagnosticTest(t));
-      els.testsListContainer.appendChild(card);
     }
   }
 
@@ -2159,6 +2340,10 @@
         els.atlasModal.classList.add('hidden');
       });
     }
+
+    if (state.isMobileLayout && sp && els.atlasTreeInspector) {
+      els.atlasTreeInspector.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   }
 
   // =========================================================================
@@ -2443,11 +2628,14 @@
       `;
 
       if (!alreadyTried) {
-        li.addEventListener('mousedown', (e) => {
+        const handleSelect = (e) => {
           e.preventDefault();
+          e.stopPropagation();
           window.labAudio.playClick();
           selectSpeciesIntoInput(sp.name);
-        });
+        };
+        li.addEventListener('pointerdown', handleSelect);
+        li.addEventListener('click', handleSelect);
       }
       els.suggestionsDropdown.appendChild(li);
     });
@@ -2463,9 +2651,116 @@
 
   function selectSpeciesIntoInput(speciesName) {
     els.speciesInput.value = speciesName;
+    if (els.mobileSpeciesSelect) {
+      els.mobileSpeciesSelect.value = speciesName;
+    }
     els.clearInputBtn.classList.remove('hidden');
     hideSuggestions();
-    els.speciesInput.focus();
+    if (!state.isMobileLayout) {
+      els.speciesInput.focus();
+    }
+  }
+
+  function getSpeciesOptgroupLabel(sp) {
+    const name = sp.name.toLowerCase();
+    const grp = (sp.taxonomyGroup || '').toLowerCase();
+    const gram = sp.microscopy.gram;
+    const shape = sp.microscopy.shape || '';
+
+    if (name.startsWith('staphylococcus') || grp.includes('staphylococc')) return '🟣 Stafilococchi (Gram+)';
+    if (name.startsWith('streptococcus') || name.startsWith('enterococcus') || grp.includes('streptococc')) return '🟣 Streptococchi & Enterococchi (Gram+)';
+    if (sp.microscopy.acidFast || name.startsWith('mycobacterium') || name.startsWith('nocardia')) {
+      return '🔴 Bacilli Acido-Resistenti (BAAR / Nocardia)';
+    }
+    if (name.startsWith('bacillus') || name.startsWith('clostridium') || name.startsWith('listeria') || (gram === 'pos' && shape.includes('rod'))) {
+      return '🟣 Bacilli & Clostridi Gram+';
+    }
+    if (
+      name.startsWith('escherichia') ||
+      name.startsWith('klebsiella') ||
+      name.startsWith('salmonella') ||
+      name.startsWith('shigella') ||
+      name.startsWith('enterobacter') ||
+      name.startsWith('serratia') ||
+      name.startsWith('proteus') ||
+      name.startsWith('yersinia') ||
+      name.startsWith('citrobacter') ||
+      name.startsWith('morganella') ||
+      name.startsWith('providencia') ||
+      grp.includes('enterobacteriaceae') ||
+      grp.includes('morganellaceae') ||
+      grp.includes('yersiniaceae')
+    ) {
+      return '🌸 Enterobatteri (Gram−)';
+    }
+    if (
+      name.startsWith('pseudomonas') ||
+      name.startsWith('acinetobacter') ||
+      name.startsWith('stenotrophomonas') ||
+      name.startsWith('burkholderia') ||
+      name.startsWith('alcaligenes') ||
+      name.startsWith('moraxella')
+    ) {
+      return '💧 Non-Fermentanti & Ossidasi+ (Gram−)';
+    }
+    if (
+      name.startsWith('neisseria') ||
+      name.startsWith('haemophilus') ||
+      name.startsWith('campylobacter') ||
+      name.startsWith('helicobacter') ||
+      name.startsWith('legionella') ||
+      name.startsWith('bordetella') ||
+      name.startsWith('brucella') ||
+      name.startsWith('francisella') ||
+      name.startsWith('pasteurella') ||
+      name.startsWith('bartonella') ||
+      name.startsWith('kingella') ||
+      name.startsWith('eikenella') ||
+      name.startsWith('cardiobacterium') ||
+      name.startsWith('aggregatibacter')
+    ) {
+      return '🩺 Esigenti & Patogeni Particolari (Gram−)';
+    }
+    if (name.startsWith('vibrio') || name.startsWith('aeromonas') || name.startsWith('plesiomonas')) {
+      return '🌊 Vibrioni & Batteri Curvi (Gram−)';
+    }
+    if (
+      name.startsWith('bacteroides') ||
+      name.startsWith('fusobacterium') ||
+      name.startsWith('prevotella') ||
+      name.startsWith('porphyromonas') ||
+      grp.includes('anaerobio')
+    ) {
+      return '🧪 Batteri Anaerobi';
+    }
+    return gram === 'pos' ? '🟣 Altri Batteri Gram+' : '🌸 Altri Batteri Gram−';
+  }
+
+  function initMobileSpeciesDropdown() {
+    if (!els.mobileSpeciesSelect) return;
+    els.mobileSpeciesSelect.innerHTML =
+      '<option value="">-- Tocca qui per scegliere tra le 100 specie certificate --</option>';
+
+    const groupMap = new Map();
+    const sorted = [...BACTERIA_DB].sort((a, b) => a.name.localeCompare(b.name));
+
+    sorted.forEach((sp) => {
+      const g = getSpeciesOptgroupLabel(sp);
+      if (!groupMap.has(g)) groupMap.set(g, []);
+      groupMap.get(g).push(sp);
+    });
+
+    groupMap.forEach((speciesList, groupLabel) => {
+      const optgroup = document.createElement('optgroup');
+      optgroup.label = `${groupLabel} (${speciesList.length})`;
+      speciesList.forEach((sp) => {
+        const opt = document.createElement('option');
+        opt.value = sp.name;
+        opt.textContent = sp.name;
+        optgroup.appendChild(opt);
+      });
+      els.mobileSpeciesSelect.appendChild(optgroup);
+    });
   }
 
   function renderQuickChips() {
@@ -2562,6 +2857,9 @@
 
       els.speciesInput.value = '';
       els.clearInputBtn.classList.add('hidden');
+      if (els.mobileSpeciesSelect) {
+        els.mobileSpeciesSelect.value = '';
+      }
 
       renderHUD();
       renderAttemptsLog();
@@ -2822,16 +3120,30 @@
       });
     }
 
-    // Categorie test
+    // Categorie test (Desktop Tabs & Mobile Dropdown a tendina)
     document.querySelectorAll('.cat-tab').forEach((btn) => {
       btn.addEventListener('click', () => {
         window.labAudio.playClick();
         document.querySelectorAll('.cat-tab').forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
         state.activeCategory = btn.dataset.category;
+        if (els.mobileCategorySelect) {
+          els.mobileCategorySelect.value = state.activeCategory;
+        }
         renderCategoryTests();
       });
     });
+
+    if (els.mobileCategorySelect) {
+      els.mobileCategorySelect.addEventListener('change', (e) => {
+        window.labAudio.playClick();
+        state.activeCategory = e.target.value;
+        document.querySelectorAll('.cat-tab').forEach((b) => {
+          b.classList.toggle('active', b.dataset.category === state.activeCategory);
+        });
+        renderCategoryTests();
+      });
+    }
 
     // Apertura/chiusura Quaderno 1: Blocchetto Note
     const openNotepad = () => {
@@ -2897,6 +3209,9 @@
     const openAtlas = () => {
       window.labAudio.playPageFlip();
       els.atlasModal.classList.remove('hidden');
+      if (els.mobileAtlasSectionSelect) {
+        els.mobileAtlasSectionSelect.value = state.atlasFilter || 'all';
+      }
     };
     els.openAtlasBtn.addEventListener('click', openAtlas);
     els.openAtlasDeskBtn.addEventListener('click', openAtlas);
@@ -2969,30 +3284,47 @@
       }
     });
 
-    // Navigazione Segnalibri Atlante (Tutte le Specie, Albero Genealogico, Gruppi, Schemi)
+    function applyAtlasSection(f) {
+      const isTree = f === 'tree';
+      const isFlow = f === 'flowchart';
+
+      if (els.atlasFlowchartTab) els.atlasFlowchartTab.classList.toggle('hidden', !isFlow);
+      if (els.atlasTreeTab) els.atlasTreeTab.classList.toggle('hidden', !isTree);
+      if (els.atlasSpeciesTab) els.atlasSpeciesTab.classList.toggle('hidden', isFlow || isTree);
+      if (els.atlasSearchWrap) els.atlasSearchWrap.classList.toggle('hidden', isFlow || isTree);
+      if (els.atlasChipsBar) els.atlasChipsBar.classList.toggle('hidden', isFlow || isTree);
+
+      document.querySelectorAll('.bookmark-tab').forEach((t) => {
+        t.classList.toggle('active', t.dataset.atlasfilter === f);
+      });
+
+      if (els.mobileAtlasSectionSelect) {
+        els.mobileAtlasSectionSelect.value = f;
+      }
+
+      if (isTree) {
+        renderTaxonomyTree();
+      } else if (!isFlow) {
+        state.atlasFilter = f;
+        renderAtlasCards();
+      }
+    }
+
+    // Navigazione Segnalibri Atlante (Desktop & Tablet)
     document.querySelectorAll('.bookmark-tab').forEach((tab) => {
       tab.addEventListener('click', () => {
         window.labAudio.playPageFlip();
-        document.querySelectorAll('.bookmark-tab').forEach((t) => t.classList.remove('active'));
-        tab.classList.add('active');
-        const f = tab.dataset.atlasfilter;
-        const isTree = f === 'tree';
-        const isFlow = f === 'flowchart';
-
-        if (els.atlasFlowchartTab) els.atlasFlowchartTab.classList.toggle('hidden', !isFlow);
-        if (els.atlasTreeTab) els.atlasTreeTab.classList.toggle('hidden', !isTree);
-        if (els.atlasSpeciesTab) els.atlasSpeciesTab.classList.toggle('hidden', isFlow || isTree);
-        if (els.atlasSearchWrap) els.atlasSearchWrap.classList.toggle('hidden', isFlow || isTree);
-        if (els.atlasChipsBar) els.atlasChipsBar.classList.toggle('hidden', isFlow || isTree);
-
-        if (isTree) {
-          renderTaxonomyTree();
-        } else if (!isFlow) {
-          state.atlasFilter = f;
-          renderAtlasCards();
-        }
+        applyAtlasSection(tab.dataset.atlasfilter);
       });
     });
+
+    // Navigazione Sezioni Atlante (Mobile Dropdown a tendina)
+    if (els.mobileAtlasSectionSelect) {
+      els.mobileAtlasSectionSelect.addEventListener('change', (e) => {
+        window.labAudio.playPageFlip();
+        applyAtlasSection(e.target.value);
+      });
+    }
 
     // Filtri Rapidi Proprietà Batteriologiche (Chip Bar)
     if (els.atlasChipsBar) {
@@ -3126,6 +3458,9 @@
     els.clearInputBtn.addEventListener('click', () => {
       els.speciesInput.value = '';
       els.clearInputBtn.classList.add('hidden');
+      if (els.mobileSpeciesSelect) {
+        els.mobileSpeciesSelect.value = '';
+      }
       updateSuggestionsDropdown();
       els.speciesInput.focus();
     });
@@ -3195,6 +3530,9 @@
     els.soundToggleBtn.addEventListener('click', () => {
       const on = window.labAudio.toggle();
       els.soundIcon.textContent = on ? '🔊' : '🔇';
+      if (els.mobSoundTileIcon) els.mobSoundTileIcon.textContent = on ? '🔊' : '🔇';
+      if (els.mobSoundTileStatus) els.mobSoundTileStatus.textContent = on ? 'Audio lab attivo' : 'Audio disattivato';
+      if (els.mobToggleSoundTile) els.mobToggleSoundTile.classList.toggle('active', on);
       if (on) updateEnvironmentControlsForView();
     });
 
@@ -3370,6 +3708,142 @@
         window.labAudio.playClick();
         if (els.mobileNotebooksHub) els.mobileNotebooksHub.classList.add('hidden');
         openAtlas();
+      });
+    }
+
+    // =======================================================================
+    // NUOVI CONTROLLI OTTIMIZZATI SMARTPHONE: MENU A TENDINA & DRAWER HUD
+    // =======================================================================
+
+    // Tendina Superiore Smartphone HUD (Barra compatta da 50px + Drawer a comparsa)
+    if (els.mobMenuToggleBtn) {
+      els.mobMenuToggleBtn.addEventListener('click', () => {
+        window.labAudio.playClick();
+        if (els.mobileHudDrawer) {
+          els.mobileHudDrawer.classList.toggle('hidden');
+        }
+      });
+    }
+    if (els.closeMobDrawerBtn) {
+      els.closeMobDrawerBtn.addEventListener('click', () => {
+        window.labAudio.playClick();
+        if (els.mobileHudDrawer) {
+          els.mobileHudDrawer.classList.add('hidden');
+        }
+      });
+    }
+    if (els.mobToggleRealisticTile) {
+      els.mobToggleRealisticTile.addEventListener('click', () => {
+        toggleRealisticMode();
+      });
+    }
+    if (els.mobToggleDeviceTile) {
+      els.mobToggleDeviceTile.addEventListener('click', () => {
+        window.labAudio.playClick();
+        toggleDeviceMode();
+      });
+    }
+    if (els.mobToggleSoundTile) {
+      els.mobToggleSoundTile.addEventListener('click', () => {
+        const on = window.labAudio.toggle();
+        if (els.soundIcon) els.soundIcon.textContent = on ? '🔊' : '🔇';
+        if (els.mobSoundTileIcon) els.mobSoundTileIcon.textContent = on ? '🔊' : '🔇';
+        if (els.mobSoundTileStatus) els.mobSoundTileStatus.textContent = on ? 'Audio lab attivo' : 'Audio disattivato';
+        if (els.mobToggleSoundTile) els.mobToggleSoundTile.classList.toggle('active', on);
+        if (on) updateEnvironmentControlsForView();
+      });
+    }
+    if (els.mobSkipSampleTile) {
+      els.mobSkipSampleTile.addEventListener('click', () => {
+        window.labAudio.playClick();
+        if (els.mobileHudDrawer) els.mobileHudDrawer.classList.add('hidden');
+        startNewRound();
+      });
+    }
+    if (els.mobShareTile) {
+      els.mobShareTile.addEventListener('click', () => {
+        window.labAudio.playClick();
+        if (els.mobileHudDrawer) els.mobileHudDrawer.classList.add('hidden');
+        shareLaboratory(false);
+      });
+    }
+
+    // Tendine Cassetti Controlli Fini Microscopio (Inline e Modal Ispezione)
+    if (els.mcAdvancedToggleBtn && els.mcAdvancedDrawer) {
+      els.mcAdvancedToggleBtn.addEventListener('click', () => {
+        window.labAudio.playClick();
+        const isCollapsed = els.mcAdvancedDrawer.classList.toggle('collapsed');
+        const isOpen = !isCollapsed;
+        if (els.mcAdvancedArrow) {
+          els.mcAdvancedArrow.classList.toggle('rotated', isOpen);
+        }
+        els.mcAdvancedToggleBtn.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+    if (els.modalMcAdvancedToggleBtn && els.modalMcAdvancedDrawer) {
+      els.modalMcAdvancedToggleBtn.addEventListener('click', () => {
+        window.labAudio.playClick();
+        const isCollapsed = els.modalMcAdvancedDrawer.classList.toggle('collapsed');
+        const isOpen = !isCollapsed;
+        if (els.modalMcAdvancedArrow) {
+          els.modalMcAdvancedArrow.classList.toggle('rotated', isOpen);
+        }
+        els.modalMcAdvancedToggleBtn.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+
+    // Steppers Focus Modal Ispezione Ravvicinata
+    if (els.modalMacroStepDown && els.modalMacroFocusSlider) {
+      els.modalMacroStepDown.addEventListener('click', () => {
+        const cur = parseFloat(els.modalMacroFocusSlider.value);
+        els.modalMacroFocusSlider.value = Math.max(10, cur - 4);
+        els.modalMacroFocusSlider.dispatchEvent(new Event('input'));
+      });
+    }
+    if (els.modalMacroStepUp && els.modalMacroFocusSlider) {
+      els.modalMacroStepUp.addEventListener('click', () => {
+        const cur = parseFloat(els.modalMacroFocusSlider.value);
+        els.modalMacroFocusSlider.value = Math.min(90, cur + 4);
+        els.modalMacroFocusSlider.dispatchEvent(new Event('input'));
+      });
+    }
+    if (els.modalMicroStepDown && els.modalMicroFocusSlider) {
+      els.modalMicroStepDown.addEventListener('click', () => {
+        const cur = parseFloat(els.modalMicroFocusSlider.value);
+        els.modalMicroFocusSlider.value = Math.max(-15, cur - 1.5);
+        els.modalMicroFocusSlider.dispatchEvent(new Event('input'));
+      });
+    }
+    if (els.modalMicroStepUp && els.modalMicroFocusSlider) {
+      els.modalMicroStepUp.addEventListener('click', () => {
+        const cur = parseFloat(els.modalMicroFocusSlider.value);
+        els.modalMicroFocusSlider.value = Math.min(15, cur + 1.5);
+        els.modalMicroFocusSlider.dispatchEvent(new Event('input'));
+      });
+    }
+
+    // Tendina Scelta Vista Vetrino / Piastra su Mobile
+    if (els.mobileViewSelect) {
+      els.mobileViewSelect.addEventListener('change', (e) => {
+        const viewKey = e.target.value;
+        if (!viewKey) return;
+        window.labAudio.playClick();
+        const isPending = state.pendingTests.has(viewKey);
+        if (state.realisticMode) {
+          openInspectionModal(viewKey, isPending);
+        } else {
+          switchLabView(viewKey, isPending);
+        }
+      });
+    }
+
+    // Tendina Scelta 100 Specie Certificate su Mobile
+    if (els.mobileSpeciesSelect) {
+      els.mobileSpeciesSelect.addEventListener('change', (e) => {
+        const spName = e.target.value;
+        if (!spName) return;
+        window.labAudio.playClick();
+        selectSpeciesIntoInput(spName);
       });
     }
 

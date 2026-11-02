@@ -211,6 +211,101 @@
 
   <!-- HEADER A BOLLA LUCIDA DI LABORATORIO -->
   <header class="lab-header">
+    <!-- BARRA COMPATTA SMARTPHONE (visibile solo su smartphone) -->
+    <div class="mobile-compact-topbar" id="mobileCompactTopBar">
+      <div class="mob-topbar-brand">
+        <span class="mob-brand-orb">🧫</span>
+        <div class="mob-brand-text">
+          <strong class="mob-brand-name">BioGuessr</strong>
+          <span class="mob-sample-tag" id="mobSampleTag">#01</span>
+        </div>
+      </div>
+
+      <div class="mob-topbar-stats">
+        <div class="mob-stat-chip score-chip" title="Punti Campione">
+          <span class="mob-chip-icon">⭐</span>
+          <strong id="mobScoreVal">1000</strong>
+        </div>
+        <div class="mob-stat-chip error-chip" title="Errori commessi">
+          <span class="mob-chip-icon">❤️</span>
+          <span id="mobErrorsVal">0/5</span>
+        </div>
+      </div>
+
+      <button type="button" class="mob-menu-toggle-btn" id="mobMenuToggleBtn" aria-label="Apri menu a tendina strumenti">
+        <span id="mobMenuIcon">⚙️</span>
+      </button>
+    </div>
+
+    <!-- TENDINA A SCOMPARSA STRUMENTI & STATS (Mobile Dropdown Drawer) -->
+    <div class="mobile-hud-drawer hidden" id="mobileHudDrawer">
+      <div class="mob-drawer-inner glass-bubble-panel">
+        <div class="mob-drawer-header">
+          <span class="mob-drawer-title">⚙️ Strumenti &amp; Impostazioni Lab</span>
+          <button type="button" class="mob-drawer-close-btn" id="closeMobDrawerBtn" aria-label="Chiudi menu strumenti">✕</button>
+        </div>
+
+        <div class="mob-drawer-grid">
+          <!-- Toggle Modalità Realistica -->
+          <button type="button" class="mob-drawer-tile sapphire-bubble" id="mobToggleRealisticTile">
+            <span class="tile-icon">⚡</span>
+            <div class="tile-info">
+              <strong>Modalità Realistica BSL-2</strong>
+              <span id="mobRealisticStatus">Attualmente: DISATTIVA</span>
+            </div>
+          </button>
+
+          <!-- Commutatore Schermo -->
+          <button type="button" class="mob-drawer-tile crystal-bubble" id="mobToggleDeviceTile">
+            <span class="tile-icon" id="mobDevTileIcon">📱</span>
+            <div class="tile-info">
+              <strong>Layout Interfaccia</strong>
+              <span id="mobDevTileStatus">Smartphone touch attivo</span>
+            </div>
+          </button>
+
+          <!-- Audio -->
+          <button type="button" class="mob-drawer-tile crystal-bubble" id="mobToggleSoundTile">
+            <span class="tile-icon" id="mobSoundTileIcon">🔊</span>
+            <div class="tile-info">
+              <strong>Effetti Acustici</strong>
+              <span id="mobSoundTileStatus">Audio attivo</span>
+            </div>
+          </button>
+
+          <!-- Nuovo Campione -->
+          <button type="button" class="mob-drawer-tile crystal-bubble" id="mobSkipSampleTile">
+            <span class="tile-icon">🔄</span>
+            <div class="tile-info">
+              <strong>Nuovo Isolato Clinico</strong>
+              <span>Estrai un altro batterio misterioso</span>
+            </div>
+          </button>
+
+          <!-- Condividi -->
+          <button type="button" class="mob-drawer-tile crystal-bubble" id="mobShareTile">
+            <span class="tile-icon">🔗</span>
+            <div class="tile-info">
+              <strong>Condividi Laboratorio</strong>
+              <span>Invia link o sfida un collega</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Riepilogo Progressi in Tendina -->
+        <div class="mob-drawer-stats-summary">
+          <div class="drawer-stat-item">
+            <span>Punteggio Totale Carriera:</span>
+            <strong id="mobTotalScoreEl">0 pt</strong>
+          </div>
+          <div class="drawer-stat-item">
+            <span>Specie Identificate:</span>
+            <strong id="mobSolvedRatioEl">0 / 100</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="brand-bubble sapphire-bubble">
       <div class="brand-circle-orb" aria-hidden="true">
         <span class="petri-dot"></span>
@@ -378,6 +473,12 @@
         <!-- Barra delle Viste Sbloccate (in Modalità Realistica cliccandole si apre la schermata dedicata!) -->
         <div class="view-tabs-strip" id="unlockedViewsBar" role="tablist" aria-label="Viste disponibili"></div>
 
+        <!-- Selettore Viste a Tendina per Smartphone -->
+        <div class="mobile-view-picker-row hidden" id="mobileViewPickerWrap">
+          <label for="mobileViewSelect" class="mobile-view-picker-label">👁️ Vista Vetrino / Piastra:</label>
+          <select id="mobileViewSelect" class="mobile-view-dropdown" aria-label="Seleziona la vista del preparato"></select>
+        </div>
+
         <!-- ==================================================================
              A) BANCONE DI LABORATORIO 3D (ATTIVO SOLO IN MODALITÀ REALISTICA!)
              Microscopio 3D + Piastra Petri davanti + Taccuino e Atlante sul banco
@@ -477,49 +578,60 @@
         <div class="classic-stage-wrapper" id="classicStageWrapper">
           <!-- Console Ottica del Microscopio (Modalità Rapida) -->
           <div class="microscope-console sapphire-bubble hidden" id="microscopeConsole">
-            <div class="mc-group">
-              <span class="mc-label">Revolver Obiettivi:</span>
-              <div class="mc-objectives">
-                <button type="button" class="obj-btn" data-obj="10x">10×</button>
-                <button type="button" class="obj-btn" data-obj="40x">40×</button>
-                <button type="button" class="obj-btn active" data-obj="100x">100× Olio</button>
+            <div class="mc-main-controls-row">
+              <div class="mc-group">
+                <span class="mc-label">Revolver Obiettivi:</span>
+                <div class="mc-objectives">
+                  <button type="button" class="obj-btn" data-obj="10x">10×</button>
+                  <button type="button" class="obj-btn" data-obj="40x">40×</button>
+                  <button type="button" class="obj-btn active" data-obj="100x">100× Olio</button>
+                </div>
+              </div>
+
+              <!-- Pulsanti Touch Rapidi per Messa a Fuoco (Sempre accessibili) -->
+              <div class="mc-touch-focus-bar">
+                <span class="mc-touch-label">🔍 Fuoco:</span>
+                <div class="mc-touch-btns-row">
+                  <button type="button" class="mc-touch-step-btn" id="macroStepDown" title="Riduci fuoco macro">− Macro</button>
+                  <button type="button" class="mc-touch-step-btn" id="macroStepUp" title="Aumenta fuoco macro">+ Macro</button>
+                  <button type="button" class="mc-touch-step-btn" id="microStepDown" title="Riduci fuoco micro">− Micro</button>
+                  <button type="button" class="mc-touch-step-btn" id="microStepUp" title="Aumenta fuoco micro">+ Micro</button>
+                </div>
               </div>
             </div>
 
-            <div class="mc-group">
-              <label class="mc-slider-label" for="macroFocusSlider">
-                <span>⚙️ Macrometrica</span>
-                <input type="range" id="macroFocusSlider" min="10" max="90" step="0.5" value="50" />
-              </label>
-            </div>
-
-            <div class="mc-group">
-              <label class="mc-slider-label" for="microFocusSlider">
-                <span>🔍 Micrometrica</span>
-                <input type="range" id="microFocusSlider" min="-15" max="15" step="0.2" value="0" />
-              </label>
-            </div>
-
-            <div class="mc-group">
-              <label class="mc-slider-label" for="condenserSlider">
-                <span>☀️ Diaframma</span>
-                <input type="range" id="condenserSlider" min="55" max="135" step="1" value="100" />
-              </label>
-            </div>
-
-            <button type="button" class="mc-reset-btn" id="centerStageBtn" title="Ricentra il vetrino sul tavolino X/Y">
-              🎯 Centra
+            <!-- Tasto a Tendina per Controlli Fini / Sliders -->
+            <button type="button" class="mc-advanced-toggle-btn" id="mcAdvancedToggleBtn" aria-expanded="false">
+              <span>📐 Controlli Avanzati (Sliders Messa a Fuoco &amp; Diaframma)</span>
+              <span class="tendina-arrow" id="mcAdvancedArrow">▼</span>
             </button>
 
-            <!-- Pulsanti Touch Rapidi per Messa a Fuoco (Mobile & Touch) -->
-            <div class="mc-touch-focus-bar">
-              <span class="mc-touch-label">🔍 Fuoco Rapido:</span>
-              <div class="mc-touch-btns-row">
-                <button type="button" class="mc-touch-step-btn" id="macroStepDown" title="Riduci fuoco macro">− Macro</button>
-                <button type="button" class="mc-touch-step-btn" id="macroStepUp" title="Aumenta fuoco macro">+ Macro</button>
-                <button type="button" class="mc-touch-step-btn" id="microStepDown" title="Riduci fuoco micro">− Micro</button>
-                <button type="button" class="mc-touch-step-btn" id="microStepUp" title="Aumenta fuoco micro">+ Micro</button>
+            <!-- Pannello a Tendina Collassabile -->
+            <div class="mc-advanced-drawer collapsed" id="mcAdvancedDrawer">
+              <div class="mc-group">
+                <label class="mc-slider-label" for="macroFocusSlider">
+                  <span>⚙️ Macrometrica</span>
+                  <input type="range" id="macroFocusSlider" min="10" max="90" step="0.5" value="50" />
+                </label>
               </div>
+
+              <div class="mc-group">
+                <label class="mc-slider-label" for="microFocusSlider">
+                  <span>🔍 Micrometrica</span>
+                  <input type="range" id="microFocusSlider" min="-15" max="15" step="0.2" value="0" />
+                </label>
+              </div>
+
+              <div class="mc-group">
+                <label class="mc-slider-label" for="condenserSlider">
+                  <span>☀️ Diaframma</span>
+                  <input type="range" id="condenserSlider" min="55" max="135" step="1" value="100" />
+                </label>
+              </div>
+
+              <button type="button" class="mc-reset-btn" id="centerStageBtn" title="Ricentra il vetrino sul tavolino X/Y">
+                🎯 Centra Tavolino
+              </button>
             </div>
           </div>
 
@@ -629,6 +741,16 @@
           </button>
         </form>
 
+        <!-- Menu a Tendina Rapido Scelta tra 100 Specie per Smartphone -->
+        <div class="mobile-species-dropdown-wrap" id="mobileSpeciesDropdownWrap">
+          <label for="mobileSpeciesSelect" class="mob-species-label">📋 Oppure scegli dal menu a tendina:</label>
+          <div class="mobile-species-select-row">
+            <select id="mobileSpeciesSelect" class="mobile-species-select" aria-label="Seleziona la specie batterica dal menu a tendina">
+              <option value="">-- Tocca qui per scegliere tra le 100 specie certificate --</option>
+            </select>
+          </div>
+        </div>
+
         <!-- Bolle di suggerimento rapido -->
         <div class="quick-suggestions-bar">
           <span class="quick-label">Consigli rapidi:</span>
@@ -662,6 +784,17 @@
               ✕
             </button>
           </div>
+        </div>
+
+        <!-- Selettore Categorie a Tendina per Smartphone -->
+        <div class="mobile-cat-dropdown-wrap" id="mobileCatDropdownWrap">
+          <label for="mobileCategorySelect" class="mob-cat-label">📂 Seleziona Categoria:</label>
+          <select id="mobileCategorySelect" class="mobile-cat-select" aria-label="Seleziona categoria test diagnostici">
+            <option value="stains">🔬 Colorazioni al Microscopio (4 test)</option>
+            <option value="biochem">🫧 Prove Biochimiche ed Enzimatiche (6 test)</option>
+            <option value="media">🧫 Terreni Selettivi &amp; Differenziali (10 terreni)</option>
+            <option value="all">📋 Mostra Tutti i 20 Test a Tendine</option>
+          </select>
         </div>
 
         <div class="category-tabs" role="tablist">
@@ -780,39 +913,60 @@
 
       <!-- Console Ottica Completa del Microscopio nella Schermata Dedicata -->
       <div class="microscope-console sapphire-bubble hidden" id="modalMicroscopeConsole">
-        <div class="mc-group">
-          <span class="mc-label">Revolver Obiettivi:</span>
-          <div class="mc-objectives">
-            <button type="button" class="obj-btn" data-obj="10x">10×</button>
-            <button type="button" class="obj-btn" data-obj="40x">40×</button>
-            <button type="button" class="obj-btn active" data-obj="100x">100× Olio</button>
+        <div class="mc-main-controls-row">
+          <div class="mc-group">
+            <span class="mc-label">Revolver Obiettivi:</span>
+            <div class="mc-objectives">
+              <button type="button" class="obj-btn" data-obj="10x">10×</button>
+              <button type="button" class="obj-btn" data-obj="40x">40×</button>
+              <button type="button" class="obj-btn active" data-obj="100x">100× Olio</button>
+            </div>
+          </div>
+
+          <!-- Pulsanti Touch Rapidi per Messa a Fuoco nella Schermata Ravvicinata -->
+          <div class="mc-touch-focus-bar">
+            <span class="mc-touch-label">🔍 Fuoco:</span>
+            <div class="mc-touch-btns-row">
+              <button type="button" class="mc-touch-step-btn" id="modalMacroStepDown" title="Riduci fuoco macro">− Macro</button>
+              <button type="button" class="mc-touch-step-btn" id="modalMacroStepUp" title="Aumenta fuoco macro">+ Macro</button>
+              <button type="button" class="mc-touch-step-btn" id="modalMicroStepDown" title="Riduci fuoco micro">− Micro</button>
+              <button type="button" class="mc-touch-step-btn" id="modalMicroStepUp" title="Aumenta fuoco micro">+ Micro</button>
+            </div>
           </div>
         </div>
 
-        <div class="mc-group">
-          <label class="mc-slider-label" for="modalMacroFocusSlider">
-            <span>⚙️ Macrometrica</span>
-            <input type="range" id="modalMacroFocusSlider" min="10" max="90" step="0.5" value="50" />
-          </label>
-        </div>
-
-        <div class="mc-group">
-          <label class="mc-slider-label" for="modalMicroFocusSlider">
-            <span>🔍 Micrometrica (Fine)</span>
-            <input type="range" id="modalMicroFocusSlider" min="-15" max="15" step="0.2" value="0" />
-          </label>
-        </div>
-
-        <div class="mc-group">
-          <label class="mc-slider-label" for="modalCondenserSlider">
-            <span>☀️ Diaframma</span>
-            <input type="range" id="modalCondenserSlider" min="55" max="135" step="1" value="100" />
-          </label>
-        </div>
-
-        <button type="button" class="mc-reset-btn" id="modalCenterStageBtn" title="Ricentra il vetrino sul tavolino X/Y">
-          🎯 Centra
+        <!-- Tasto a Tendina per Controlli Sliders -->
+        <button type="button" class="mc-advanced-toggle-btn" id="modalMcAdvancedToggleBtn" aria-expanded="false">
+          <span>📐 Cursori Fine &amp; Diaframma</span>
+          <span class="tendina-arrow" id="modalMcAdvancedArrow">▼</span>
         </button>
+
+        <div class="mc-advanced-drawer collapsed" id="modalMcAdvancedDrawer">
+          <div class="mc-group">
+            <label class="mc-slider-label" for="modalMacroFocusSlider">
+              <span>⚙️ Macrometrica</span>
+              <input type="range" id="modalMacroFocusSlider" min="10" max="90" step="0.5" value="50" />
+            </label>
+          </div>
+
+          <div class="mc-group">
+            <label class="mc-slider-label" for="modalMicroFocusSlider">
+              <span>🔍 Micrometrica (Fine)</span>
+              <input type="range" id="modalMicroFocusSlider" min="-15" max="15" step="0.2" value="0" />
+            </label>
+          </div>
+
+          <div class="mc-group">
+            <label class="mc-slider-label" for="modalCondenserSlider">
+              <span>☀️ Diaframma</span>
+              <input type="range" id="modalCondenserSlider" min="55" max="135" step="1" value="100" />
+            </label>
+          </div>
+
+          <button type="button" class="mc-reset-btn" id="modalCenterStageBtn" title="Ricentra il vetrino sul tavolino X/Y">
+            🎯 Centra Tavolino
+          </button>
+        </div>
       </div>
 
       <!-- Fumetto Guida per Procedura Interattiva o Semina Automatica in Corso -->
@@ -944,6 +1098,21 @@
       </div>
 
       <div class="atlas-controls-row">
+        <!-- Menu a Tendina Sezioni Atlante per Smartphone -->
+        <div class="mobile-atlas-filter-wrap" id="mobileAtlasFilterWrap">
+          <label for="mobileAtlasSectionSelect" class="mob-atlas-label">📖 Sezione Atlante:</label>
+          <select id="mobileAtlasSectionSelect" class="mobile-atlas-select" aria-label="Seleziona la sezione dell'atlante">
+            <option value="all">🦠 Tutte le 100 Specie</option>
+            <option value="tree">🌳 Albero Genealogico (Filogenesi Completa)</option>
+            <option value="gpos_cocci">🟣 Cocchi Gram+</option>
+            <option value="gpos_rods">🟢 Bacilli Gram+ &amp; BAAR</option>
+            <option value="enterics">🌸 Enterobatteri (Ox −)</option>
+            <option value="ox_pos">💧 Gram− Ossidasi +</option>
+            <option value="anaerobes">🧪 Anaerobi &amp; Speciali</option>
+            <option value="flowchart">🧭 Schemi &amp; Chiavi Dicotomiche</option>
+          </select>
+        </div>
+
         <div class="atlas-bookmarks" role="tablist">
           <button type="button" class="bookmark-tab active" data-atlasfilter="all">🦠 Tutte le 100 Specie</button>
           <button type="button" class="bookmark-tab tree-tab-btn" data-atlasfilter="tree">🌳 Albero Genealogico</button>
