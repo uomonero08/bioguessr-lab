@@ -62,6 +62,31 @@
           Benvenuto nel laboratorio di biosicurezza. Identifica l'isolato clinico misterioso attraverso prove biochimiche, microscopia a immersione e terreni differenziali prima di esaurire i 5 tentativi!
         </p>
 
+        <!-- SELEZIONE MODALITÀ DISPOSITIVO (AUTO / SMARTPHONE / DESKTOP) -->
+        <div class="start-device-mode-card">
+          <div class="device-mode-header">
+            <span class="device-mode-label">📱 Layout Interfaccia:</span>
+            <span class="device-mode-badge" id="deviceModeBadge">⚡ Auto: Rilevamento...</span>
+          </div>
+          <div class="device-pill-group" role="radiogroup" aria-label="Seleziona la modalità interfaccia">
+            <button type="button" class="device-mode-pill active" data-mode="auto" id="devModeAuto" title="Rileva automaticamente se sei da smartphone o computer">
+              <span class="pill-symbol">⚡</span>
+              <span class="pill-text">Auto</span>
+            </button>
+            <button type="button" class="device-mode-pill" data-mode="mobile" id="devModeMobile" title="Forza la modalità smartphone (ottimizzata touch)">
+              <span class="pill-symbol">📱</span>
+              <span class="pill-text">Smartphone</span>
+            </button>
+            <button type="button" class="device-mode-pill" data-mode="desktop" id="devModeDesktop" title="Forza la modalità desktop (schermo intero)">
+              <span class="pill-symbol">💻</span>
+              <span class="pill-text">Desktop</span>
+            </button>
+          </div>
+          <p class="device-mode-caption" id="deviceModeCaption">
+            ⚡ Rilevamento automatico: adatta l'interfaccia a touch e dimensioni dello schermo.
+          </p>
+        </div>
+
         <!-- AZIONE PRINCIPALE: PLAY -->
         <button type="button" class="start-play-btn sapphire-bubble" id="startPlayBtn">
           <span class="play-icon-glow">▶</span>
@@ -106,6 +131,20 @@
               <button type="button" class="pill-action-btn crystal-bubble" id="startSoundToggleBtn">
                 <span id="startSoundIcon">🔊 Attivo</span>
               </button>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-label">📱 Layout Schermo</span>
+              <span class="setting-desc">Auto-rilevamento touch o forza interfaccia Smartphone / Desktop</span>
+            </div>
+            <div class="setting-ctrl">
+              <div class="device-pill-group-mini" id="settingsDevicePills">
+                <button type="button" class="device-mini-pill active" data-mode="auto" id="settDevAuto">⚡ Auto</button>
+                <button type="button" class="device-mini-pill" data-mode="mobile" id="settDevMobile">📱 Mobile</button>
+                <button type="button" class="device-mini-pill" data-mode="desktop" id="settDevDesktop">💻 Desktop</button>
+              </div>
             </div>
           </div>
 
@@ -253,6 +292,15 @@
         title="Attiva/Disattiva audio di laboratorio"
       >
         <span id="soundIcon">🔊</span>
+      </button>
+
+      <button
+        type="button"
+        class="pill-action-btn crystal-bubble"
+        id="deviceModeHeaderBtn"
+        title="Passa da modalità Smartphone a Desktop o viceversa"
+      >
+        <span id="deviceModeHeaderIcon">📱</span> <span class="hide-sm" id="deviceModeHeaderLabel">Mobile</span>
       </button>
 
       <button
@@ -462,6 +510,17 @@
             <button type="button" class="mc-reset-btn" id="centerStageBtn" title="Ricentra il vetrino sul tavolino X/Y">
               🎯 Centra
             </button>
+
+            <!-- Pulsanti Touch Rapidi per Messa a Fuoco (Mobile & Touch) -->
+            <div class="mc-touch-focus-bar">
+              <span class="mc-touch-label">🔍 Fuoco Rapido:</span>
+              <div class="mc-touch-btns-row">
+                <button type="button" class="mc-touch-step-btn" id="macroStepDown" title="Riduci fuoco macro">− Macro</button>
+                <button type="button" class="mc-touch-step-btn" id="macroStepUp" title="Aumenta fuoco macro">+ Macro</button>
+                <button type="button" class="mc-touch-step-btn" id="microStepDown" title="Riduci fuoco micro">− Micro</button>
+                <button type="button" class="mc-touch-step-btn" id="microStepUp" title="Aumenta fuoco micro">+ Micro</button>
+              </div>
+            </div>
           </div>
 
           <!-- Fumetto a Bolla Lucida (Modalità Rapida fallback) -->
@@ -499,6 +558,18 @@
           <p class="obs-detail" id="obsDetail">
             Caricamento morfologia coloniale in corso...
           </p>
+        </div>
+
+        <!-- Pulsanti di Navigazione Rapida per Smartphone sotto l'Osservazione -->
+        <div class="mobile-stage-shortcuts" id="mobileStageShortcuts">
+          <button type="button" class="mobile-shortcut-btn btn-test sapphire-bubble" id="mobQuickGoTestsBtn">
+            <span>🧪 Scegli Test Diagnostico (20)</span>
+            <span>→</span>
+          </button>
+          <button type="button" class="mobile-shortcut-btn btn-guess teal-bubble" id="mobQuickGoGuessBtn">
+            <span>🧬 Formula Diagnosi</span>
+            <span>⚡</span>
+          </button>
         </div>
       </div>
 
@@ -606,6 +677,17 @@
         </div>
 
         <div class="tests-list" id="testsListContainer"></div>
+
+        <!-- Scorciatoie veloci Mobile per tornare alla microscopia o andare a indovinare -->
+        <div class="mobile-tests-shortcuts" id="mobileTestsShortcuts">
+          <button type="button" class="mobile-shortcut-btn btn-scope sapphire-bubble" id="mobQuickBackScopeBtn">
+            <span>🔬 Guarda al Microscopio</span>
+          </button>
+          <button type="button" class="mobile-shortcut-btn btn-guess teal-bubble" id="mobQuickTestsGoGuessBtn">
+            <span>🧬 Formula Diagnosi</span>
+            <span>⚡</span>
+          </button>
+        </div>
       </div>
 
       <!-- RIEPILOGO COMPATTO + SCORCIATOIA AI DUE QUADERNI -->
@@ -1146,6 +1228,77 @@
   <div class="lab-toast hidden" id="labToast" role="status" aria-live="polite">
     <span class="toast-icon">🔗</span>
     <span class="toast-msg" id="labToastMsg">Link di laboratorio copiato negli appunti!</span>
+  </div>
+
+  <!-- BARRA DI NAVIGAZIONE INFERIORE SMARTPHONE (Attiva solo in modalità Mobile) -->
+  <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Navigazione rapida smartphone">
+    <button type="button" class="mob-nav-btn active" data-tab="microscope" id="mobTabMicroscope">
+      <span class="mob-tab-icon">🔬</span>
+      <span class="mob-tab-label">Microscopio</span>
+    </button>
+    <button type="button" class="mob-nav-btn" data-tab="tests" id="mobTabTests">
+      <span class="mob-tab-icon">🧪</span>
+      <span class="mob-tab-label">Test</span>
+      <span class="mob-tab-badge" id="mobTestsCountBadge">20</span>
+    </button>
+    <button type="button" class="mob-nav-btn" data-tab="guess" id="mobTabGuess">
+      <span class="mob-tab-icon">🧬</span>
+      <span class="mob-tab-label">Diagnosi</span>
+      <span class="mob-tab-badge-vials" id="mobErrorsBadge">0/5</span>
+    </button>
+    <button type="button" class="mob-nav-btn" data-tab="notebooks" id="mobTabNotebooks">
+      <span class="mob-tab-icon">📖</span>
+      <span class="mob-tab-label">Quaderni</span>
+      <span class="mob-tab-badge" id="mobNotesBadge">0</span>
+    </button>
+  </nav>
+
+  <!-- BANNER NOTIFICA TEST ESEGUITO PER SMARTPHONE -->
+  <div class="mobile-test-alert hidden" id="mobileTestAlert">
+    <div class="mob-alert-content">
+      <span class="mob-alert-icon">✨</span>
+      <span class="mob-alert-text" id="mobileTestAlertText">Test completato!</span>
+    </div>
+    <div class="mob-alert-actions">
+      <button type="button" class="mob-alert-action-btn" id="mobileViewMicroscopeActionBtn">
+        🔬 Guarda
+      </button>
+      <button type="button" class="mob-alert-dismiss" id="mobileDismissAlertBtn">✕</button>
+    </div>
+  </div>
+
+  <!-- SELETTORE QUADERNI PER SMARTPHONE -->
+  <div class="modal-backdrop mobile-nb-modal hidden" id="mobileNotebooksHub" role="dialog" aria-modal="true">
+    <div class="mobile-nb-sheet glass-bubble-panel">
+      <div class="mobile-nb-sheet-header">
+        <div class="mobile-nb-sheet-title">
+          <span class="sheet-icon">📖</span>
+          <div>
+            <h3>I Due Quaderni di Laboratorio</h3>
+            <p>Scegli quale strumento consultare</p>
+          </div>
+        </div>
+        <button type="button" class="close-circle-btn" id="closeMobNotebooksHubBtn" aria-label="Chiudi menu quaderni">✕</button>
+      </div>
+      <div class="mobile-nb-cards-grid">
+        <button type="button" class="mobile-nb-card sapphire-bubble" id="mobOpenNotepadCard">
+          <span class="nb-card-icon">📒</span>
+          <div class="nb-card-info">
+            <strong>Blocchetto Note del Microbiologo</strong>
+            <p>Registro storico dei test fatti, note cliniche e checklist 100 specie escluse.</p>
+          </div>
+          <span class="nb-card-arrow">→</span>
+        </button>
+        <button type="button" class="mobile-nb-card teal-bubble" id="mobOpenAtlasCard">
+          <span class="nb-card-icon">📘</span>
+          <div class="nb-card-info">
+            <strong>Atlante 100 Specie &amp; Albero Genealogico</strong>
+            <p>Schede dettagliate, micrografie reali, filogenesi completa da Dominio a Specie.</p>
+          </div>
+          <span class="nb-card-arrow">→</span>
+        </button>
+      </div>
+    </div>
   </div>
 
   <script src="js/vendor/three.min.js"></script>

@@ -36,6 +36,15 @@ Ogni specie è corredata da scheda tassonomica completa a 7 livelli, morfologia 
 
 ---
 
+### 📱 Esperienza Smartphone Fluida & Riconoscimento Automatico
+Il simulatore riconosce autonomamente il tipo di dispositivo (PC desktop vs smartphone touch):
+- **⚡ Modalità Auto**: Rileva schermo e touch avviando l'interfaccia ideale.
+- **📱 Barra di Navigazione Mobile a 4 Schede**: Navigazione istantanea tra *Microscopio*, *Test Lab (20)*, *Diagnosi* e *I Due Quaderni* senza dover scorrere avanti e indietro pagine chilometriche.
+- **🔍 Controlli Touch Ergonomici**: Tasti rapidi `+` e `−` per messa a fuoco macro/micro, selezione rapida degli obiettivi e alert test con link diretto al microscopio.
+- **💻 Commutatore Sempre a Portata di Mano**: Selettore nel menu iniziale, nelle impostazioni e icona rapida nell'intestazione per passare tra versione Smartphone e Desktop in qualsiasi momento.
+
+---
+
 ### 🌳 Albero Genealogico & Filogenesi dei Batteri
 Uno strumento didattico avanzato integrato nell'Atlante per esplorare l'inquadramento evolutivo dei procarioti:
 $$\text{Dominio (Bacteria)} \longrightarrow \text{Phylum (6)} \longrightarrow \text{Classe (9)} \longrightarrow \text{Ordine (20)} \longrightarrow \text{Famiglia (35)} \longrightarrow \text{Genere (55)} \longrightarrow \text{Specie (100)}$$

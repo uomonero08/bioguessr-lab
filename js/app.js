@@ -19,6 +19,11 @@
     errors: 0,
     wrongGuesses: [],
 
+    // Modalità Dispositivo (Auto / Smartphone / Desktop) & Navigazione Mobile
+    deviceModePref: 'auto',
+    isMobileLayout: false,
+    activeMobileTab: 'microscope',
+
     // Start Screen & Transizione Chimica
     gameStarted: false,
     masterVolume: 0.8,
@@ -275,6 +280,52 @@
     els.modalClinicalOverview = document.getElementById('modalClinicalOverview');
     els.inspectPlateAfterBtn = document.getElementById('inspectPlateAfterBtn');
     els.nextSampleModalBtn = document.getElementById('nextSampleModalBtn');
+
+    // Modalità Dispositivo (Auto / Smartphone / Desktop)
+    els.startDeviceModeCard = document.querySelector('.start-device-mode-card');
+    els.deviceModeBadge = document.getElementById('deviceModeBadge');
+    els.deviceModeCaption = document.getElementById('deviceModeCaption');
+    els.devModeAuto = document.getElementById('devModeAuto');
+    els.devModeMobile = document.getElementById('devModeMobile');
+    els.devModeDesktop = document.getElementById('devModeDesktop');
+    els.settDevAuto = document.getElementById('settDevAuto');
+    els.settDevMobile = document.getElementById('settDevMobile');
+    els.settDevDesktop = document.getElementById('settDevDesktop');
+    els.deviceModeHeaderBtn = document.getElementById('deviceModeHeaderBtn');
+    els.deviceModeHeaderIcon = document.getElementById('deviceModeHeaderIcon');
+    els.deviceModeHeaderLabel = document.getElementById('deviceModeHeaderLabel');
+
+    // Barra Navigazione Mobile Inferiore & Componenti Smartphone
+    els.mobileBottomNav = document.getElementById('mobileBottomNav');
+    els.mobTabMicroscope = document.getElementById('mobTabMicroscope');
+    els.mobTabTests = document.getElementById('mobTabTests');
+    els.mobTabGuess = document.getElementById('mobTabGuess');
+    els.mobTabNotebooks = document.getElementById('mobTabNotebooks');
+    els.mobTestsCountBadge = document.getElementById('mobTestsCountBadge');
+    els.mobErrorsBadge = document.getElementById('mobErrorsBadge');
+    els.mobNotesBadge = document.getElementById('mobNotesBadge');
+
+    // Focus Touch Steppers
+    els.macroStepDown = document.getElementById('macroStepDown');
+    els.macroStepUp = document.getElementById('macroStepUp');
+    els.microStepDown = document.getElementById('microStepDown');
+    els.microStepUp = document.getElementById('microStepUp');
+
+    // Scorciatoie Mobile
+    els.mobQuickGoTestsBtn = document.getElementById('mobQuickGoTestsBtn');
+    els.mobQuickGoGuessBtn = document.getElementById('mobQuickGoGuessBtn');
+    els.mobQuickBackScopeBtn = document.getElementById('mobQuickBackScopeBtn');
+    els.mobQuickTestsGoGuessBtn = document.getElementById('mobQuickTestsGoGuessBtn');
+
+    // Notifica Mobile & Hub Quaderni
+    els.mobileTestAlert = document.getElementById('mobileTestAlert');
+    els.mobileTestAlertText = document.getElementById('mobileTestAlertText');
+    els.mobileViewMicroscopeActionBtn = document.getElementById('mobileViewMicroscopeActionBtn');
+    els.mobileDismissAlertBtn = document.getElementById('mobileDismissAlertBtn');
+    els.mobileNotebooksHub = document.getElementById('mobileNotebooksHub');
+    els.closeMobNotebooksHubBtn = document.getElementById('closeMobNotebooksHubBtn');
+    els.mobOpenNotepadCard = document.getElementById('mobOpenNotepadCard');
+    els.mobOpenAtlasCard = document.getElementById('mobOpenAtlasCard');
   }
 
   function init() {
@@ -330,6 +381,8 @@
       bench3d.setHoodState(state.hoodAirOn, state.hoodLightOn);
     }
     syncRealisticUI();
+    updateDeviceModeUIElements();
+    applyDeviceMode(resolveEffectiveIsMobile(), false);
     renderAtlasCards();
     bindEvents();
     startNewRound();
@@ -338,22 +391,30 @@
   function loadPersistedStats() {
     try {
       const raw = localStorage.getItem('bioguessr_stats_v2');
-      if (!raw) return;
-      const saved = JSON.parse(raw);
-      if (saved && typeof saved === 'object' && saved !== null) {
-        state.totalScore = Math.max(0, Math.min(10000000, Number(saved.totalScore) || 0));
-        if (Array.isArray(saved.solvedIds)) {
-          const validIds = new Set(BACTERIA_DB.map((b) => b.id));
-          state.solvedIds = new Set(
-            saved.solvedIds.filter((id) => typeof id === 'string' && validIds.has(id))
-          );
+      if (raw) {
+        const saved = JSON.parse(raw);
+        if (saved && typeof saved === 'object' && saved !== null) {
+          state.totalScore = Math.max(0, Math.min(10000000, Number(saved.totalScore) || 0));
+          if (Array.isArray(saved.solvedIds)) {
+            const validIds = new Set(BACTERIA_DB.map((b) => b.id));
+            state.solvedIds = new Set(
+              saved.solvedIds.filter((id) => typeof id === 'string' && validIds.has(id))
+            );
+          }
+          if (typeof saved.realisticMode === 'boolean') {
+            state.realisticMode = saved.realisticMode;
+          }
+          if (typeof saved.masterVolume === 'number' && !isNaN(saved.masterVolume)) {
+            state.masterVolume = Math.max(0, Math.min(1, saved.masterVolume));
+          }
+          if (saved.deviceModePref && ['auto', 'mobile', 'desktop'].includes(saved.deviceModePref)) {
+            state.deviceModePref = saved.deviceModePref;
+          }
         }
-        if (typeof saved.realisticMode === 'boolean') {
-          state.realisticMode = saved.realisticMode;
-        }
-        if (typeof saved.masterVolume === 'number' && !isNaN(saved.masterVolume)) {
-          state.masterVolume = Math.max(0, Math.min(1, saved.masterVolume));
-        }
+      }
+      const directDevMode = localStorage.getItem('bioguessr_device_mode');
+      if (directDevMode && ['auto', 'mobile', 'desktop'].includes(directDevMode)) {
+        state.deviceModePref = directDevMode;
       }
     } catch (_) {}
   }
@@ -366,10 +427,175 @@
           totalScore: state.totalScore,
           solvedIds: Array.from(state.solvedIds),
           realisticMode: state.realisticMode,
-          masterVolume: state.masterVolume
+          masterVolume: state.masterVolume,
+          deviceModePref: state.deviceModePref
         })
       );
+      localStorage.setItem('bioguessr_device_mode', state.deviceModePref);
     } catch (_) {}
+  }
+
+  // =========================================================================
+  // GESTIONE SMARTPHONE FLUIDO, DETECTION TOUCH & COMMUTATORE DISPOSITIVO
+  // =========================================================================
+  function detectIsMobileDevice() {
+    const isSmallWidth = window.innerWidth <= 840;
+    const hasTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const ua = navigator.userAgent || '';
+    const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    return (isSmallWidth && hasTouch) || isMobileUA || isSmallWidth;
+  }
+
+  function resolveEffectiveIsMobile() {
+    if (state.deviceModePref === 'mobile') return true;
+    if (state.deviceModePref === 'desktop') return false;
+    return detectIsMobileDevice();
+  }
+
+  function setDeviceModePreference(mode, triggerResize = true) {
+    if (!['auto', 'mobile', 'desktop'].includes(mode)) mode = 'auto';
+    state.deviceModePref = mode;
+
+    try {
+      localStorage.setItem('bioguessr_device_mode', mode);
+    } catch (_) {}
+    savePersistedStats();
+
+    updateDeviceModeUIElements();
+    const effectiveMobile = resolveEffectiveIsMobile();
+    applyDeviceMode(effectiveMobile, triggerResize);
+  }
+
+  function toggleDeviceMode() {
+    const currentlyMobile = state.isMobileLayout;
+    setDeviceModePreference(currentlyMobile ? 'desktop' : 'mobile');
+    showToast(
+      currentlyMobile ? '💻 Passato a modalità Desktop' : '📱 Passato a modalità Smartphone touch',
+      currentlyMobile ? '💻' : '📱'
+    );
+  }
+
+  function updateDeviceModeUIElements() {
+    const isDetectedMobile = detectIsMobileDevice();
+    const currentMode = state.deviceModePref;
+
+    const pills = [
+      { el: els.devModeAuto, mode: 'auto' },
+      { el: els.devModeMobile, mode: 'mobile' },
+      { el: els.devModeDesktop, mode: 'desktop' },
+      { el: els.settDevAuto, mode: 'auto' },
+      { el: els.settDevMobile, mode: 'mobile' },
+      { el: els.settDevDesktop, mode: 'desktop' }
+    ];
+
+    pills.forEach(({ el, mode }) => {
+      if (!el) return;
+      el.classList.toggle('active', currentMode === mode);
+    });
+
+    if (els.deviceModeBadge) {
+      if (currentMode === 'auto') {
+        els.deviceModeBadge.textContent = isDetectedMobile ? '⚡ Auto: Smartphone' : '⚡ Auto: Desktop';
+      } else if (currentMode === 'mobile') {
+        els.deviceModeBadge.textContent = '📱 Smartphone (Forzato)';
+      } else {
+        els.deviceModeBadge.textContent = '💻 Desktop (Forzato)';
+      }
+    }
+
+    if (els.deviceModeCaption) {
+      if (currentMode === 'auto') {
+        els.deviceModeCaption.textContent = isDetectedMobile
+          ? '⚡ Rilevamento automatico: touch rilevato, interfaccia Smartphone fluida attiva.'
+          : '⚡ Rilevamento automatico: schermo ampio rilevato, interfaccia Desktop a 2 colonne attiva.';
+      } else if (currentMode === 'mobile') {
+        els.deviceModeCaption.textContent =
+          '📱 Modalità Smartphone forzata: barra di navigazione inferiore a 4 schede attiva.';
+      } else {
+        els.deviceModeCaption.textContent =
+          '💻 Modalità Desktop forzata: visualizzazione a schermo intero senza schede inferiori.';
+      }
+    }
+  }
+
+  function applyDeviceMode(effectiveIsMobile, triggerResize = true) {
+    state.isMobileLayout = effectiveIsMobile;
+    document.body.classList.toggle('ui-smartphone', effectiveIsMobile);
+    document.body.classList.toggle('ui-desktop', !effectiveIsMobile);
+
+    if (els.deviceModeHeaderIcon) {
+      els.deviceModeHeaderIcon.textContent = effectiveIsMobile ? '📱' : '💻';
+    }
+    if (els.deviceModeHeaderLabel) {
+      els.deviceModeHeaderLabel.textContent = effectiveIsMobile ? 'Mobile' : 'Desktop';
+    }
+
+    if (effectiveIsMobile) {
+      setMobileTab(state.activeMobileTab || 'microscope');
+    } else {
+      document.body.classList.remove('tab-microscope', 'tab-tests', 'tab-guess', 'tab-notebooks');
+      if (els.mobileNotebooksHub) {
+        els.mobileNotebooksHub.classList.add('hidden');
+      }
+    }
+
+    if (triggerResize) {
+      setTimeout(() => {
+        if (renderer && typeof renderer.resize === 'function') renderer.resize();
+        if (bench3d && typeof bench3d.resize === 'function') bench3d.resize();
+      }, 60);
+    }
+  }
+
+  function setMobileTab(tabKey) {
+    if (!['microscope', 'tests', 'guess', 'notebooks'].includes(tabKey)) tabKey = 'microscope';
+    state.activeMobileTab = tabKey;
+
+    document.body.classList.remove('tab-microscope', 'tab-tests', 'tab-guess', 'tab-notebooks');
+    document.body.classList.add(`tab-${tabKey}`);
+
+    const tabs = [
+      { el: els.mobTabMicroscope, key: 'microscope' },
+      { el: els.mobTabTests, key: 'tests' },
+      { el: els.mobTabGuess, key: 'guess' },
+      { el: els.mobTabNotebooks, key: 'notebooks' }
+    ];
+
+    tabs.forEach(({ el, key }) => {
+      if (!el) return;
+      el.classList.toggle('active', key === tabKey);
+    });
+
+    if (tabKey === 'notebooks') {
+      if (els.mobileNotebooksHub) {
+        els.mobileNotebooksHub.classList.remove('hidden');
+      }
+    } else {
+      if (els.mobileNotebooksHub) {
+        els.mobileNotebooksHub.classList.add('hidden');
+      }
+    }
+
+    if (tabKey === 'microscope') {
+      setTimeout(() => {
+        if (renderer && typeof renderer.resize === 'function') renderer.resize();
+        if (bench3d && typeof bench3d.resize === 'function') bench3d.resize();
+      }, 40);
+    }
+  }
+
+  let mobileAlertTimer = null;
+  function showMobileTestAlert(testName, cost, testId) {
+    if (!state.isMobileLayout || !els.mobileTestAlert) return;
+    if (els.mobileTestAlertText) {
+      els.mobileTestAlertText.textContent = `Test "${testName}" completato (-${cost} pt)!`;
+    }
+    els.mobileTestAlert.classList.remove('hidden');
+
+    if (mobileAlertTimer) clearTimeout(mobileAlertTimer);
+    mobileAlertTimer = setTimeout(() => {
+      if (els.mobileTestAlert) els.mobileTestAlert.classList.add('hidden');
+    }, 5500);
   }
 
   function refillDeck() {
@@ -814,6 +1040,17 @@
     els.errorsSummaryPill.innerHTML = `Errori: <strong>${state.errors} / ${MAX_ERRORS}</strong>`;
     els.testsUsedBadge.textContent = `${totalUsed} test`;
     els.notepadBadgeCount.textContent = state.performedTests.size;
+
+    // Badges Barra Mobile
+    if (els.mobTestsCountBadge) {
+      els.mobTestsCountBadge.textContent = 20 - state.performedTests.size;
+    }
+    if (els.mobErrorsBadge) {
+      els.mobErrorsBadge.textContent = `${state.errors}/${MAX_ERRORS}`;
+    }
+    if (els.mobNotesBadge) {
+      els.mobNotesBadge.textContent = state.performedTests.size;
+    }
 
     if (els.fsScoreEl) els.fsScoreEl.textContent = state.potentialScore;
     if (els.fsErrorsEl) els.fsErrorsEl.textContent = `${state.errors}/${MAX_ERRORS}`;
@@ -1371,6 +1608,7 @@
       renderCategoryTests();
       renderNotepadAndRecent();
       renderHUD();
+      showMobileTestAlert(testMeta.shortName, testMeta.cost, testMeta.id);
     }, 220);
   }
 
@@ -2609,9 +2847,17 @@
     els.closeNotepadBtn.addEventListener('click', () => {
       window.labAudio.playClick();
       els.notepadModal.classList.add('hidden');
+      if (state.isMobileLayout && state.activeMobileTab === 'notebooks') {
+        setMobileTab('microscope');
+      }
     });
     els.notepadModal.addEventListener('click', (e) => {
-      if (e.target === els.notepadModal) els.notepadModal.classList.add('hidden');
+      if (e.target === els.notepadModal) {
+        els.notepadModal.classList.add('hidden');
+        if (state.isMobileLayout && state.activeMobileTab === 'notebooks') {
+          setMobileTab('microscope');
+        }
+      }
     });
 
     document.querySelectorAll('.np-tab').forEach((tab) => {
@@ -2660,9 +2906,17 @@
     els.closeAtlasBtn.addEventListener('click', () => {
       window.labAudio.playClick();
       els.atlasModal.classList.add('hidden');
+      if (state.isMobileLayout && state.activeMobileTab === 'notebooks') {
+        setMobileTab('microscope');
+      }
     });
     els.atlasModal.addEventListener('click', (e) => {
-      if (e.target === els.atlasModal) els.atlasModal.classList.add('hidden');
+      if (e.target === els.atlasModal) {
+        els.atlasModal.classList.add('hidden');
+        if (state.isMobileLayout && state.activeMobileTab === 'notebooks') {
+          setMobileTab('microscope');
+        }
+      }
     });
 
     // Pulsanti rapidi sul Bancone 3D (Microscopio 3D & Piastra Petri 3D)
@@ -2983,6 +3237,152 @@
         shareLaboratory(true);
       });
     }
+
+    // Selettori Modalità Dispositivo (Menu Iniziale & Impostazioni)
+    const modePillMap = [
+      { el: els.devModeAuto, mode: 'auto' },
+      { el: els.devModeMobile, mode: 'mobile' },
+      { el: els.devModeDesktop, mode: 'desktop' },
+      { el: els.settDevAuto, mode: 'auto' },
+      { el: els.settDevMobile, mode: 'mobile' },
+      { el: els.settDevDesktop, mode: 'desktop' }
+    ];
+
+    modePillMap.forEach(({ el, mode }) => {
+      if (!el) return;
+      el.addEventListener('click', () => {
+        window.labAudio.playClick();
+        setDeviceModePreference(mode);
+      });
+    });
+
+    // Pulsante Rapido Header Commutatore Dispositivo
+    if (els.deviceModeHeaderBtn) {
+      els.deviceModeHeaderBtn.addEventListener('click', () => {
+        window.labAudio.playClick();
+        toggleDeviceMode();
+      });
+    }
+
+    // Barra Navigazione Inferiore Mobile (4 Schede)
+    const mobileTabsMap = [
+      { el: els.mobTabMicroscope, key: 'microscope' },
+      { el: els.mobTabTests, key: 'tests' },
+      { el: els.mobTabGuess, key: 'guess' },
+      { el: els.mobTabNotebooks, key: 'notebooks' }
+    ];
+
+    mobileTabsMap.forEach(({ el, key }) => {
+      if (!el) return;
+      el.addEventListener('click', () => {
+        window.labAudio.playClick();
+        setMobileTab(key);
+      });
+    });
+
+    // Focus Touch Steppers (per smartphone: aggiusta senza combattere con gli slider)
+    if (els.macroStepDown && els.macroFocusSlider) {
+      els.macroStepDown.addEventListener('click', () => {
+        const cur = parseFloat(els.macroFocusSlider.value);
+        els.macroFocusSlider.value = Math.max(10, cur - 4);
+        els.macroFocusSlider.dispatchEvent(new Event('input'));
+      });
+    }
+    if (els.macroStepUp && els.macroFocusSlider) {
+      els.macroStepUp.addEventListener('click', () => {
+        const cur = parseFloat(els.macroFocusSlider.value);
+        els.macroFocusSlider.value = Math.min(90, cur + 4);
+        els.macroFocusSlider.dispatchEvent(new Event('input'));
+      });
+    }
+    if (els.microStepDown && els.microFocusSlider) {
+      els.microStepDown.addEventListener('click', () => {
+        const cur = parseFloat(els.microFocusSlider.value);
+        els.microFocusSlider.value = Math.max(-15, cur - 1.5);
+        els.microFocusSlider.dispatchEvent(new Event('input'));
+      });
+    }
+    if (els.microStepUp && els.microFocusSlider) {
+      els.microStepUp.addEventListener('click', () => {
+        const cur = parseFloat(els.microFocusSlider.value);
+        els.microFocusSlider.value = Math.min(15, cur + 1.5);
+        els.microFocusSlider.dispatchEvent(new Event('input'));
+      });
+    }
+
+    // Scorciatoie veloci Smartphone
+    if (els.mobQuickGoTestsBtn) {
+      els.mobQuickGoTestsBtn.addEventListener('click', () => {
+        window.labAudio.playClick();
+        setMobileTab('tests');
+      });
+    }
+    if (els.mobQuickGoGuessBtn) {
+      els.mobQuickGoGuessBtn.addEventListener('click', () => {
+        window.labAudio.playClick();
+        setMobileTab('guess');
+      });
+    }
+    if (els.mobQuickBackScopeBtn) {
+      els.mobQuickBackScopeBtn.addEventListener('click', () => {
+        window.labAudio.playClick();
+        setMobileTab('microscope');
+      });
+    }
+    if (els.mobQuickTestsGoGuessBtn) {
+      els.mobQuickTestsGoGuessBtn.addEventListener('click', () => {
+        window.labAudio.playClick();
+        setMobileTab('guess');
+      });
+    }
+
+    // Alert Notifica Test Mobile
+    if (els.mobileViewMicroscopeActionBtn) {
+      els.mobileViewMicroscopeActionBtn.addEventListener('click', () => {
+        window.labAudio.playClick();
+        if (els.mobileTestAlert) els.mobileTestAlert.classList.add('hidden');
+        setMobileTab('microscope');
+      });
+    }
+    if (els.mobileDismissAlertBtn) {
+      els.mobileDismissAlertBtn.addEventListener('click', () => {
+        if (els.mobileTestAlert) els.mobileTestAlert.classList.add('hidden');
+      });
+    }
+
+    // Hub Quaderni Mobile
+    if (els.closeMobNotebooksHubBtn) {
+      els.closeMobNotebooksHubBtn.addEventListener('click', () => {
+        window.labAudio.playClick();
+        if (els.mobileNotebooksHub) els.mobileNotebooksHub.classList.add('hidden');
+        setMobileTab('microscope');
+      });
+    }
+    if (els.mobOpenNotepadCard) {
+      els.mobOpenNotepadCard.addEventListener('click', () => {
+        window.labAudio.playClick();
+        if (els.mobileNotebooksHub) els.mobileNotebooksHub.classList.add('hidden');
+        openNotepad();
+      });
+    }
+    if (els.mobOpenAtlasCard) {
+      els.mobOpenAtlasCard.addEventListener('click', () => {
+        window.labAudio.playClick();
+        if (els.mobileNotebooksHub) els.mobileNotebooksHub.classList.add('hidden');
+        openAtlas();
+      });
+    }
+
+    // Listener Ridimensionamento Finestra per Auto-Detection Dinamica
+    window.addEventListener('resize', () => {
+      if (state.deviceModePref === 'auto') {
+        const eff = resolveEffectiveIsMobile();
+        if (eff !== state.isMobileLayout) {
+          applyDeviceMode(eff);
+          updateDeviceModeUIElements();
+        }
+      }
+    });
   }
 
   function showToast(msg, icon = '🔗') {
