@@ -1,0 +1,4403 @@
+/* ==========================================================================
+   BioGuessr Lab v2.0 — Liquid-Glass Bubble UI & Clinical Laboratory Design
+   Palette da Laboratorio Clinico (Bianco Sterile, Ghiaccio Chirurgico,
+   Zaffiro Cobalto Lucido, Ciano Medicale) + Bolle 3D Ultra-Lucide Animate
+   ========================================================================== */
+
+:root {
+  --lab-bg-1: #e4f0fb;
+  --lab-bg-2: #f4f9fe;
+  --lab-bg-3: #d2e5f7;
+
+  --ink-navy: #0a223d;
+  --ink-slate: #334e68;
+  --ink-muted: #5c7690;
+
+  --sapphire-deep: #0b2756;
+  --sapphire-mid: #144488;
+  --sapphire-bright: #0284c7;
+  --lab-cyan: #38bdf8;
+  --lab-teal: #0d9488;
+  --lab-emerald: #10b981;
+  --lab-amber: #f59e0b;
+  --lab-rose: #e11d48;
+
+  --radius-bubble-xl: 30px;
+  --radius-bubble-lg: 24px;
+  --radius-bubble-md: 18px;
+  --radius-pill: 999px;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+  --font-hand: 'Caveat', cursive, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  color: var(--ink-navy);
+  background:
+    radial-gradient(circle at 15% 10%, rgba(56, 189, 248, 0.22), transparent 40%),
+    radial-gradient(circle at 85% 88%, rgba(14, 165, 233, 0.2), transparent 42%),
+    linear-gradient(145deg, var(--lab-bg-1) 0%, var(--lab-bg-2) 50%, var(--lab-bg-3) 100%);
+  background-attachment: fixed;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Modalità Realistica attiva: lieve atmosfera acciaio/cleanroom ancora più definita */
+body.realistic-active {
+  background:
+    radial-gradient(circle at 20% 8%, rgba(14, 165, 233, 0.26), transparent 44%),
+    radial-gradient(circle at 82% 85%, rgba(13, 148, 136, 0.2), transparent 45%),
+    linear-gradient(150deg, #dbeaf8 0%, #eef6fc 48%, #c9dff4 100%);
+}
+
+.hidden {
+  display: none !important;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+/* ==========================================================================
+   SFONDO LABORATORIO CON BOLLE DI VETRO FLUTTUANTI ANIMATE
+   ========================================================================== */
+.lab-bg-decor {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.floating-orb {
+  position: absolute;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 28% 28%, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.25) 26%, rgba(56, 189, 248, 0.18) 65%, rgba(2, 132, 199, 0.32) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  box-shadow:
+    inset 0 4px 14px rgba(255, 255, 255, 0.9),
+    inset -6px -8px 18px rgba(2, 132, 199, 0.25),
+    0 12px 30px rgba(2, 132, 199, 0.12);
+  opacity: 0.58;
+  animation: floatBubble 14s ease-in-out infinite alternate;
+}
+
+.orb-1 { width: 110px; height: 110px; top: 9%; left: 3%; animation-duration: 13s; }
+.orb-2 { width: 72px; height: 72px; top: 68%; left: 6%; animation-duration: 16s; animation-delay: -4s; }
+.orb-3 { width: 140px; height: 140px; top: 16%; right: 4%; animation-duration: 18s; animation-delay: -7s; }
+.orb-4 { width: 64px; height: 64px; bottom: 12%; right: 9%; animation-duration: 12s; animation-delay: -2s; }
+.orb-5 { width: 48px; height: 48px; top: 46%; left: 49%; animation-duration: 15s; animation-delay: -5s; }
+
+@keyframes floatBubble {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(12px, -18px, 0) scale(1.04); }
+  100% { transform: translate3d(-10px, -32px, 0) scale(0.97); }
+}
+
+/* ==========================================================================
+   SISTEMA COMPONENTI "BOLLA 3D ULTRA-LUCIDA" (ISPIRATO ALL'IMMAGINE ALLEGATA)
+   ========================================================================== */
+
+/* 1. Bolla Zaffiro-Laboratorio (come le forme blu lucide dell'immagine allegata, potenziate) */
+.sapphire-bubble {
+  position: relative;
+  overflow: hidden;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(186, 230, 253, 0.52) 0%, transparent 38%),
+    radial-gradient(circle at 88% 84%, rgba(56, 189, 248, 0.45) 0%, transparent 42%),
+    linear-gradient(155deg, #16488f 0%, #0b2756 54%, #123e7c 100%);
+  border: 1.8px solid rgba(224, 242, 254, 0.92);
+  box-shadow:
+    0 12px 26px -8px rgba(11, 39, 86, 0.42),
+    0 0 14px rgba(56, 189, 248, 0.25),
+    inset 0 3px 7px rgba(255, 255, 255, 0.78),
+    inset 0 -8px 18px rgba(56, 189, 248, 0.36),
+    inset 6px 0 14px rgba(186, 230, 253, 0.22);
+  transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.24s ease, filter 0.2s ease;
+}
+
+/* Riflesso superiore curvo ad effetto lente bagnata */
+.sapphire-bubble::before {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 6%;
+  right: 6%;
+  height: 44%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.46) 0%, rgba(255, 255, 255, 0.04) 100%);
+  pointer-events: none;
+}
+
+/* Bagliore stellare animato lungo il bordo (Glint Speculare) */
+.sapphire-bubble::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 42%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  animation: glossySweep 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Variante Verde-Acqua Medicale per il 2° Quaderno (Atlante Batteri) */
+.teal-bubble {
+  position: relative;
+  overflow: hidden;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(167, 243, 208, 0.52) 0%, transparent 38%),
+    radial-gradient(circle at 88% 84%, rgba(45, 212, 191, 0.45) 0%, transparent 42%),
+    linear-gradient(155deg, #0f766e 0%, #064e3b 56%, #0d9488 100%);
+  border: 1.8px solid rgba(209, 250, 229, 0.92);
+  box-shadow:
+    0 12px 26px -8px rgba(6, 78, 59, 0.4),
+    inset 0 3px 7px rgba(255, 255, 255, 0.78),
+    inset 0 -8px 18px rgba(45, 212, 191, 0.35);
+  transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.24s ease;
+}
+
+.teal-bubble::before {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 7%;
+  right: 7%;
+  height: 44%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.46) 0%, rgba(255, 255, 255, 0.04) 100%);
+  pointer-events: none;
+}
+
+/* 2. Bolla Cristallo-Ghiaccio da Laboratorio (Pannelli Principali Luminosi & Definiti) */
+.glass-bubble-panel {
+  position: relative;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.96) 0%, transparent 45%),
+    radial-gradient(circle at 92% 90%, rgba(186, 230, 253, 0.55) 0%, transparent 45%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(232, 244, 255, 0.84) 60%, rgba(245, 250, 255, 0.93) 100%);
+  backdrop-filter: blur(20px) saturate(160%);
+  border: 2px solid #ffffff;
+  border-radius: var(--radius-bubble-xl);
+  box-shadow:
+    0 20px 44px -14px rgba(11, 39, 86, 0.18),
+    0 2px 8px rgba(2, 132, 199, 0.1),
+    inset 0 4px 14px rgba(255, 255, 255, 1),
+    inset 0 -10px 24px rgba(56, 189, 248, 0.18);
+}
+
+.crystal-bubble {
+  position: relative;
+  overflow: hidden;
+  color: var(--ink-navy);
+  background:
+    radial-gradient(circle at 20% 20%, #ffffff 0%, rgba(224, 242, 254, 0.85) 75%),
+    linear-gradient(145deg, #ffffff, #dbeafe);
+  border: 1.8px solid #ffffff;
+  box-shadow:
+    0 10px 22px -8px rgba(11, 39, 86, 0.2),
+    inset 0 3px 8px #ffffff,
+    inset 0 -6px 14px rgba(56, 189, 248, 0.24);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+}
+
+@keyframes glossySweep {
+  0%, 68% { transform: translateX(-120%) rotate(25deg); opacity: 0; }
+  76% { opacity: 1; }
+  100% { transform: translateX(420%) rotate(25deg); opacity: 0; }
+}
+
+.dark-ink {
+  color: var(--ink-navy) !important;
+}
+
+.accent-cobalt {
+  color: var(--sapphire-bright) !important;
+}
+
+/* ==========================================================================
+   HEADER A BOLLA DI LABORATORIO
+   ========================================================================== */
+.lab-header {
+  position: sticky;
+  top: 0;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 22px;
+  background: rgba(235, 245, 255, 0.78);
+  backdrop-filter: blur(18px);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 26px rgba(11, 39, 86, 0.08);
+  flex-wrap: wrap;
+}
+
+.brand-bubble {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 7px 16px 7px 9px;
+  border-radius: var(--radius-pill);
+}
+
+.brand-circle-orb {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #6ee7b7, #059669 60%, #064e3b);
+  border: 2px solid #ffffff;
+  box-shadow: inset 0 2px 6px rgba(255,255,255,0.85), 0 0 12px rgba(16, 185, 129, 0.5);
+  display: grid;
+  place-items: center;
+}
+
+.petri-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #fde047;
+  box-shadow: -6px 5px 0 -2px #fef08a, 6px -4px 0 -2.5px #fde047, 4px 6px 0 -2.5px #ffffff;
+}
+
+.brand-title {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.brand-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(56, 189, 248, 0.28);
+  border: 1px solid rgba(224, 242, 254, 0.7);
+}
+
+.brand-subtitle {
+  font-size: 0.7rem;
+  color: #bae6fd;
+}
+
+/* TASTO INTERATTIVO "MODALITÀ REALISTICA" A CAPSULA LUCIDA */
+.realistic-toggle-bubble {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 16px 6px 7px;
+  border-radius: var(--radius-pill);
+  background:
+    radial-gradient(circle at 20% 20%, #ffffff, #dbeafe 80%);
+  border: 2px solid #ffffff;
+  box-shadow:
+    0 10px 24px -8px rgba(11, 39, 86, 0.25),
+    inset 0 2px 8px #ffffff,
+    inset 0 -6px 12px rgba(56, 189, 248, 0.25);
+  color: var(--ink-navy);
+  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.realistic-toggle-bubble:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.realistic-toggle-bubble.active {
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(167, 243, 208, 0.55), transparent 45%),
+    linear-gradient(135deg, #0284c7 0%, #0f766e 55%, #065f46 100%);
+  border-color: #ecfdf5;
+  box-shadow:
+    0 12px 28px -6px rgba(13, 148, 136, 0.55),
+    0 0 18px rgba(45, 212, 191, 0.45),
+    inset 0 3px 8px rgba(255, 255, 255, 0.8);
+}
+
+.toggle-knob {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #0b2756, #0284c7);
+  color: #ffffff;
+  border: 1.8px solid #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(11, 39, 86, 0.3);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.realistic-toggle-bubble.active .toggle-knob {
+  background: linear-gradient(145deg, #ffffff, #d1fae5);
+  transform: rotate(12deg) scale(1.08);
+}
+
+.toggle-copy {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.18;
+}
+
+.toggle-kicker {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.8;
+  font-weight: 700;
+}
+
+.toggle-copy strong {
+  font-size: 0.82rem;
+  font-family: var(--font-display);
+}
+
+/* HUD Capsule Statistiche */
+.hud-stats {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.hud-bubble {
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  min-width: 114px;
+}
+
+.hud-label {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  opacity: 0.88;
+}
+
+.crystal-bubble .hud-label {
+  color: var(--ink-slate);
+}
+
+.hud-value-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  position: relative;
+}
+
+.hud-value {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.hud-unit {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  opacity: 0.85;
+}
+
+.hud-sub-badge {
+  margin-left: 4px;
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(2, 132, 199, 0.16);
+  color: #0369a1;
+}
+
+/* 5 Fiale Lucide Errori */
+.life-vials {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.life-vial {
+  width: 16px;
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(180deg, #a7f3d0, #10b981);
+  border: 1px solid #ffffff;
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.65);
+  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.life-vial.lost {
+  background: rgba(244, 63, 94, 0.35);
+  border-color: rgba(254, 205, 211, 0.6);
+  box-shadow: none;
+  transform: scale(0.82);
+}
+
+.score-delta-anchor {
+  position: relative;
+}
+
+.floating-delta {
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #ffe4e6;
+  background: #e11d48;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  border: 1px solid #ffffff;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 80;
+  animation: floatDownFade 1.1s ease-out forwards;
+}
+
+@keyframes floatDownFade {
+  0% { opacity: 1; transform: translateY(0) scale(1.08); }
+  100% { opacity: 0; transform: translateY(22px) scale(0.92); }
+}
+
+/* Pulsanti Header per i 2 Quaderni */
+.header-notebooks {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notebook-launch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 15px;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.notebook-launch-btn:hover,
+.circle-bubble-btn:hover,
+.pill-action-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+}
+
+.nb-counter-pill {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  background: #ffffff;
+  color: var(--sapphire-deep);
+  font-weight: 800;
+}
+
+.circle-bubble-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+}
+
+.pill-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   GRIGLIA WORKSTATION A 2 COLONNE
+   ========================================================================== */
+.workstation-grid {
+  position: relative;
+  z-index: 2;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 18px 22px 38px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.16fr) minmax(380px, 0.94fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.stage-column,
+.workbench-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ==========================================================================
+   RIQUADRO SUPERIORE: PIASTRA PETRI / CAPPA BSL-2 / MICROSCOPIO
+   ========================================================================== */
+.viewport-card {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.viewport-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sample-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: var(--radius-pill);
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 10px #34d399;
+}
+
+.sample-code {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* Barra Controlli Cappa Biohazard BSL-2 */
+.hood-controls-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.hood-chip {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(226, 232, 240, 0.85);
+  border: 1.5px solid #ffffff;
+  color: var(--ink-slate);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.1);
+  transition: all 0.18s ease;
+}
+
+.hood-chip.active {
+  background: linear-gradient(135deg, #0284c7, #0d9488);
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(2, 132, 199, 0.32), inset 0 2px 5px rgba(255,255,255,0.65);
+}
+
+.tool-chip {
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 6px 13px;
+  border-radius: var(--radius-pill);
+}
+
+.tool-chip.active {
+  background: linear-gradient(135deg, #f59e0b, #eab308);
+  color: #ffffff;
+}
+
+/* Strip Schede Viste Sbloccate */
+.view-tabs-strip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  overflow-x: auto;
+  padding: 2px 2px 5px;
+}
+
+.view-pill {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1.5px solid #ffffff;
+  color: var(--ink-slate);
+  box-shadow: 0 4px 10px rgba(11, 39, 86, 0.08), inset 0 2px 4px #ffffff;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.view-pill:hover {
+  transform: translateY(-1px);
+  color: var(--sapphire-deep);
+}
+
+.view-pill.active {
+  color: #ffffff;
+  background: linear-gradient(145deg, #16488f, #0284c7);
+  border-color: #e0f2fe;
+  box-shadow: 0 8px 18px rgba(2, 132, 199, 0.35), inset 0 2px 6px rgba(255, 255, 255, 0.72);
+}
+
+/* CONSOLE REALISTICA DEL MICROSCOPIO */
+.microscope-console {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 20px;
+  flex-wrap: wrap;
+}
+
+.mc-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mc-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #bae6fd;
+}
+
+.mc-objectives {
+  display: inline-flex;
+  background: rgba(7, 18, 40, 0.48);
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.obj-btn {
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  transition: all 0.16s ease;
+}
+
+.obj-btn.active {
+  background: #ffffff;
+  color: var(--sapphire-deep);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.45);
+}
+
+.mc-slider-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #e0f2fe;
+}
+
+.mc-slider-label input[type='range'] {
+  width: 78px;
+  accent-color: #38bdf8;
+  cursor: pointer;
+}
+
+.mc-reset-btn {
+  padding: 5px 11px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.mc-reset-btn:hover {
+  background: rgba(255, 255, 255, 0.34);
+}
+
+/* FUMETTO A BOLLA CON CODA TRIANGOLARE (ISPIRATO ALL'IMMAGINE ALLEGATA!) */
+.interactive-speech-bubble {
+  position: relative;
+  border-radius: 20px;
+  padding: 10px 16px;
+  overflow: visible !important;
+  z-index: 12;
+  animation: gentlePulseBubble 2.4s ease-in-out infinite;
+}
+
+@keyframes gentlePulseBubble {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+.speech-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.speech-text {
+  font-size: 0.83rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.skip-step-btn {
+  padding: 4px 11px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--sapphire-deep);
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.skip-step-btn:hover {
+  background: #ffffff;
+  transform: scale(1.04);
+}
+
+.speech-pointer {
+  position: absolute;
+  bottom: -10px;
+  left: 42px;
+  width: 18px;
+  height: 18px;
+  background: #0d3168;
+  border-right: 1.8px solid rgba(224, 242, 254, 0.92);
+  border-bottom: 1.8px solid rgba(224, 242, 254, 0.92);
+  transform: rotate(45deg);
+}
+
+/* AREA CANVAS */
+.canvas-stage {
+  position: relative;
+  width: 100%;
+  height: 375px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 2.5px solid #ffffff;
+  box-shadow:
+    inset 0 2px 12px rgba(11, 39, 86, 0.16),
+    0 10px 24px -8px rgba(11, 39, 86, 0.22);
+  background: #dcebf7;
+  cursor: crosshair;
+}
+
+#labCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-hint-pill {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.lab-loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 39, 86, 0.55);
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.spinner-ring {
+  width: 34px;
+  height: 34px;
+  border: 3.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* BANNER OSSERVAZIONE A BOLLA */
+.observation-banner {
+  border-radius: 20px;
+  padding: 12px 16px;
+}
+
+.obs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.obs-title {
+  font-size: 0.87rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.obs-detail {
+  font-size: 0.82rem;
+  color: #e0f2fe;
+  line-height: 1.46;
+}
+
+.obs-badge {
+  font-family: var(--font-mono);
+  font-size: 0.69rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+}
+
+.tone-info { background: #0284c7; color: #ffffff; }
+.tone-success { background: #059669; color: #ffffff; }
+.tone-amber { background: #d97706; color: #ffffff; }
+.tone-danger { background: #e11d48; color: #ffffff; }
+.tone-purple { background: #7c3aed; color: #ffffff; }
+.tone-pink { background: #db2777; color: #ffffff; }
+.tone-neutral { background: #475569; color: #ffffff; }
+
+/* ==========================================================================
+   ZONA DI SCRITTURA & AUTOCOMPLETAMENTO A BOLLA (SOTTO LA PIASTRA PETRI)
+   ========================================================================== */
+.guess-card {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 25;
+}
+
+.guess-card.shake {
+  animation: errorShake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes errorShake {
+  10%, 90% { transform: translateX(-3px); }
+  20%, 80% { transform: translateX(5px); }
+  30%, 50%, 70% { transform: translateX(-6px); }
+  40%, 60% { transform: translateX(6px); }
+}
+
+.guess-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.guess-title {
+  font-family: var(--font-display);
+  font-size: 1.06rem;
+  font-weight: 700;
+  color: var(--ink-navy);
+}
+
+.guess-subtitle {
+  font-size: 0.8rem;
+  color: var(--ink-slate);
+}
+
+.errors-pill {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(225, 29, 72, 0.12);
+  border: 1.5px solid rgba(225, 29, 72, 0.35);
+  color: #be123c;
+  white-space: nowrap;
+}
+
+.guess-form {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.autocomplete-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  font-size: 1.05rem;
+  pointer-events: none;
+}
+
+.species-input {
+  width: 100%;
+  padding: 13px 38px 13px 44px;
+  border-radius: var(--radius-pill);
+  background: #ffffff;
+  border: 2px solid rgba(2, 132, 199, 0.32);
+  box-shadow:
+    inset 0 3px 8px rgba(11, 39, 86, 0.06),
+    0 6px 16px rgba(11, 39, 86, 0.06);
+  color: var(--ink-navy);
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-style: italic;
+  transition: all 0.2s ease;
+}
+
+.species-input::placeholder {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+
+.species-input:focus {
+  outline: none;
+  border-color: var(--sapphire-bright);
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.28);
+}
+
+.clear-input-btn {
+  position: absolute;
+  right: 12px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.2);
+  color: var(--ink-slate);
+  font-size: 0.78rem;
+  display: grid;
+  place-items: center;
+}
+
+.clear-input-btn:hover {
+  background: rgba(225, 29, 72, 0.16);
+  color: #be123c;
+}
+
+.btn-primary-bubble {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 24px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.btn-primary-bubble:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  filter: brightness(1.06);
+}
+
+.btn-primary-bubble:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Menu a tendina suggerimenti a bolla lucida */
+.suggestions-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  max-height: 255px;
+  overflow-y: auto;
+  list-style: none;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(18px);
+  border: 2px solid var(--sapphire-bright);
+  border-radius: 22px;
+  box-shadow: 0 22px 45px rgba(11, 39, 86, 0.28);
+  z-index: 75;
+  padding: 6px;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.14s ease;
+}
+
+.suggestion-item:hover,
+.suggestion-item.highlighted {
+  background: rgba(2, 132, 199, 0.14);
+}
+
+.suggestion-item.already-tried {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.sug-name {
+  font-style: italic;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--ink-navy);
+}
+
+.sug-name mark {
+  background: rgba(56, 189, 248, 0.35);
+  color: #0369a1;
+  border-radius: 4px;
+  padding: 0 2px;
+}
+
+.sug-meta {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--ink-muted);
+}
+
+/* Consigli rapidi a bolla */
+.quick-suggestions-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.quick-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ink-slate);
+}
+
+.quick-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.quick-chip {
+  font-size: 0.76rem;
+  font-style: italic;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(145deg, #ffffff, #e0f2fe);
+  border: 1.5px solid #ffffff;
+  color: var(--sapphire-deep);
+  box-shadow: 0 4px 10px rgba(11, 39, 86, 0.1), inset 0 2px 4px #ffffff;
+  transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.quick-chip:hover {
+  transform: translateY(-2px) scale(1.03);
+  background: linear-gradient(145deg, #16488f, #0284c7);
+  color: #ffffff;
+}
+
+.attempts-log {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.attempt-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: rgba(225, 29, 72, 0.1);
+  border: 1.5px solid rgba(225, 29, 72, 0.28);
+  color: #9f1239;
+}
+
+.attempt-row.same-genus {
+  background: rgba(245, 158, 11, 0.16);
+  border-color: rgba(217, 119, 6, 0.4);
+  color: #92400e;
+}
+
+.attempt-hint {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+/* ==========================================================================
+   COLONNA DESTRA: CARD TEST A BOLLA LUCIDA & ACCESSO QUADERNI
+   ========================================================================== */
+.tests-panel-card {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.panel-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink-navy);
+}
+
+.panel-subtitle {
+  font-size: 0.78rem;
+  color: var(--ink-slate);
+}
+
+.tests-used-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 11px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.category-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  background: rgba(203, 225, 246, 0.55);
+  padding: 5px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid #ffffff;
+}
+
+.cat-tab {
+  padding: 8px 6px;
+  border-radius: var(--radius-pill);
+  font-size: 0.79rem;
+  font-weight: 700;
+  color: var(--ink-slate);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cat-tab.active {
+  background: linear-gradient(145deg, #16488f, #0b2756);
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(11, 39, 86, 0.3), inset 0 2px 5px rgba(255, 255, 255, 0.65);
+}
+
+.cat-count {
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.tests-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 9px;
+  max-height: 410px;
+  overflow-y: auto;
+  padding: 2px 5px 4px 2px;
+}
+
+.test-card-btn {
+  width: 100%;
+  text-align: left;
+  padding: 12px 15px;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 12% 15%, #ffffff 0%, rgba(235, 246, 255, 0.9) 70%),
+    linear-gradient(145deg, #ffffff, #e2effb);
+  border: 1.8px solid #ffffff;
+  box-shadow:
+    0 8px 18px -8px rgba(11, 39, 86, 0.16),
+    inset 0 2px 6px #ffffff,
+    inset 0 -5px 12px rgba(56, 189, 248, 0.16);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.test-card-btn:hover {
+  transform: translateY(-2px) scale(1.01);
+  border-color: var(--sapphire-bright);
+  box-shadow:
+    0 12px 24px -8px rgba(2, 132, 199, 0.28),
+    inset 0 2px 8px #ffffff;
+}
+
+.test-card-btn.done {
+  background: linear-gradient(145deg, #ecfdf5, #d1fae5);
+  border-color: #6ee7b7;
+}
+
+.test-card-btn.in-progress {
+  background: linear-gradient(145deg, #e0f2fe, #bae6fd);
+  border-color: #0284c7;
+}
+
+.test-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.test-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--ink-navy);
+}
+
+.test-cost-pill {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(225, 29, 72, 0.12);
+  color: #be123c;
+  border: 1px solid rgba(225, 29, 72, 0.28);
+  white-space: nowrap;
+}
+
+.test-desc {
+  font-size: 0.76rem;
+  color: var(--ink-slate);
+  line-height: 1.4;
+}
+
+/* RIEPILOGO COMPATTO BANCO + LANCIO QUADERNI */
+.mini-desk-card {
+  padding: 15px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mini-desk-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mini-desk-title {
+  font-family: var(--font-display);
+  font-size: 0.96rem;
+  color: var(--ink-navy);
+}
+
+.mini-desk-sub {
+  font-size: 0.75rem;
+  color: var(--ink-slate);
+}
+
+.mini-desk-btns {
+  display: flex;
+  gap: 7px;
+}
+
+.mini-nb-btn {
+  padding: 7px 13px;
+  border-radius: var(--radius-pill);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.mini-nb-btn:hover {
+  transform: translateY(-2px);
+}
+
+.recent-results-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 165px;
+  overflow-y: auto;
+}
+
+.empty-report-state {
+  font-size: 0.79rem;
+  color: var(--ink-slate);
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1.5px dashed rgba(2, 132, 199, 0.3);
+}
+
+.mini-result-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 13px;
+  background: #ffffff;
+  border: 1px solid rgba(2, 132, 199, 0.2);
+  font-size: 0.79rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mini-result-row:hover {
+  border-color: var(--sapphire-bright);
+  transform: translateX(2px);
+}
+
+/* ==========================================================================
+   QUADERNO #1: BLOCCHETTO NOTE A SPIRALE DI LABORATORIO
+   ========================================================================== */
+.drawer-backdrop,
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(10, 34, 61, 0.48);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.spiral-notepad-sheet {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  max-height: 88vh;
+  background: #fffdf7;
+  border-radius: 12px 12px 24px 24px;
+  border: 2px solid #cbd5e1;
+  box-shadow:
+    0 28px 60px rgba(10, 34, 61, 0.42),
+    8px 8px 0 rgba(226, 232, 240, 0.9);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: notebookOpen 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes notebookOpen {
+  from { opacity: 0; transform: translateY(18px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.spiral-rings-row {
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 24px 6px;
+  background: linear-gradient(180deg, #e2e8f0, #f8fafc);
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.spiral-rings-row span {
+  width: 14px;
+  height: 22px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #475569, #cbd5e1 45%, #334155);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.25);
+}
+
+.notepad-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px 10px;
+  border-bottom: 2px solid #fca5a5;
+  background: #fffdf7;
+}
+
+.notepad-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #0284c7;
+  letter-spacing: 0.08em;
+}
+
+.notepad-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.22rem;
+  color: var(--ink-navy);
+}
+
+.close-circle-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: var(--ink-navy);
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  transition: all 0.16s ease;
+}
+
+.close-circle-btn:hover {
+  background: #e11d48;
+  color: #ffffff;
+}
+
+.notepad-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 10px 22px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+}
+
+.np-tab {
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink-slate);
+  background: #e2e8f0;
+  transition: all 0.16s ease;
+}
+
+.np-tab.active {
+  background: var(--sapphire-deep);
+  color: #ffffff;
+}
+
+.notepad-page {
+  padding: 16px 22px 20px;
+  overflow-y: auto;
+  flex: 1;
+  background-image: linear-gradient(#e0f2fe 1px, transparent 1px);
+  background-size: 100% 28px;
+}
+
+.empty-notepad-msg {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1.5px dashed #94a3b8;
+  color: var(--ink-slate);
+  font-size: 0.84rem;
+}
+
+.notepad-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.report-entry {
+  padding: 11px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.report-entry:hover {
+  border-color: var(--sapphire-bright);
+  transform: translateY(-1px);
+}
+
+.report-entry-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.report-entry-name {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--ink-navy);
+}
+
+.report-entry-text {
+  font-size: 0.8rem;
+  color: var(--ink-slate);
+}
+
+/* Appunti liberi su carta a righe */
+.quick-note-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+}
+
+.qtag-label {
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: var(--ink-slate);
+}
+
+.qtag-btn {
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 0.73rem;
+  font-weight: 700;
+}
+
+.qtag-btn:hover {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+.lined-paper-textarea {
+  width: 100%;
+  min-height: 240px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1.5px solid #94a3b8;
+  background:
+    repeating-linear-gradient(
+      #fffef9,
+      #fffef9 27px,
+      #bae6fd 28px
+    );
+  font-family: var(--font-hand);
+  font-size: 1.32rem;
+  line-height: 28px;
+  color: #0f2942;
+  resize: vertical;
+}
+
+.lined-paper-textarea:focus {
+  outline: none;
+  border-color: var(--sapphire-bright);
+}
+
+.notepad-notes-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 0.75rem;
+}
+
+.saved-hint {
+  color: #059669;
+  font-weight: 700;
+}
+
+.clear-notes-link {
+  color: #e11d48;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* Checklist 20 Specie nel Blocchetto */
+.checklist-intro {
+  font-size: 0.8rem;
+  color: var(--ink-slate);
+  background: rgba(255, 255, 255, 0.92);
+  padding: 8px 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.suspects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.suspect-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  font-size: 0.8rem;
+}
+
+.suspect-pill.ruled-out {
+  opacity: 0.48;
+  background: #f1f5f9;
+}
+
+.suspect-pill.ruled-out .suspect-select-btn {
+  text-decoration: line-through;
+  text-decoration-color: #e11d48;
+  text-decoration-thickness: 2px;
+}
+
+.suspect-select-btn {
+  flex: 1;
+  text-align: left;
+  font-style: italic;
+  font-weight: 600;
+  color: var(--ink-navy);
+}
+
+.suspect-toggle-x {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fee2e2;
+  color: #be123c;
+  font-weight: 800;
+  font-size: 0.72rem;
+  display: grid;
+  place-items: center;
+}
+
+.suspect-toggle-x:hover {
+  background: #e11d48;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   QUADERNO #2: L'ATLANTE DEI BATTERI (ENCICLOPEDIA RILEGATA SFOGLIABILE)
+   ========================================================================== */
+.atlas-book-binder {
+  width: 100%;
+  max-width: 1020px;
+  max-height: 89vh;
+  background: #f8fbff;
+  border-radius: 26px;
+  border: 3px solid #ffffff;
+  box-shadow:
+    0 30px 65px rgba(10, 34, 61, 0.45),
+    inset 12px 0 0 #0f766e;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-left: 12px;
+  animation: notebookOpen 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.atlas-top-ribbon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px 12px;
+  background: linear-gradient(135deg, #064e3b, #0f766e 60%, #0284c7);
+  color: #ffffff;
+}
+
+.atlas-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #a7f3d0;
+  letter-spacing: 0.08em;
+}
+
+.atlas-top-ribbon h2 {
+  font-family: var(--font-display);
+  font-size: 1.28rem;
+}
+
+.atlas-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 22px;
+  background: #eef6fc;
+  border-bottom: 1.5px solid #cbd5e1;
+  flex-wrap: wrap;
+}
+
+.atlas-bookmarks {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.bookmark-tab {
+  padding: 7px 13px;
+  border-radius: var(--radius-pill);
+  font-size: 0.77rem;
+  font-weight: 700;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: var(--ink-slate);
+  transition: all 0.16s ease;
+}
+
+.bookmark-tab.active {
+  background: #0f766e;
+  border-color: #0f766e;
+  color: #ffffff;
+}
+
+.atlas-search-wrap {
+  min-width: 240px;
+  flex: 1;
+  max-width: 310px;
+}
+
+.atlas-search-input {
+  width: 100%;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid #94a3b8;
+  background: #ffffff;
+  font-size: 0.82rem;
+  color: var(--ink-navy);
+}
+
+.atlas-book-pages {
+  padding: 18px 22px 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.atlas-species-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.atlas-sp-card {
+  background: #ffffff;
+  border: 1.8px solid #dbeafe;
+  border-radius: 20px;
+  padding: 14px 16px;
+  box-shadow: 0 8px 20px -10px rgba(11, 39, 86, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.atlas-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.atlas-mini-canvas {
+  width: 88px;
+  height: 46px;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  flex-shrink: 0;
+}
+
+.atlas-sp-card h4 {
+  font-size: 1rem;
+  color: var(--sapphire-deep);
+}
+
+.atlas-sp-group {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--ink-muted);
+}
+
+.atlas-badges-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.atlas-mini-pill {
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: #f1f5f9;
+  color: var(--ink-navy);
+  border: 1px solid #cbd5e1;
+}
+
+.atlas-sp-card p {
+  font-size: 0.79rem;
+  color: var(--ink-slate);
+  line-height: 1.44;
+}
+
+.flowchart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.flow-card {
+  background: #ffffff;
+  border: 1.8px solid #dbeafe;
+  border-radius: 20px;
+  padding: 16px;
+}
+
+.flow-card h3 {
+  font-size: 0.95rem;
+  color: #0f766e;
+  margin-bottom: 8px;
+}
+
+.flow-card ul {
+  padding-left: 18px;
+  font-size: 0.8rem;
+  color: var(--ink-slate);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* --- ATLANTE 100 SPECIE: BARRA CHIP FILTRI RAPIDI & CONTATORE --- */
+.atlas-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.atlas-counter-pill {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: var(--radius-pill);
+  background: #dbeafe;
+  color: #1e40af;
+  white-space: nowrap;
+}
+
+.atlas-chips-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 22px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.chips-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 4px;
+}
+
+.atlas-chip {
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.74rem;
+  font-weight: 600;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: var(--ink-slate);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.atlas-chip:hover {
+  border-color: #0284c7;
+  color: #0284c7;
+}
+
+.atlas-chip.active {
+  background: #0f766e;
+  border-color: #0f766e;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(15, 118, 110, 0.25);
+}
+
+.tree-tab-btn {
+  background: #ecfdf5 !important;
+  color: #047857 !important;
+  border-color: #a7f3d0 !important;
+}
+
+.tree-tab-btn.active {
+  background: #0f766e !important;
+  color: #ffffff !important;
+  border-color: #0f766e !important;
+}
+
+/* --- ATLANTE: ALBERO GENEALOGICO / TASSONOMICO DEI BATTERI --- */
+.tree-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid #e2e8f0;
+  flex-wrap: wrap;
+}
+
+.tree-root-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #0d9488;
+  letter-spacing: 0.08em;
+}
+
+.tree-header-bar h3 {
+  font-size: 1.05rem;
+  color: var(--sapphire-deep);
+  margin: 2px 0 4px;
+}
+
+.tree-header-bar p {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.tree-actions-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tree-search-input {
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid #cbd5e1;
+  font-size: 0.78rem;
+  min-width: 240px;
+  background: #ffffff;
+  color: var(--ink-navy);
+}
+
+.tree-btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+.tree-ctrl-btn {
+  padding: 5px 11px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--ink-navy);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tree-ctrl-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.tree-main-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.tree-hierarchy-container {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 16px;
+  max-height: 64vh;
+  overflow-y: auto;
+}
+
+/* Nodi dell'Albero Tassonomico */
+.tree-node-item {
+  margin: 2px 0;
+}
+
+.tree-node-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+
+.tree-node-row:hover {
+  background: #f0fdf4;
+}
+
+.tree-node-row.selected {
+  background: #e0f2fe;
+  outline: 1.5px solid #0284c7;
+}
+
+.tree-caret {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  background: #f1f5f9;
+  color: #475569;
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.tree-node-row.open > .tree-caret {
+  transform: rotate(90deg);
+}
+
+.tree-node-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-navy);
+}
+
+.tree-rank-tag {
+  font-size: 0.63rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.tree-count-pill {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 10px;
+  background: #e2e8f0;
+  color: #334155;
+  margin-left: auto;
+}
+
+.tree-sub-branch {
+  list-style: none;
+  padding-left: 18px;
+  border-left: 2px dashed #cbd5e1;
+  margin-left: 8px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.tree-sub-branch.collapsed {
+  display: none;
+}
+
+.tree-species-leaf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  margin: 2px 0 2px 6px;
+  cursor: pointer;
+  border-left: 2.5px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.tree-species-leaf:hover {
+  background: #f8fafc;
+  border-left-color: #0f766e;
+}
+
+.tree-species-leaf.selected {
+  background: #ecfeff;
+  border-left-color: #0f766e;
+  font-weight: 700;
+}
+
+.tree-species-name {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--ink-slate);
+}
+
+.tree-gram-badge {
+  font-size: 0.63rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.tree-gram-badge.pos {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.tree-gram-badge.neg {
+  background: #fce7f3;
+  color: #be185d;
+}
+
+.tree-gram-badge.acidfast {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Sidecard Anteprima Specie nell'Albero */
+.tree-inspector-sidecard {
+  background: #ffffff;
+  border: 1.5px solid #dbeafe;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 10px 25px -10px rgba(15, 118, 110, 0.18);
+  position: sticky;
+  top: 0;
+}
+
+.tree-empty-inspector {
+  text-align: center;
+  padding: 32px 14px;
+  color: var(--ink-muted);
+}
+
+.tree-empty-inspector .empty-icon {
+  font-size: 2.4rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.tree-empty-inspector h4 {
+  font-size: 0.95rem;
+  color: var(--sapphire-deep);
+  margin-bottom: 6px;
+}
+
+.tree-empty-inspector p {
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.tree-spec-quick-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.tree-spec-quick-canvas {
+  width: 90px;
+  height: 52px;
+  border-radius: 8px;
+  border: 1.5px solid #cbd5e1;
+  flex-shrink: 0;
+}
+
+.tree-spec-quick-head h4 {
+  font-size: 1.02rem;
+  color: var(--sapphire-deep);
+}
+
+.tree-spec-quick-lineage {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--ink-muted);
+}
+
+.tree-spec-quick-gold {
+  background: #eff6ff;
+  border-left: 3px solid #3b82f6;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.77rem;
+  color: #1e3a8a;
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+
+.tree-inspect-full-btn {
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1.5px solid #0f766e;
+  background: #0f766e;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  margin-top: 10px;
+}
+
+.tree-inspect-full-btn:hover {
+  background: #115e59;
+}
+
+/* Schede Dettaglio Specie (Modal Completo Dossier & Letteratura) */
+.species-detail-card {
+  max-width: 980px;
+  width: 95vw;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 22px 26px;
+  border-radius: 26px;
+}
+
+.detail-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.detail-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: #0f766e;
+  font-weight: 700;
+}
+
+.detail-name {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  color: var(--sapphire-deep);
+  margin: 4px 0 2px;
+}
+
+.detail-aliases {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+}
+
+.detail-bsl-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1.5px solid #f87171;
+  margin-right: 12px;
+}
+
+.detail-content-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.detail-visuals-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.detail-micro-card,
+.detail-plate-card {
+  padding: 14px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1.5px solid #dbeafe;
+}
+
+.detail-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.detail-card-head h4 {
+  font-size: 0.88rem;
+  color: var(--sapphire-deep);
+}
+
+.detail-canvas-box {
+  background: #0f172a;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #334155;
+}
+
+.detail-canvas-box canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.detail-micro-caption {
+  font-size: 0.73rem;
+  color: var(--ink-muted);
+  line-height: 1.4;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.detail-plate-desc {
+  font-size: 0.79rem;
+  color: var(--ink-slate);
+  line-height: 1.42;
+}
+
+.detail-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-section-block {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.section-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-navy);
+  margin-bottom: 8px;
+}
+
+.detail-gold-box {
+  background: #eff6ff;
+  border-left: 3.5px solid #3b82f6;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #1e3a8a;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.detail-markers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.detail-marker-pill {
+  font-family: var(--font-mono);
+  font-size: 0.69rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-media-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.detail-media-chip {
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.detail-media-chip.growth-pos {
+  border-color: #86efac;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.detail-media-chip.growth-neg {
+  border-color: #f1f5f9;
+  background: #f8fafc;
+  color: #94a3b8;
+  opacity: 0.75;
+}
+
+.detail-clinical-text {
+  font-size: 0.8rem;
+  color: var(--ink-slate);
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+
+.detail-diseases-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.disease-tag {
+  font-size: 0.72rem;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+/* Card di Letteratura Scientifica */
+.lit-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+
+.lit-card:last-child {
+  margin-bottom: 0;
+}
+
+.lit-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--sapphire-deep);
+  margin-bottom: 2px;
+}
+
+.lit-citation {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--ink-muted);
+  margin-bottom: 4px;
+}
+
+.lit-finding {
+  font-size: 0.77rem;
+  color: var(--ink-slate);
+  line-height: 1.35;
+}
+
+.detail-footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Pulsante Scheda Card Atlante */
+.atlas-view-detail-btn {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1.5px solid #dbeafe;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  margin-top: 4px;
+}
+
+.atlas-view-detail-btn:hover {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   MODALE DI FINE ROUND
+   ========================================================================== */
+.result-modal-card {
+  max-width: 630px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.result-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 22px;
+}
+
+.result-banner.lost {
+  background: linear-gradient(145deg, #9f1239, #e11d48);
+}
+
+.result-icon {
+  font-size: 2.4rem;
+}
+
+.result-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  color: #a7f3d0;
+}
+
+.result-banner.lost .result-kicker {
+  color: #ffe4e6;
+}
+
+.result-species-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.result-taxonomy {
+  font-size: 0.82rem;
+  color: #e0f2fe;
+}
+
+.result-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.metric-box {
+  padding: 12px;
+  border-radius: 18px;
+  text-align: center;
+}
+
+.metric-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ink-slate);
+  margin-bottom: 3px;
+}
+
+.metric-val {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.scientific-dossier {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #ffffff;
+  border: 1.8px solid #dbeafe;
+  padding: 15px 18px;
+  border-radius: 20px;
+}
+
+.dossier-block h3 {
+  font-size: 0.85rem;
+  color: var(--sapphire-bright);
+  margin-bottom: 4px;
+}
+
+.dossier-block p {
+  font-size: 0.82rem;
+  color: var(--ink-slate);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.modal-footer .btn-primary-bubble {
+  padding: 12px 24px;
+}
+
+/* Scrollbar elegante da laboratorio */
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track { background: rgba(203, 213, 225, 0.35); border-radius: 99px; }
+::-webkit-scrollbar-thumb { background: rgba(100, 116, 139, 0.45); border-radius: 99px; }
+
+/* ==========================================================================
+   BANCONE 3D INTERATTIVO & SCHERMATA RAVVICINATA (MODALITÀ REALISTICA v3.0)
+   ========================================================================== */
+.classic-stage-wrapper,
+.bench3d-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bench3d-stage {
+  position: relative;
+  width: 100%;
+  height: 416px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 2.5px solid #ffffff;
+  background: linear-gradient(180deg, #cbe0f5 0%, #e4f0fb 100%);
+  box-shadow:
+    inset 0 6px 20px rgba(11, 39, 86, 0.2),
+    0 12px 28px -8px rgba(11, 39, 86, 0.26);
+}
+
+#bench3dCanvas,
+#inspectionCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.bench3d-badge-top {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 15px;
+  border-radius: var(--radius-pill);
+  font-size: 0.74rem;
+  font-weight: 700;
+  pointer-events: none;
+  white-space: nowrap;
+  max-width: calc(100% - 24px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bench3d-sep {
+  opacity: 0.65;
+}
+
+.bench3d-hover-card {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 9px 18px;
+  border-radius: 18px;
+  text-align: center;
+  pointer-events: none;
+  min-width: 240px;
+  max-width: calc(100% - 28px);
+  animation: notebookOpen 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bench3d-hover-card strong {
+  font-size: 0.84rem;
+  color: #ffffff;
+}
+
+.bench3d-hover-card span {
+  font-size: 0.73rem;
+  color: #e0f2fe;
+}
+
+.bench3d-quick-bar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.bench-station-btn {
+  padding: 9px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.77rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s ease;
+}
+
+.bench-station-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  filter: brightness(1.06);
+}
+
+/* Z-index: la schermata ravvicinata sta sotto a Blocchetto Note, Atlante e Fine Round */
+.inspection-backdrop {
+  z-index: 102;
+  padding: 14px;
+}
+
+#notepadModal,
+#atlasModal,
+#resultModal {
+  z-index: 130;
+}
+
+.inspection-window-card {
+  width: 100%;
+  max-width: 960px;
+  max-height: 94vh;
+  overflow-y: auto;
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: notebookOpen 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.inspection-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.inspection-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.inspection-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--sapphire-bright);
+  text-transform: uppercase;
+}
+
+.inspection-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink-navy);
+}
+
+.inspection-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.back-to-bench-btn {
+  padding: 8px 15px;
+  border-radius: var(--radius-pill);
+  font-size: 0.79rem;
+  font-weight: 800;
+  color: var(--sapphire-deep);
+  transition: all 0.18s ease;
+}
+
+.back-to-bench-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(145deg, #16488f, #0284c7);
+  color: #ffffff;
+}
+
+.stain-quick-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid #bae6fd;
+  box-shadow: inset 0 2px 5px #ffffff;
+}
+
+.stain-picker-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-navy);
+}
+
+.stain-picker-btns {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.stain-pick-chip {
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: linear-gradient(145deg, #ffffff, #e0f2fe);
+  border: 1.5px solid #7dd3fc;
+  color: var(--sapphire-deep);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.18s ease;
+}
+
+.stain-pick-chip:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(145deg, #16488f, #0284c7);
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+.stain-pick-chip.done {
+  border-color: #34d399;
+  background: linear-gradient(145deg, #ecfdf5, #d1fae5);
+  color: #065f46;
+}
+
+.stain-pick-chip.active {
+  background: linear-gradient(145deg, #0b2756, #0284c7);
+  color: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 5px 12px rgba(2, 132, 199, 0.32);
+}
+
+.inspection-canvas-stage {
+  height: 415px;
+}
+
+.micrograph-credit-pill {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  z-index: 9;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(10, 25, 47, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(125, 211, 252, 0.5);
+  color: #e0f2fe;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  pointer-events: none;
+  max-width: calc(100% - 26px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.guess-header-right,
+.panel-header-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fs-drawer-close-btn {
+  display: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  font-weight: 800;
+  align-items: center;
+  justify-content: center;
+  color: var(--sapphire-deep);
+}
+
+.fs-drawer-close-btn:hover {
+  background: linear-gradient(145deg, #e11d48, #be123c);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   MODALITÀ BANCONE 3D A SCHERMO INTERO + CONTROLLI CAPPA BSL-2 (v3.1)
+   ========================================================================== */
+.bench-fs-topbar {
+  display: none;
+}
+
+.bench-fs-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 15px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.bench-fs-hood-group,
+.bench-fs-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.fs-hud-btn {
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.77rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.fs-hud-btn.active-drawer {
+  border-color: #34d399;
+  box-shadow:
+    0 0 0 2px rgba(52, 211, 153, 0.55),
+    0 10px 22px rgba(2, 132, 199, 0.38);
+}
+
+.exit-fs-btn {
+  font-weight: 800;
+  color: var(--sapphire-deep);
+}
+
+.exit-fs-btn:hover {
+  background: linear-gradient(145deg, #16488f, #0284c7);
+  color: #ffffff;
+}
+
+body.bench-fullscreen-mode {
+  overflow: hidden;
+}
+
+body.bench-fullscreen-mode #benchStandardBadge {
+  display: none;
+}
+
+body.bench-fullscreen-mode #bench3dWrapper {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 95;
+  margin: 0;
+  padding: 0;
+  background: #091d3a;
+}
+
+body.bench-fullscreen-mode #bench3dStage {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+}
+
+body.bench-fullscreen-mode .bench-fs-topbar {
+  display: flex;
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  right: 16px;
+  z-index: 16;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  pointer-events: none;
+}
+
+body.bench-fullscreen-mode .bench-fs-status,
+body.bench-fullscreen-mode .bench-fs-hood-group,
+body.bench-fullscreen-mode .bench-fs-actions {
+  pointer-events: auto;
+}
+
+body.bench-fullscreen-mode #benchQuickActions {
+  position: fixed;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: min(840px, calc(100vw - 28px));
+  z-index: 97;
+  padding: 7px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(11, 39, 86, 0.48);
+  backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(255, 255, 255, 0.62);
+  box-shadow: 0 16px 36px rgba(7, 22, 48, 0.45);
+}
+
+body.bench-fullscreen-mode #bench3dTooltip {
+  bottom: 76px;
+  z-index: 97;
+}
+
+body.bench-fullscreen-mode .fs-drawer-close-btn {
+  display: inline-flex;
+}
+
+/* Cassetto flottante Menu Test a Schermo Intero */
+body.bench-fullscreen-mode #workbenchColumn {
+  display: none;
+}
+
+body.bench-fullscreen-mode.fs-tests-open #workbenchColumn {
+  display: flex;
+  position: fixed;
+  top: 72px;
+  right: 18px;
+  bottom: 76px;
+  width: min(430px, calc(100vw - 32px));
+  z-index: 99;
+  overflow-y: auto;
+  padding: 2px 4px 6px 2px;
+  animation: notebookOpen 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Barra flottante Indovina Specie a Schermo Intero */
+body.bench-fullscreen-mode #guessCard {
+  display: none;
+}
+
+body.bench-fullscreen-mode.fs-guess-open #guessCard {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  bottom: 76px;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: min(700px, calc(100vw - 28px));
+  z-index: 99;
+  box-shadow:
+    0 24px 60px rgba(7, 22, 48, 0.58),
+    inset 0 2px 6px rgba(255, 255, 255, 0.9);
+  animation: notebookOpen 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.bench-fullscreen-mode #guessCard .suggestions-dropdown {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 1120px) {
+  .workstation-grid {
+    grid-template-columns: 1fr;
+  }
+  .hide-md {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .lab-header {
+    padding: 10px 14px;
+  }
+  .guess-form {
+    flex-direction: column;
+  }
+  .btn-primary-bubble {
+    padding: 13px;
+  }
+  .bench3d-quick-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  body.bench-fullscreen-mode #benchQuickActions {
+    border-radius: 22px;
+  }
+  body.bench-fullscreen-mode.fs-tests-open #workbenchColumn {
+    top: 116px;
+    bottom: 106px;
+  }
+  body.bench-fullscreen-mode.fs-guess-open #guessCard {
+    bottom: 106px;
+  }
+  .bench3d-stage,
+  .inspection-canvas-stage {
+    height: 335px;
+  }
+  .bench3d-badge-top {
+    font-size: 0.67rem;
+    padding: 5px 10px;
+  }
+  .atlas-species-list,
+  .flowchart-grid,
+  .suspects-grid,
+  .tree-main-layout,
+  .detail-content-layout {
+    grid-template-columns: 1fr;
+  }
+  .hide-sm {
+    display: none;
+  }
+}
+
+
+/* ==========================================================================
+   BioGuessr Lab v4 — SKIN "AGAR & VETRERIA" (Microbiologia)
+   Solo aspetto grafico: struttura, ID, layout e funzioni restano identici.
+   Palette: Petrolio Cappa BSL-2 · Viola Cristallo (Gram) · Ambra Agar ·
+   Rosso Agar-Sangue · Vetro Borosilicato
+   ========================================================================== */
+:root {
+  --lab-bg-1: #e6f2f0;
+  --lab-bg-2: #f6fbfa;
+  --lab-bg-3: #d9ebe8;
+
+  --ink-navy: #082a31;
+  --ink-slate: #2f5058;
+  --ink-muted: #557a80;
+
+  --sapphire-deep: #0a4450;
+  --sapphire-mid: #0e5f6e;
+  --sapphire-bright: #0e7490;
+  --lab-cyan: #22b8c5;
+  --lab-teal: #0d9488;
+
+  --petrol-900: #062e36;
+  --petrol-800: #0a4450;
+  --petrol-700: #0e5f6e;
+  --petrol-600: #0f7a8a;
+  --petrol-400: #22b8c5;
+  --petrol-200: #a5e9ec;
+  --petrol-50: #ecfbfa;
+
+  --violet-crystal: #5b21b6;
+  --violet-crystal-2: #7c3aed;
+  --agar-amber: #f4b942;
+  --agar-amber-deep: #b7790d;
+  --agar-cream: #fff6dc;
+  --blood-agar: #b4233f;
+  --safranin: #db2777;
+
+  --stain-strip: linear-gradient(90deg, var(--petrol-600) 0%, var(--violet-crystal-2) 45%, var(--safranin) 70%, var(--agar-amber) 100%);
+}
+
+/* --- Sfondo: camera bianca con campo microscopico appena accennato --- */
+html,
+body {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='%230e5f6e' fill-opacity='0.055'%3E%3Ccircle cx='24' cy='30' r='3'/%3E%3Ccircle cx='31' cy='36' r='2'/%3E%3Ccircle cx='118' cy='18' r='2.5'/%3E%3Ccircle cx='180' cy='64' r='3.5'/%3E%3Ccircle cx='186' cy='72' r='2'/%3E%3Ccircle cx='70' cy='104' r='2.5'/%3E%3Ccircle cx='142' cy='132' r='3'/%3E%3Ccircle cx='150' cy='126' r='1.8'/%3E%3Ccircle cx='36' cy='170' r='2.8'/%3E%3Ccircle cx='200' cy='190' r='2.2'/%3E%3Ccircle cx='104' cy='196' r='3.2'/%3E%3C/g%3E%3Cg fill='none' stroke='%235b21b6' stroke-opacity='0.05' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M88 52h10'/%3E%3Cpath d='M160 168l7 5'/%3E%3Cpath d='M18 112l4 8'/%3E%3C/g%3E%3C/svg%3E"),
+    radial-gradient(circle at 12% 8%, rgba(34, 184, 197, 0.18), transparent 42%),
+    radial-gradient(circle at 88% 92%, rgba(124, 58, 237, 0.1), transparent 45%),
+    radial-gradient(circle at 70% 18%, rgba(244, 185, 66, 0.1), transparent 38%),
+    linear-gradient(150deg, var(--lab-bg-1) 0%, var(--lab-bg-2) 50%, var(--lab-bg-3) 100%);
+  background-attachment: fixed;
+}
+
+body.realistic-active {
+  background:
+    radial-gradient(circle at 18% 6%, rgba(34, 184, 197, 0.22), transparent 44%),
+    radial-gradient(circle at 84% 88%, rgba(91, 33, 182, 0.12), transparent 46%),
+    linear-gradient(155deg, #dcebe9 0%, #eef7f5 48%, #cfe3e0 100%);
+  background-attachment: fixed;
+}
+
+/* --- Bolle fluttuanti trasformate in piastre Petri con colonie --- */
+.floating-orb {
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  box-shadow:
+    inset 0 0 0 5px rgba(214, 238, 236, 0.55),
+    inset 0 6px 14px rgba(255, 255, 255, 0.75),
+    0 14px 30px rgba(6, 46, 54, 0.12);
+  opacity: 0.5;
+  animation-name: floatPetriDish;
+}
+
+.orb-1,
+.orb-5 {
+  background:
+    radial-gradient(circle at 30% 26%, rgba(255, 255, 255, 0.85) 0 7%, transparent 8%),
+    radial-gradient(circle at 62% 58%, var(--agar-cream) 0 6%, transparent 7%),
+    radial-gradient(circle at 40% 68%, var(--agar-cream) 0 4.5%, transparent 5.5%),
+    radial-gradient(circle at 70% 34%, var(--agar-cream) 0 4%, transparent 5%),
+    radial-gradient(circle at 52% 44%, #fde9b0 0 3%, transparent 4%),
+    radial-gradient(circle, #f6cd72 0 62%, #e3a334 100%);
+}
+
+.orb-2,
+.orb-4 {
+  background:
+    radial-gradient(circle at 30% 26%, rgba(255, 255, 255, 0.75) 0 7%, transparent 8%),
+    radial-gradient(circle at 58% 56%, #f3f4f6 0 6%, rgba(254, 202, 202, 0.7) 9%, transparent 12%),
+    radial-gradient(circle at 38% 64%, #f3f4f6 0 4.5%, rgba(254, 202, 202, 0.6) 7%, transparent 9%),
+    radial-gradient(circle, #c0263f 0 60%, #7f1d1d 100%);
+}
+
+.orb-3 {
+  background:
+    radial-gradient(circle at 28% 24%, rgba(255, 255, 255, 0.8) 0 6%, transparent 7%),
+    radial-gradient(circle at 60% 60%, #be185d 0 5%, transparent 6%),
+    radial-gradient(circle at 42% 70%, #be185d 0 4%, transparent 5%),
+    radial-gradient(circle at 68% 36%, #db2777 0 4%, transparent 5%),
+    radial-gradient(circle at 46% 42%, #be185d 0 3%, transparent 4%),
+    radial-gradient(circle, #f9a8d4 0 60%, #ec4899 100%);
+}
+
+@keyframes floatPetriDish {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(12px, -18px, 0) rotate(8deg); }
+  100% { transform: translate3d(-10px, -30px, 0) rotate(-6deg); }
+}
+
+/* --- Bolla principale: vetro petrolio da cappa biologica --- */
+.sapphire-bubble {
+  background:
+    radial-gradient(circle at 14% 18%, rgba(165, 233, 236, 0.45) 0%, transparent 38%),
+    radial-gradient(circle at 88% 84%, rgba(34, 184, 197, 0.4) 0%, transparent 42%),
+    linear-gradient(155deg, #11707f 0%, var(--petrol-800) 55%, #0c5966 100%);
+  border-color: rgba(204, 245, 245, 0.92);
+  box-shadow:
+    0 12px 26px -8px rgba(6, 46, 54, 0.45),
+    0 0 14px rgba(34, 184, 197, 0.22),
+    inset 0 3px 7px rgba(255, 255, 255, 0.7),
+    inset 0 -8px 18px rgba(34, 184, 197, 0.32),
+    inset 6px 0 14px rgba(165, 233, 236, 0.18);
+}
+
+/* --- Seconda bolla (Atlante): viola cristallo della colorazione di Gram --- */
+.teal-bubble {
+  background:
+    radial-gradient(circle at 14% 18%, rgba(221, 214, 254, 0.5) 0%, transparent 38%),
+    radial-gradient(circle at 88% 84%, rgba(167, 139, 250, 0.42) 0%, transparent 42%),
+    linear-gradient(155deg, #6d28d9 0%, #4c1d95 56%, #7c3aed 100%);
+  border-color: rgba(237, 233, 254, 0.92);
+  box-shadow:
+    0 12px 26px -8px rgba(76, 29, 149, 0.42),
+    inset 0 3px 7px rgba(255, 255, 255, 0.72),
+    inset 0 -8px 18px rgba(167, 139, 250, 0.35);
+}
+
+/* --- Bolla cristallo: vetro borosilicato --- */
+.crystal-bubble {
+  background:
+    radial-gradient(circle at 20% 20%, #ffffff 0%, rgba(226, 245, 243, 0.88) 75%),
+    linear-gradient(145deg, #ffffff, #dbf0ee);
+  box-shadow:
+    0 10px 22px -8px rgba(6, 46, 54, 0.2),
+    inset 0 3px 8px #ffffff,
+    inset 0 -6px 14px rgba(34, 184, 197, 0.2);
+}
+
+/* --- Pannelli: vetro smerigliato con nastro "colorazione" in alto --- */
+.glass-bubble-panel {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.96) 0%, transparent 45%),
+    radial-gradient(circle at 92% 90%, rgba(165, 233, 236, 0.4) 0%, transparent 45%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.92) 0%, rgba(234, 247, 245, 0.86) 60%, rgba(246, 252, 251, 0.94) 100%);
+  box-shadow:
+    0 22px 46px -16px rgba(6, 46, 54, 0.2),
+    0 2px 8px rgba(14, 116, 144, 0.08),
+    inset 0 4px 14px rgba(255, 255, 255, 1),
+    inset 0 -10px 24px rgba(34, 184, 197, 0.12);
+}
+
+.glass-bubble-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 32px;
+  right: 32px;
+  height: 3px;
+  border-radius: 0 0 4px 4px;
+  background: var(--stain-strip);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* --- Header --- */
+.lab-header {
+  background: rgba(240, 249, 247, 0.82);
+  border-bottom: 1px solid rgba(14, 95, 110, 0.12);
+  box-shadow: 0 8px 26px rgba(6, 46, 54, 0.07);
+}
+
+.lab-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--stain-strip);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Logo: mini piastra Petri con colonie */
+.brand-circle-orb {
+  background:
+    radial-gradient(circle at 30% 26%, rgba(255, 255, 255, 0.85) 0 9%, transparent 10%),
+    radial-gradient(circle, #f6cd72 0 58%, #e3a334 74%, rgba(255, 255, 255, 0.95) 76%, #d6eeec 100%);
+  box-shadow:
+    inset 0 2px 6px rgba(255, 255, 255, 0.8),
+    0 0 12px rgba(244, 185, 66, 0.45);
+}
+
+.petri-dot {
+  background: var(--agar-cream);
+  box-shadow:
+    -7px 5px 0 -2px #fffbeb,
+    6px -5px 0 -2.5px var(--agar-cream),
+    5px 6px 0 -3px #ffffff;
+}
+
+.brand-subtitle {
+  color: var(--petrol-200);
+}
+
+.brand-tag {
+  background: rgba(244, 185, 66, 0.28);
+  border-color: rgba(253, 230, 138, 0.75);
+  color: #fffbeb;
+}
+
+/* Interruttore Modalità Realistica */
+.realistic-toggle-bubble {
+  background: radial-gradient(circle at 20% 20%, #ffffff, #d9f0ed 80%);
+  box-shadow:
+    0 10px 24px -8px rgba(6, 46, 54, 0.25),
+    inset 0 2px 8px #ffffff,
+    inset 0 -6px 12px rgba(34, 184, 197, 0.22);
+}
+
+.realistic-toggle-bubble.active {
+  background:
+    radial-gradient(circle at 18% 20%, rgba(165, 233, 236, 0.5), transparent 45%),
+    linear-gradient(135deg, var(--petrol-600) 0%, var(--petrol-700) 50%, #4c1d95 100%);
+  border-color: #ecfeff;
+  box-shadow:
+    0 12px 28px -6px rgba(14, 95, 110, 0.55),
+    0 0 18px rgba(124, 58, 237, 0.3),
+    inset 0 3px 8px rgba(255, 255, 255, 0.75);
+}
+
+.toggle-knob {
+  background: linear-gradient(145deg, var(--petrol-800), var(--petrol-600));
+  box-shadow: 0 4px 10px rgba(6, 46, 54, 0.3);
+}
+
+.realistic-toggle-bubble.active .toggle-knob {
+  background: linear-gradient(145deg, #ffffff, #fef3c7);
+  color: var(--agar-amber-deep);
+}
+
+/* HUD */
+.hud-sub-badge {
+  background: rgba(14, 116, 144, 0.14);
+  color: var(--petrol-700);
+}
+
+/* Errori come provette: liquido verde = tentativo disponibile */
+.life-vials {
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.life-vial {
+  width: 9px;
+  height: 18px;
+  border-radius: 2px 2px 6px 6px;
+  background: linear-gradient(to top, #34d399 0%, #6ee7b7 68%, rgba(255, 255, 255, 0.75) 68%, rgba(255, 255, 255, 0.55) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 6px rgba(52, 211, 153, 0.55), inset -2px 0 3px rgba(255, 255, 255, 0.5);
+}
+
+.life-vial.lost {
+  background: linear-gradient(to top, #f43f5e 0%, #fb7185 22%, rgba(255, 255, 255, 0.22) 22%, rgba(255, 255, 255, 0.12) 100%);
+  border-color: rgba(254, 205, 211, 0.7);
+  box-shadow: none;
+  transform: none;
+  opacity: 0.75;
+}
+
+.nb-counter-pill {
+  color: var(--petrol-800);
+}
+
+/* --- Area osservazione --- */
+.hood-chip.active {
+  background: linear-gradient(135deg, var(--petrol-600), var(--lab-teal));
+  box-shadow: 0 6px 14px rgba(14, 95, 110, 0.32), inset 0 2px 5px rgba(255, 255, 255, 0.55);
+}
+
+.view-pill {
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 4px 10px rgba(6, 46, 54, 0.07), inset 0 2px 4px #ffffff;
+}
+
+.view-pill:hover {
+  color: var(--petrol-700);
+}
+
+.view-pill.active {
+  background: linear-gradient(145deg, var(--petrol-700), var(--petrol-600));
+  border-color: #ccfbf1;
+  box-shadow: 0 8px 18px rgba(14, 95, 110, 0.32), inset 0 2px 6px rgba(255, 255, 255, 0.6);
+}
+
+.mc-label { color: var(--petrol-200); }
+.mc-slider-label { color: #ecfeff; }
+.mc-slider-label input[type='range'] { accent-color: var(--agar-amber); }
+.obj-btn.active { color: var(--petrol-800); }
+
+.mc-objectives {
+  background: rgba(6, 46, 54, 0.5);
+}
+
+.speech-pointer {
+  background: var(--petrol-800);
+  border-right-color: rgba(204, 245, 245, 0.92);
+  border-bottom-color: rgba(204, 245, 245, 0.92);
+}
+
+.skip-step-btn {
+  color: var(--petrol-800);
+}
+
+/* Palco canvas: incorniciato come l'oculare / il bordo di una piastra */
+.canvas-stage {
+  background: #e4f1ef;
+  box-shadow:
+    inset 0 0 0 1px rgba(14, 95, 110, 0.1),
+    inset 0 2px 14px rgba(6, 46, 54, 0.14),
+    0 12px 26px -10px rgba(6, 46, 54, 0.24);
+}
+
+.lab-loading-overlay {
+  background: rgba(6, 46, 54, 0.58);
+}
+
+.obs-detail { color: #e6fbfa; }
+.tone-info { background: #0e7490; }
+
+/* --- Zona di scrittura --- */
+.species-input {
+  border-color: rgba(15, 122, 138, 0.32);
+  box-shadow:
+    inset 0 3px 8px rgba(6, 46, 54, 0.05),
+    0 6px 16px rgba(6, 46, 54, 0.06);
+}
+
+.species-input:focus {
+  border-color: var(--petrol-600);
+  box-shadow: 0 0 0 4px rgba(34, 184, 197, 0.25);
+}
+
+.suggestions-dropdown {
+  border-color: var(--petrol-600);
+  box-shadow: 0 22px 45px rgba(6, 46, 54, 0.26);
+}
+
+.suggestion-item:hover,
+.suggestion-item.highlighted {
+  background: rgba(15, 122, 138, 0.11);
+}
+
+.sug-name mark {
+  background: rgba(244, 185, 66, 0.4);
+  color: #7a4b04;
+}
+
+.quick-chip {
+  background: linear-gradient(145deg, #ffffff, #e2f4f2);
+  color: var(--petrol-800);
+  box-shadow: 0 4px 10px rgba(6, 46, 54, 0.08), inset 0 2px 4px #ffffff;
+}
+
+.quick-chip:hover {
+  background: linear-gradient(145deg, var(--petrol-700), var(--petrol-600));
+}
+
+/* --- Pannello test: etichette da provetta --- */
+.category-tabs {
+  background: rgba(204, 234, 231, 0.6);
+}
+
+.cat-tab.active {
+  background: linear-gradient(145deg, var(--petrol-700), var(--petrol-800));
+  box-shadow: 0 6px 14px rgba(6, 46, 54, 0.28), inset 0 2px 5px rgba(255, 255, 255, 0.55);
+}
+
+.test-card-btn {
+  position: relative;
+  overflow: hidden;
+  padding-left: 19px;
+  background:
+    radial-gradient(circle at 12% 15%, #ffffff 0%, rgba(236, 248, 246, 0.92) 70%),
+    linear-gradient(145deg, #ffffff, #e3f2f0);
+  box-shadow:
+    0 8px 18px -8px rgba(6, 46, 54, 0.15),
+    inset 0 2px 6px #ffffff,
+    inset 0 -5px 12px rgba(34, 184, 197, 0.12);
+}
+
+.test-card-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: linear-gradient(180deg, var(--petrol-400), var(--violet-crystal-2));
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.test-card-btn:hover {
+  border-color: var(--petrol-400);
+  box-shadow:
+    0 12px 24px -8px rgba(14, 95, 110, 0.26),
+    inset 0 2px 8px #ffffff;
+}
+
+.test-card-btn.done {
+  background: linear-gradient(145deg, #ecfdf5, #d1fae5);
+  border-color: #6ee7b7;
+}
+
+.test-card-btn.done::before {
+  background: linear-gradient(180deg, #34d399, #059669);
+  opacity: 1;
+}
+
+/* In corso = "in incubazione": ambra come un terreno a 37 °C */
+.test-card-btn.in-progress {
+  background: linear-gradient(145deg, #fffbeb, #fdecc0);
+  border-color: var(--agar-amber);
+}
+
+.test-card-btn.in-progress::before {
+  background: linear-gradient(180deg, var(--agar-amber), var(--agar-amber-deep));
+  opacity: 1;
+}
+
+.empty-report-state {
+  border-color: rgba(15, 122, 138, 0.3);
+}
+
+.mini-result-row {
+  border-color: rgba(15, 122, 138, 0.2);
+}
+
+.mini-result-row:hover {
+  border-color: var(--petrol-400);
+}
+
+/* --- Modali --- */
+.drawer-backdrop,
+.modal-backdrop {
+  background: rgba(6, 46, 54, 0.5);
+}
+
+/* Blocchetto: quaderno di laboratorio a quadretti */
+.notepad-header {
+  border-bottom-color: rgba(180, 35, 63, 0.35);
+}
+
+.notepad-kicker { color: var(--petrol-600); }
+
+.np-tab.active {
+  background: var(--petrol-800);
+}
+
+.notepad-page {
+  background-image:
+    linear-gradient(rgba(14, 116, 144, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 116, 144, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.qtag-btn {
+  background: #def5f3;
+  color: var(--petrol-700);
+}
+
+.qtag-btn:hover {
+  background: var(--petrol-600);
+  color: #ffffff;
+}
+
+.lined-paper-textarea {
+  background: repeating-linear-gradient(#fffef9, #fffef9 27px, #cfe9e6 28px);
+  color: var(--ink-navy);
+}
+
+.lined-paper-textarea:focus {
+  border-color: var(--petrol-600);
+}
+
+/* Atlante: rilegatura viola cristallo */
+.atlas-book-binder {
+  box-shadow:
+    0 30px 65px rgba(6, 46, 54, 0.42),
+    inset 12px 0 0 var(--violet-crystal);
+}
+
+.atlas-top-ribbon {
+  background: linear-gradient(135deg, #2e1065 0%, var(--violet-crystal) 55%, var(--petrol-600) 100%);
+}
+
+.atlas-kicker { color: #ddd6fe; }
+
+.atlas-controls-row { background: #f1eefb; }
+
+.bookmark-tab.active {
+  background: var(--violet-crystal);
+  border-color: var(--violet-crystal);
+}
+
+.atlas-sp-card,
+.flow-card {
+  border-color: #e4defa;
+}
+
+.atlas-sp-card h4 { color: var(--petrol-800); }
+.flow-card h3 { color: var(--violet-crystal); }
+
+.result-taxonomy { color: #ccfbf1; }
+
+.scientific-dossier {
+  border-color: #d6efec;
+}
+
+/* --- Bancone 3D, schermata ravvicinata e schermo intero --- */
+.bench3d-stage {
+  background: linear-gradient(180deg, #cfe7e4 0%, #eaf6f4 100%);
+  box-shadow:
+    inset 0 6px 20px rgba(6, 46, 54, 0.18),
+    0 12px 28px -8px rgba(6, 46, 54, 0.26);
+}
+
+.bench3d-hover-card span { color: #ccfbf1; }
+
+.back-to-bench-btn { color: var(--petrol-800); }
+
+.back-to-bench-btn:hover,
+.exit-fs-btn:hover,
+.stain-pick-chip:hover {
+  background: linear-gradient(145deg, var(--petrol-700), var(--petrol-600));
+}
+
+.stain-quick-picker { border-color: #bfe8e5; }
+
+.stain-pick-chip {
+  background: linear-gradient(145deg, #ffffff, #e2f4f2);
+  border-color: #99e0e3;
+  color: var(--petrol-800);
+}
+
+.stain-pick-chip.active {
+  background: linear-gradient(145deg, var(--petrol-800), var(--violet-crystal));
+  box-shadow: 0 5px 12px rgba(76, 29, 149, 0.3);
+}
+
+.micrograph-credit-pill {
+  background: rgba(6, 46, 54, 0.82);
+  border-color: rgba(165, 233, 236, 0.5);
+  color: #ecfeff;
+}
+
+.exit-fs-btn,
+.fs-drawer-close-btn {
+  color: var(--petrol-800);
+}
+
+body.bench-fullscreen-mode #bench3dWrapper {
+  background: var(--petrol-900);
+}
+
+body.bench-fullscreen-mode #benchQuickActions {
+  background: rgba(6, 46, 54, 0.52);
+  box-shadow: 0 16px 36px rgba(3, 24, 28, 0.45);
+}
+
+body.bench-fullscreen-mode.fs-guess-open #guessCard {
+  box-shadow:
+    0 24px 60px rgba(3, 24, 28, 0.55),
+    inset 0 2px 6px rgba(255, 255, 255, 0.9);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar-track { background: rgba(204, 230, 227, 0.4); }
+::-webkit-scrollbar-thumb { background: rgba(14, 95, 110, 0.4); }
+
+/* Accessibilità: focus da tastiera visibile e movimento ridotto */
+button:focus-visible,
+textarea:focus-visible,
+[role='tab']:focus-visible {
+  outline: 3px solid rgba(34, 184, 197, 0.65);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-orb,
+  .sapphire-bubble::after,
+  .interactive-speech-bubble {
+    animation: none !important;
+  }
+}
+
+
+/* ==========================================================================
+   START SCREEN & CHEMICAL-MICROBIOLOGY TRANSITION OVERLAY
+   ========================================================================== */
+.start-screen-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background:
+    radial-gradient(circle at 18% 15%, rgba(34, 184, 197, 0.32), transparent 45%),
+    radial-gradient(circle at 82% 82%, rgba(124, 58, 237, 0.24), transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(244, 185, 66, 0.15), transparent 60%),
+    linear-gradient(135deg, #062e36 0%, #0a4450 48%, #1e1338 100%);
+  overflow-y: auto;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
+}
+
+.start-screen-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.start-screen-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bio-floating-cells {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.bio-cell {
+  position: absolute;
+  font-size: 2.4rem;
+  opacity: 0.22;
+  filter: drop-shadow(0 0 16px rgba(34, 184, 197, 0.5));
+  animation: floatStartCell 12s ease-in-out infinite alternate;
+}
+
+.cell-1 { top: 12%; left: 8%; animation-duration: 11s; }
+.cell-2 { top: 72%; left: 12%; animation-duration: 15s; animation-delay: -3s; }
+.cell-3 { top: 18%; right: 10%; animation-duration: 13s; animation-delay: -5s; font-size: 2.8rem; }
+.cell-4 { bottom: 14%; right: 14%; animation-duration: 16s; animation-delay: -2s; }
+.cell-5 { top: 48%; left: 4%; animation-duration: 14s; animation-delay: -6s; }
+
+@keyframes floatStartCell {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  50% { transform: translateY(-24px) rotate(12deg) scale(1.08); }
+  100% { transform: translateY(18px) rotate(-8deg) scale(0.95); }
+}
+
+.start-card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 620px;
+  padding: 32px 36px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(28px);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 30px 70px rgba(6, 46, 54, 0.45),
+    0 0 35px rgba(34, 184, 197, 0.28),
+    inset 0 2px 10px #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: startCardPop 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes startCardPop {
+  from { opacity: 0; transform: scale(0.92) translateY(24px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.start-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid rgba(14, 95, 110, 0.12);
+  padding-bottom: 16px;
+}
+
+.start-brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.start-brand-title {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--petrol-900);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.start-brand-sub {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--petrol-700);
+  font-family: var(--font-sans);
+}
+
+.start-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.start-intro-text {
+  font-size: 0.92rem;
+  color: var(--ink-slate);
+  line-height: 1.55;
+}
+
+/* TASTO PLAY PRINCIPALE: GRANDE, LUMINOSO E IMPATTANTE */
+.start-play-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 26px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #0e5f6e 0%, #0a4450 45%, #5b21b6 100%);
+  border: 2px solid rgba(165, 233, 236, 0.95);
+  box-shadow:
+    0 12px 28px -6px rgba(10, 68, 80, 0.6),
+    0 0 24px rgba(34, 184, 197, 0.4),
+    inset 0 2px 8px rgba(255, 255, 255, 0.7);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+.start-play-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:
+    0 16px 36px -6px rgba(10, 68, 80, 0.7),
+    0 0 32px rgba(34, 184, 197, 0.6),
+    inset 0 3px 10px rgba(255, 255, 255, 0.9);
+}
+
+.play-icon-glow {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22b8c5, #10b981);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 1.3rem;
+  padding-left: 3px;
+  box-shadow: 0 0 16px rgba(34, 184, 197, 0.8), inset 0 2px 4px #ffffff;
+  flex-shrink: 0;
+}
+
+.play-label-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  flex: 1;
+}
+
+.play-main-text {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.play-sub-text {
+  font-size: 0.76rem;
+  color: #a5e9ec;
+  font-family: var(--font-mono);
+}
+
+.play-arrow {
+  font-size: 1.5rem;
+  color: #f4b942;
+  filter: drop-shadow(0 0 6px rgba(244, 185, 66, 0.8));
+}
+
+/* AZIONI SECONDARIE */
+.start-secondary-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.start-action-btn {
+  flex: 1;
+  min-width: 200px;
+  padding: 11px 16px;
+  border-radius: 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.start-action-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* CASSETTO IMPOSTAZIONI */
+.start-settings-drawer {
+  background: rgba(240, 249, 247, 0.95);
+  border: 1.5px solid #bfe8e5;
+  border-radius: 18px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: startSettingsOpen 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes startSettingsOpen {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.settings-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--petrol-900);
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(14, 95, 110, 0.1);
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.setting-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.setting-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--petrol-800);
+}
+
+.setting-desc {
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+}
+
+.setting-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.setting-ctrl input[type='range'] {
+  width: 100px;
+  accent-color: var(--petrol-600);
+  cursor: pointer;
+}
+
+.slider-val-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--petrol-800);
+  background: #ffffff;
+  padding: 2px 7px;
+  border-radius: 6px;
+  border: 1px solid #bfe8e5;
+  min-width: 44px;
+  text-align: center;
+}
+
+/* TOGGLE SWITCH DA LABORATORIO */
+.toggle-switch-lab {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+}
+
+.toggle-switch-lab input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #cbd5e1;
+  transition: 0.25s;
+  border-radius: 24px;
+  border: 1px solid #94a3b8;
+}
+
+.switch-slider::before {
+  position: absolute;
+  content: '';
+  height: 18px;
+  width: 18px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+}
+
+.toggle-switch-lab input:checked + .switch-slider {
+  background: linear-gradient(135deg, #0d9488, #22b8c5);
+  border-color: #0f766e;
+}
+
+.toggle-switch-lab input:checked + .switch-slider::before {
+  transform: translateX(22px);
+}
+
+.start-footer {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--ink-muted);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+/* ==========================================================================
+   TRANSIZIONE CHIMICA & MICROBIOLOGICA (REAZIONE IN PROVETTA + DIAFRAMMA OCULARE)
+   ========================================================================== */
+.chemical-transition-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 250;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.chemical-transition-curtain.active {
+  pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+}
+
+.chem-reaction-layer {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Apertura/Diaframma a iride dell'oculare */
+.microscope-lens-aperture {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 0%, rgba(6, 46, 54, 0.95) 60%, #03181c 100%);
+  transform: scale(0.1);
+  opacity: 0;
+  border-radius: 50%;
+}
+
+.chemical-transition-curtain.active .microscope-lens-aperture {
+  animation: irisZoom 1.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes irisZoom {
+  0% { transform: scale(0.05); opacity: 0; border: 80px solid #03181c; }
+  30% { opacity: 1; transform: scale(0.6); border: 40px solid var(--petrol-900); }
+  75% { opacity: 1; transform: scale(1.6); border: 10px solid var(--petrol-600); }
+  100% { opacity: 0; transform: scale(3.5); }
+}
+
+/* Fluido reagente colorato (reazione chimica dal violetto al ciano all'ambra) */
+.chem-fluid-wash {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(91, 33, 182, 0.8) 0%, transparent 50%),
+    radial-gradient(circle at 70% 60%, rgba(34, 184, 197, 0.85) 0%, transparent 55%),
+    radial-gradient(circle at 50% 50%, rgba(244, 185, 66, 0.75) 0%, transparent 60%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transform: rotate(0deg) scale(0.8);
+}
+
+.chemical-transition-curtain.active .chem-fluid-wash {
+  animation: fluidReactionWash 1.3s ease-out forwards;
+}
+
+@keyframes fluidReactionWash {
+  0% { opacity: 0; transform: rotate(0deg) scale(0.5); }
+  35% { opacity: 0.95; transform: rotate(45deg) scale(1.2); }
+  80% { opacity: 0.8; transform: rotate(90deg) scale(1.6); }
+  100% { opacity: 0; transform: rotate(120deg) scale(2.2); }
+}
+
+/* Bolle chimiche effervescenti generate durante la transizione */
+.chem-bubbles-burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.chem-bubble-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffffff, rgba(34, 184, 197, 0.6) 60%, rgba(91, 33, 182, 0.8));
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 12px rgba(34, 184, 197, 0.8);
+  animation: bubblePopFade 1.2s ease-out forwards;
+}
+
+@keyframes bubblePopFade {
+  0% { transform: translateY(0) scale(0.2); opacity: 0; }
+  25% { opacity: 1; transform: translateY(-30px) scale(1.2); }
+  85% { opacity: 0.9; transform: translateY(-120px) scale(1.4); }
+  100% { opacity: 0; transform: translateY(-160px) scale(0); }
+}
+
+/* Testo diagnostico al centro durante la reazione */
+.chem-transition-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(6, 46, 54, 0.88);
+  backdrop-filter: blur(12px);
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(165, 233, 236, 0.7);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(34, 184, 197, 0.4);
+  color: #ffffff;
+  opacity: 0;
+}
+
+.chemical-transition-curtain.active .chem-transition-label {
+  animation: labelPulseShow 1.3s ease-in-out forwards;
+}
+
+@keyframes labelPulseShow {
+  0% { opacity: 0; transform: translate(-50%, -40%) scale(0.9); }
+  20%, 75% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -60%) scale(1.05); }
+}
+
+.chem-spinner {
+  width: 22px;
+  height: 22px;
+  border: 2.5px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #22b8c5;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+.chem-text {
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ecfeff;
+}
+
+/* =========================================================================
+   CONDIVISIONE & TOAST DI NOTIFICA
+   ========================================================================= */
+.start-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.start-share-link {
+  background: transparent;
+  border: 1px dashed rgba(2, 132, 199, 0.45);
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  color: #0284c7;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.start-share-link:hover {
+  background: #f0fdf4;
+  border-color: #0f766e;
+  color: #0f766e;
+  transform: translateY(-1px);
+}
+
+.lab-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #ffffff;
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  box-shadow: 0 16px 36px -8px rgba(2, 132, 199, 0.45), 0 0 20px rgba(56, 189, 248, 0.25);
+  padding: 12px 24px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  z-index: 100000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lab-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.lab-toast .toast-icon {
+  font-size: 1.15rem;
+}
+
+.lab-toast .toast-msg {
+  letter-spacing: 0.02em;
+}

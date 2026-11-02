@@ -1,0 +1,14 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Agent Skills
+.agents/
+
+# Scratch and Temporary Test Files
+scratch/
+
+# Node
+node_modules/
+npm-debug.log*

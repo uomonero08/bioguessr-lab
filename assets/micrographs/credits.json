@@ -1,0 +1,952 @@
+[
+  {
+    "key": "bacillus_cereus_gram",
+    "file": "assets/micrographs/bacillus_cereus_gram.jpg",
+    "size": 17392,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "capsule_india_ink",
+    "file": "assets/micrographs/capsule_india_ink.jpg",
+    "size": 88454,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "capsule_stain_pos",
+    "file": "assets/micrographs/capsule_stain_pos.jpg",
+    "size": 89520,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "clostridium_difficile_gram",
+    "file": "assets/micrographs/clostridium_difficile_gram.jpg",
+    "size": 102324,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "enterococcus_faecalis_gram",
+    "file": "assets/micrographs/enterococcus_faecalis_gram.jpg",
+    "size": 220504,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "escherichia_coli_gram",
+    "file": "assets/micrographs/escherichia_coli_gram.jpg",
+    "size": 99209,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "haemophilus_influenzae_gram",
+    "file": "assets/micrographs/haemophilus_influenzae_gram.jpg",
+    "size": 136608,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "helicobacter_pylori_gram",
+    "file": "assets/micrographs/helicobacter_pylori_gram.jpg",
+    "size": 678429,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "klebsiella_pneumoniae_gram",
+    "file": "assets/micrographs/klebsiella_pneumoniae_gram.jpg",
+    "size": 102544,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "listeria_monocytogenes_gram",
+    "file": "assets/micrographs/listeria_monocytogenes_gram.jpg",
+    "size": 36355,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "mycobacterium_tuberculosis_ziehl",
+    "file": "assets/micrographs/mycobacterium_tuberculosis_ziehl.jpg",
+    "size": 143488,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "neisseria_meningitidis_gram",
+    "file": "assets/micrographs/neisseria_meningitidis_gram.jpg",
+    "size": 124323,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "proteus_mirabilis_gram",
+    "file": "assets/micrographs/proteus_mirabilis_gram.jpg",
+    "size": 117426,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "pseudomonas_aeruginosa_gram",
+    "file": "assets/micrographs/pseudomonas_aeruginosa_gram.jpg",
+    "size": 50862,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "salmonella_enterica_gram",
+    "file": "assets/micrographs/salmonella_enterica_gram.jpg",
+    "size": 86331,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "serratia_marcescens_gram",
+    "file": "assets/micrographs/serratia_marcescens_gram.jpg",
+    "size": 121867,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "shigella_flexneri_gram",
+    "file": "assets/micrographs/shigella_flexneri_gram.jpg",
+    "size": 157250,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "spores_clostridium_pos",
+    "file": "assets/micrographs/spores_clostridium_pos.png",
+    "size": 444346,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "spores_schaeffer_pos",
+    "file": "assets/micrographs/spores_schaeffer_pos.jpg",
+    "size": 34774,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "staphylococcus_aureus_gram",
+    "file": "assets/micrographs/staphylococcus_aureus_gram.jpg",
+    "size": 134317,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "staphylococcus_epidermidis_gram",
+    "file": "assets/micrographs/staphylococcus_epidermidis_gram.jpg",
+    "size": 80980,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "streptococcus_pneumoniae_gram",
+    "file": "assets/micrographs/streptococcus_pneumoniae_gram.jpg",
+    "size": 95786,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "streptococcus_pyogenes_gram",
+    "file": "assets/micrographs/streptococcus_pyogenes_gram.jpg",
+    "size": 81282,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "vibrio_cholerae_gram",
+    "file": "assets/micrographs/vibrio_cholerae_gram.jpg",
+    "size": 57376,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "ziehl_neg_blue",
+    "file": "assets/micrographs/ziehl_neg_blue.jpg",
+    "size": 157999,
+    "source": "CDC Public Health Image Library (PHIL) / Open-Access Clinical Microbiology Literature (Wikimedia Commons)"
+  },
+  {
+    "key": "staphylococcus_aureus",
+    "file": "assets/micrographs/staphylococcus_aureus_gram.jpg",
+    "resolvedFallbackKey": "staphylococcus_aureus_gram",
+    "speciesName": "Staphylococcus aureus",
+    "taxonomy": "Bacillota › Staphylococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Bergey’s Trust)"
+  },
+  {
+    "key": "staphylococcus_epidermidis",
+    "file": "assets/micrographs/staphylococcus_epidermidis_gram.jpg",
+    "resolvedFallbackKey": "staphylococcus_epidermidis_gram",
+    "speciesName": "Staphylococcus epidermidis",
+    "taxonomy": "Bacillota › Staphylococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Nature Rev Microbiol)"
+  },
+  {
+    "key": "streptococcus_pyogenes",
+    "file": "assets/micrographs/streptococcus_pyogenes_gram.jpg",
+    "resolvedFallbackKey": "streptococcus_pyogenes_gram",
+    "speciesName": "Streptococcus pyogenes",
+    "taxonomy": "Bacillota › Streptococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (NEJM)"
+  },
+  {
+    "key": "streptococcus_pneumoniae",
+    "file": "assets/micrographs/streptococcus_pneumoniae_gram.jpg",
+    "resolvedFallbackKey": "streptococcus_pneumoniae_gram",
+    "speciesName": "Streptococcus pneumoniae",
+    "taxonomy": "Bacillota › Streptococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Nature)"
+  },
+  {
+    "key": "enterococcus_faecalis",
+    "file": "assets/micrographs/enterococcus_faecalis_gram.jpg",
+    "resolvedFallbackKey": "enterococcus_faecalis_gram",
+    "speciesName": "Enterococcus faecalis",
+    "taxonomy": "Bacillota › Enterococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ESCMID CMI)"
+  },
+  {
+    "key": "bacillus_cereus",
+    "file": "assets/micrographs/bacillus_cereus_gram.jpg",
+    "resolvedFallbackKey": "bacillus_cereus_gram",
+    "speciesName": "Bacillus cereus",
+    "taxonomy": "Bacillota › Bacillaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "clostridium_difficile",
+    "file": "assets/micrographs/clostridium_difficile_gram.jpg",
+    "resolvedFallbackKey": "clostridium_difficile_gram",
+    "speciesName": "Clostridium difficile",
+    "taxonomy": "Bacillota › Clostridiaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (NEJM)"
+  },
+  {
+    "key": "listeria_monocytogenes",
+    "file": "assets/micrographs/listeria_monocytogenes_gram.jpg",
+    "resolvedFallbackKey": "listeria_monocytogenes_gram",
+    "speciesName": "Listeria monocytogenes",
+    "taxonomy": "Bacillota › Listeriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Ann Rev)"
+  },
+  {
+    "key": "mycobacterium_tuberculosis",
+    "file": "assets/micrographs/mycobacterium_tuberculosis_gram.jpg",
+    "resolvedFallbackKey": "mycobacterium_tuberculosis_gram",
+    "speciesName": "Mycobacterium tuberculosis",
+    "taxonomy": "Actinomycetota › Mycobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (WHO)"
+  },
+  {
+    "key": "neisseria_meningitidis",
+    "file": "assets/micrographs/neisseria_meningitidis_gram.jpg",
+    "resolvedFallbackKey": "neisseria_meningitidis_gram",
+    "speciesName": "Neisseria meningitidis",
+    "taxonomy": "Pseudomonadota › Neisseriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (The Lancet)"
+  },
+  {
+    "key": "haemophilus_influenzae",
+    "file": "assets/micrographs/haemophilus_influenzae_gram.jpg",
+    "resolvedFallbackKey": "haemophilus_influenzae_gram",
+    "speciesName": "Haemophilus influenzae",
+    "taxonomy": "Pseudomonadota › Pasteurellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "escherichia_coli",
+    "file": "assets/micrographs/escherichia_coli_gram.jpg",
+    "resolvedFallbackKey": "escherichia_coli_gram",
+    "speciesName": "Escherichia coli",
+    "taxonomy": "Pseudomonadota › Enterobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "klebsiella_pneumoniae",
+    "file": "assets/micrographs/klebsiella_pneumoniae_gram.jpg",
+    "resolvedFallbackKey": "klebsiella_pneumoniae_gram",
+    "speciesName": "Klebsiella pneumoniae",
+    "taxonomy": "Pseudomonadota › Enterobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "salmonella_enterica",
+    "file": "assets/micrographs/salmonella_enterica_gram.jpg",
+    "resolvedFallbackKey": "salmonella_enterica_gram",
+    "speciesName": "Salmonella enterica",
+    "taxonomy": "Pseudomonadota › Enterobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Pathogens)"
+  },
+  {
+    "key": "shigella_flexneri",
+    "file": "assets/micrographs/shigella_flexneri_gram.jpg",
+    "resolvedFallbackKey": "shigella_flexneri_gram",
+    "speciesName": "Shigella flexneri",
+    "taxonomy": "Pseudomonadota › Enterobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "proteus_mirabilis",
+    "file": "assets/micrographs/proteus_mirabilis_gram.jpg",
+    "resolvedFallbackKey": "proteus_mirabilis_gram",
+    "speciesName": "Proteus mirabilis",
+    "taxonomy": "Pseudomonadota › Morganellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM)"
+  },
+  {
+    "key": "serratia_marcescens",
+    "file": "assets/micrographs/serratia_marcescens_gram.jpg",
+    "resolvedFallbackKey": "serratia_marcescens_gram",
+    "speciesName": "Serratia marcescens",
+    "taxonomy": "Pseudomonadota › Yersiniaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Springer)"
+  },
+  {
+    "key": "pseudomonas_aeruginosa",
+    "file": "assets/micrographs/pseudomonas_aeruginosa_gram.jpg",
+    "resolvedFallbackKey": "pseudomonas_aeruginosa_gram",
+    "speciesName": "Pseudomonas aeruginosa",
+    "taxonomy": "Pseudomonadota › Pseudomonadaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Nature)"
+  },
+  {
+    "key": "vibrio_cholerae",
+    "file": "assets/micrographs/vibrio_cholerae_gram.jpg",
+    "resolvedFallbackKey": "vibrio_cholerae_gram",
+    "speciesName": "Vibrio cholerae",
+    "taxonomy": "Pseudomonadota › Vibrionaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (The Lancet)"
+  },
+  {
+    "key": "helicobacter_pylori",
+    "file": "assets/micrographs/helicobacter_pylori_gram.jpg",
+    "resolvedFallbackKey": "helicobacter_pylori_gram",
+    "speciesName": "Helicobacter pylori",
+    "taxonomy": "Campylobacterota › Helicobacteraceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Gut / BMJ)"
+  },
+  {
+    "key": "staphylococcus_saprophyticus",
+    "file": "assets/micrographs/staphylococcus_epidermidis_gram.jpg",
+    "resolvedFallbackKey": "staphylococcus_epidermidis_gram",
+    "speciesName": "Staphylococcus saprophyticus",
+    "taxonomy": "Bacillota › Staphylococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (CID)"
+  },
+  {
+    "key": "staphylococcus_lugdunensis",
+    "file": "assets/micrographs/staphylococcus_aureus_gram.jpg",
+    "resolvedFallbackKey": "staphylococcus_aureus_gram",
+    "speciesName": "Staphylococcus lugdunensis",
+    "taxonomy": "Bacillota › Staphylococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "staphylococcus_haemolyticus",
+    "file": "assets/micrographs/staphylococcus_epidermidis_gram.jpg",
+    "resolvedFallbackKey": "staphylococcus_epidermidis_gram",
+    "speciesName": "Staphylococcus haemolyticus",
+    "taxonomy": "Bacillota › Staphylococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Springer)"
+  },
+  {
+    "key": "staphylococcus_hominis",
+    "file": "assets/micrographs/staphylococcus_epidermidis_gram.jpg",
+    "resolvedFallbackKey": "staphylococcus_epidermidis_gram",
+    "speciesName": "Staphylococcus hominis",
+    "taxonomy": "Bacillota › Staphylococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Nature)"
+  },
+  {
+    "key": "streptococcus_agalactiae",
+    "file": "assets/micrographs/streptococcus_pyogenes_gram.jpg",
+    "resolvedFallbackKey": "streptococcus_pyogenes_gram",
+    "speciesName": "Streptococcus agalactiae",
+    "taxonomy": "Bacillota › Streptococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ACOG)"
+  },
+  {
+    "key": "streptococcus_mutans",
+    "file": "assets/micrographs/streptococcus_pyogenes_gram.jpg",
+    "resolvedFallbackKey": "streptococcus_pyogenes_gram",
+    "speciesName": "Streptococcus mutans",
+    "taxonomy": "Bacillota › Streptococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM)"
+  },
+  {
+    "key": "streptococcus_mitis",
+    "file": "assets/micrographs/streptococcus_pneumoniae_gram.jpg",
+    "resolvedFallbackKey": "streptococcus_pneumoniae_gram",
+    "speciesName": "Streptococcus mitis",
+    "taxonomy": "Bacillota › Streptococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (JCM)"
+  },
+  {
+    "key": "streptococcus_sanguinis",
+    "file": "assets/micrographs/streptococcus_pyogenes_gram.jpg",
+    "resolvedFallbackKey": "streptococcus_pyogenes_gram",
+    "speciesName": "Streptococcus sanguinis",
+    "taxonomy": "Bacillota › Streptococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (IAI)"
+  },
+  {
+    "key": "streptococcus_gallolyticus",
+    "file": "assets/micrographs/streptococcus_pyogenes_gram.jpg",
+    "resolvedFallbackKey": "streptococcus_pyogenes_gram",
+    "speciesName": "Streptococcus gallolyticus",
+    "taxonomy": "Bacillota › Streptococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Nature)"
+  },
+  {
+    "key": "streptococcus_dysgalactiae",
+    "file": "assets/micrographs/streptococcus_pyogenes_gram.jpg",
+    "resolvedFallbackKey": "streptococcus_pyogenes_gram",
+    "speciesName": "Streptococcus dysgalactiae",
+    "taxonomy": "Bacillota › Streptococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (CMI)"
+  },
+  {
+    "key": "streptococcus_anginosus",
+    "file": "assets/micrographs/streptococcus_pyogenes_gram.jpg",
+    "resolvedFallbackKey": "streptococcus_pyogenes_gram",
+    "speciesName": "Streptococcus anginosus",
+    "taxonomy": "Bacillota › Streptococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Future Med)"
+  },
+  {
+    "key": "enterococcus_faecium",
+    "file": "assets/micrographs/enterococcus_faecalis_gram.jpg",
+    "resolvedFallbackKey": "enterococcus_faecalis_gram",
+    "speciesName": "Enterococcus faecium",
+    "taxonomy": "Bacillota › Enterococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "bacillus_anthracis",
+    "file": "assets/micrographs/bacillus_cereus_gram.jpg",
+    "resolvedFallbackKey": "bacillus_cereus_gram",
+    "speciesName": "Bacillus anthracis",
+    "taxonomy": "Bacillota › Bacillaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Nature)"
+  },
+  {
+    "key": "bacillus_subtilis",
+    "file": "assets/micrographs/bacillus_cereus_gram.jpg",
+    "resolvedFallbackKey": "bacillus_cereus_gram",
+    "speciesName": "Bacillus subtilis",
+    "taxonomy": "Bacillota › Bacillaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (MMBR)"
+  },
+  {
+    "key": "bacillus_thuringiensis",
+    "file": "assets/micrographs/bacillus_cereus_gram.jpg",
+    "resolvedFallbackKey": "bacillus_cereus_gram",
+    "speciesName": "Bacillus thuringiensis",
+    "taxonomy": "Bacillota › Bacillaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Toxins)"
+  },
+  {
+    "key": "clostridium_perfringens",
+    "file": "assets/micrographs/clostridium_difficile_gram.jpg",
+    "resolvedFallbackKey": "clostridium_difficile_gram",
+    "speciesName": "Clostridium perfringens",
+    "taxonomy": "Bacillota › Clostridiaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (MMBR)"
+  },
+  {
+    "key": "clostridium_tetani",
+    "file": "assets/micrographs/clostridium_difficile_gram.jpg",
+    "resolvedFallbackKey": "clostridium_difficile_gram",
+    "speciesName": "Clostridium tetani",
+    "taxonomy": "Bacillota › Clostridiaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (The Lancet)"
+  },
+  {
+    "key": "clostridium_botulinum",
+    "file": "assets/micrographs/clostridium_difficile_gram.jpg",
+    "resolvedFallbackKey": "clostridium_difficile_gram",
+    "speciesName": "Clostridium botulinum",
+    "taxonomy": "Bacillota › Clostridiaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Nature)"
+  },
+  {
+    "key": "lactobacillus_acidophilus",
+    "file": "assets/micrographs/listeria_monocytogenes_gram.jpg",
+    "resolvedFallbackKey": "listeria_monocytogenes_gram",
+    "speciesName": "Lactobacillus acidophilus",
+    "taxonomy": "Bacillota › Lactobacillaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Elsevier)"
+  },
+  {
+    "key": "lactobacillus_rhamnosus",
+    "file": "assets/micrographs/listeria_monocytogenes_gram.jpg",
+    "resolvedFallbackKey": "listeria_monocytogenes_gram",
+    "speciesName": "Lactobacillus rhamnosus",
+    "taxonomy": "Bacillota › Lactobacillaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (PNAS)"
+  },
+  {
+    "key": "pediococcus_acidilactici",
+    "file": "assets/micrographs/staphylococcus_epidermidis_gram.jpg",
+    "resolvedFallbackKey": "staphylococcus_epidermidis_gram",
+    "speciesName": "Pediococcus acidilactici",
+    "taxonomy": "Bacillota › Lactobacillaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (AIM)"
+  },
+  {
+    "key": "leuconostoc_mesenteroides",
+    "file": "assets/micrographs/streptococcus_pneumoniae_gram.jpg",
+    "resolvedFallbackKey": "streptococcus_pneumoniae_gram",
+    "speciesName": "Leuconostoc mesenteroides",
+    "taxonomy": "Bacillota › Lactobacillaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Oxford)"
+  },
+  {
+    "key": "finegoldia_magna",
+    "file": "assets/micrographs/staphylococcus_epidermidis_gram.jpg",
+    "resolvedFallbackKey": "staphylococcus_epidermidis_gram",
+    "speciesName": "Finegoldia magna",
+    "taxonomy": "Bacillota › Peptostreptococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Elsevier)"
+  },
+  {
+    "key": "peptoniphilus_harei",
+    "file": "assets/micrographs/staphylococcus_epidermidis_gram.jpg",
+    "resolvedFallbackKey": "staphylococcus_epidermidis_gram",
+    "speciesName": "Peptoniphilus harei",
+    "taxonomy": "Bacillota › Peptostreptococcaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "cutibacterium_acnes",
+    "file": "assets/micrographs/listeria_monocytogenes_gram.jpg",
+    "resolvedFallbackKey": "listeria_monocytogenes_gram",
+    "speciesName": "Cutibacterium acnes",
+    "taxonomy": "Actinomycetota › Propionibacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "actinomyces_israelii",
+    "file": "assets/micrographs/listeria_monocytogenes_gram.jpg",
+    "resolvedFallbackKey": "listeria_monocytogenes_gram",
+    "speciesName": "Actinomyces israelii",
+    "taxonomy": "Actinomycetota › Actinomycetaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ESCMID)"
+  },
+  {
+    "key": "bifidobacterium_bifidum",
+    "file": "assets/micrographs/listeria_monocytogenes_gram.jpg",
+    "resolvedFallbackKey": "listeria_monocytogenes_gram",
+    "speciesName": "Bifidobacterium bifidum",
+    "taxonomy": "Actinomycetota › Bifidobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Frontiers)"
+  },
+  {
+    "key": "gardnerella_vaginalis",
+    "file": "assets/micrographs/haemophilus_influenzae_gram.jpg",
+    "resolvedFallbackKey": "haemophilus_influenzae_gram",
+    "speciesName": "Gardnerella vaginalis",
+    "taxonomy": "Actinomycetota › Bifidobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (JID)"
+  },
+  {
+    "key": "streptomyces_griseus",
+    "file": "assets/micrographs/listeria_monocytogenes_gram.jpg",
+    "resolvedFallbackKey": "listeria_monocytogenes_gram",
+    "speciesName": "Streptomyces griseus",
+    "taxonomy": "Actinomycetota › Streptomycetaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Oxford)"
+  },
+  {
+    "key": "corynebacterium_diphtheriae",
+    "file": "assets/micrographs/listeria_monocytogenes_gram.jpg",
+    "resolvedFallbackKey": "listeria_monocytogenes_gram",
+    "speciesName": "Corynebacterium diphtheriae",
+    "taxonomy": "Actinomycetota › Corynebacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (JCM)"
+  },
+  {
+    "key": "corynebacterium_jeikeium",
+    "file": "assets/micrographs/listeria_monocytogenes_gram.jpg",
+    "resolvedFallbackKey": "listeria_monocytogenes_gram",
+    "speciesName": "Corynebacterium jeikeium",
+    "taxonomy": "Actinomycetota › Corynebacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "corynebacterium_pseudodiphtheriticum",
+    "file": "assets/micrographs/listeria_monocytogenes_gram.jpg",
+    "resolvedFallbackKey": "listeria_monocytogenes_gram",
+    "speciesName": "Corynebacterium pseudodiphtheriticum",
+    "taxonomy": "Actinomycetota › Corynebacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (CDC EID)"
+  },
+  {
+    "key": "corynebacterium_striatum",
+    "file": "assets/micrographs/listeria_monocytogenes_gram.jpg",
+    "resolvedFallbackKey": "listeria_monocytogenes_gram",
+    "speciesName": "Corynebacterium striatum",
+    "taxonomy": "Actinomycetota › Corynebacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (JCM)"
+  },
+  {
+    "key": "nocardia_asteroides",
+    "file": "assets/micrographs/mycobacterium_tuberculosis_ziehl.jpg",
+    "resolvedFallbackKey": "mycobacterium_tuberculosis_ziehl",
+    "speciesName": "Nocardia asteroides",
+    "taxonomy": "Actinomycetota › Nocardiaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (AJT)"
+  },
+  {
+    "key": "nocardia_brasiliensis",
+    "file": "assets/micrographs/mycobacterium_tuberculosis_ziehl.jpg",
+    "resolvedFallbackKey": "mycobacterium_tuberculosis_ziehl",
+    "speciesName": "Nocardia brasiliensis",
+    "taxonomy": "Actinomycetota › Nocardiaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Oxford)"
+  },
+  {
+    "key": "mycobacterium_avium",
+    "file": "assets/micrographs/mycobacterium_tuberculosis_ziehl.jpg",
+    "resolvedFallbackKey": "mycobacterium_tuberculosis_ziehl",
+    "speciesName": "Mycobacterium avium",
+    "taxonomy": "Actinomycetota › Mycobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ATS/ERS)"
+  },
+  {
+    "key": "mycobacterium_kansasii",
+    "file": "assets/micrographs/mycobacterium_tuberculosis_ziehl.jpg",
+    "resolvedFallbackKey": "mycobacterium_tuberculosis_ziehl",
+    "speciesName": "Mycobacterium kansasii",
+    "taxonomy": "Actinomycetota › Mycobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ATS)"
+  },
+  {
+    "key": "mycobacterium_leprae",
+    "file": "assets/micrographs/mycobacterium_tuberculosis_ziehl.jpg",
+    "resolvedFallbackKey": "mycobacterium_tuberculosis_ziehl",
+    "speciesName": "Mycobacterium leprae",
+    "taxonomy": "Actinomycetota › Mycobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "klebsiella_oxytoca",
+    "file": "assets/micrographs/klebsiella_pneumoniae_gram.jpg",
+    "resolvedFallbackKey": "klebsiella_pneumoniae_gram",
+    "speciesName": "Klebsiella oxytoca",
+    "taxonomy": "Pseudomonadota › Enterobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (NEJM)"
+  },
+  {
+    "key": "klebsiella_aerogenes",
+    "file": "assets/micrographs/escherichia_coli_gram.jpg",
+    "resolvedFallbackKey": "escherichia_coli_gram",
+    "speciesName": "Klebsiella aerogenes",
+    "taxonomy": "Pseudomonadota › Enterobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (IJSEM)"
+  },
+  {
+    "key": "enterobacter_cloacae",
+    "file": "assets/micrographs/escherichia_coli_gram.jpg",
+    "resolvedFallbackKey": "escherichia_coli_gram",
+    "speciesName": "Enterobacter cloacae",
+    "taxonomy": "Pseudomonadota › Enterobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "citrobacter_freundii",
+    "file": "assets/micrographs/salmonella_enterica_gram.jpg",
+    "resolvedFallbackKey": "salmonella_enterica_gram",
+    "speciesName": "Citrobacter freundii",
+    "taxonomy": "Pseudomonadota › Enterobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Elsevier)"
+  },
+  {
+    "key": "citrobacter_koseri",
+    "file": "assets/micrographs/escherichia_coli_gram.jpg",
+    "resolvedFallbackKey": "escherichia_coli_gram",
+    "speciesName": "Citrobacter koseri",
+    "taxonomy": "Pseudomonadota › Enterobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Elsevier)"
+  },
+  {
+    "key": "proteus_vulgaris",
+    "file": "assets/micrographs/proteus_mirabilis_gram.jpg",
+    "resolvedFallbackKey": "proteus_mirabilis_gram",
+    "speciesName": "Proteus vulgaris",
+    "taxonomy": "Pseudomonadota › Morganellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "morganella_morganii",
+    "file": "assets/micrographs/proteus_mirabilis_gram.jpg",
+    "resolvedFallbackKey": "proteus_mirabilis_gram",
+    "speciesName": "Morganella morganii",
+    "taxonomy": "Pseudomonadota › Morganellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (IJID)"
+  },
+  {
+    "key": "providencia_stuartii",
+    "file": "assets/micrographs/proteus_mirabilis_gram.jpg",
+    "resolvedFallbackKey": "proteus_mirabilis_gram",
+    "speciesName": "Providencia stuartii",
+    "taxonomy": "Pseudomonadota › Morganellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "providencia_rettgeri",
+    "file": "assets/micrographs/proteus_mirabilis_gram.jpg",
+    "resolvedFallbackKey": "proteus_mirabilis_gram",
+    "speciesName": "Providencia rettgeri",
+    "taxonomy": "Pseudomonadota › Morganellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (AAC)"
+  },
+  {
+    "key": "serratia_liquefaciens",
+    "file": "assets/micrographs/serratia_marcescens_gram.jpg",
+    "resolvedFallbackKey": "serratia_marcescens_gram",
+    "speciesName": "Serratia liquefaciens",
+    "taxonomy": "Pseudomonadota › Yersiniaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Wiley)"
+  },
+  {
+    "key": "yersinia_enterocolitica",
+    "file": "assets/micrographs/shigella_flexneri_gram.jpg",
+    "resolvedFallbackKey": "shigella_flexneri_gram",
+    "speciesName": "Yersinia enterocolitica",
+    "taxonomy": "Pseudomonadota › Yersiniaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "yersinia_pestis",
+    "file": "assets/micrographs/shigella_flexneri_gram.jpg",
+    "resolvedFallbackKey": "shigella_flexneri_gram",
+    "speciesName": "Yersinia pestis",
+    "taxonomy": "Pseudomonadota › Yersiniaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "yersinia_pseudotuberculosis",
+    "file": "assets/micrographs/shigella_flexneri_gram.jpg",
+    "resolvedFallbackKey": "shigella_flexneri_gram",
+    "speciesName": "Yersinia pseudotuberculosis",
+    "taxonomy": "Pseudomonadota › Yersiniaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Ann Rev)"
+  },
+  {
+    "key": "salmonella_bongori",
+    "file": "assets/micrographs/salmonella_enterica_gram.jpg",
+    "resolvedFallbackKey": "salmonella_enterica_gram",
+    "speciesName": "Salmonella bongori",
+    "taxonomy": "Pseudomonadota › Enterobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (PLoS)"
+  },
+  {
+    "key": "shigella_sonnei",
+    "file": "assets/micrographs/shigella_flexneri_gram.jpg",
+    "resolvedFallbackKey": "shigella_flexneri_gram",
+    "speciesName": "Shigella sonnei",
+    "taxonomy": "Pseudomonadota › Enterobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Nature)"
+  },
+  {
+    "key": "shigella_dysenteriae",
+    "file": "assets/micrographs/shigella_flexneri_gram.jpg",
+    "resolvedFallbackKey": "shigella_flexneri_gram",
+    "speciesName": "Shigella dysenteriae",
+    "taxonomy": "Pseudomonadota › Enterobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM)"
+  },
+  {
+    "key": "edwardsiella_tarda",
+    "file": "assets/micrographs/salmonella_enterica_gram.jpg",
+    "resolvedFallbackKey": "salmonella_enterica_gram",
+    "speciesName": "Edwardsiella tarda",
+    "taxonomy": "Pseudomonadota › Hafniaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (FEMS)"
+  },
+  {
+    "key": "hafnia_alvei",
+    "file": "assets/micrographs/escherichia_coli_gram.jpg",
+    "resolvedFallbackKey": "escherichia_coli_gram",
+    "speciesName": "Hafnia alvei",
+    "taxonomy": "Pseudomonadota › Hafniaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (JCM)"
+  },
+  {
+    "key": "cronobacter_sakazakii",
+    "file": "assets/micrographs/escherichia_coli_gram.jpg",
+    "resolvedFallbackKey": "escherichia_coli_gram",
+    "speciesName": "Cronobacter sakazakii",
+    "taxonomy": "Pseudomonadota › Enterobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Elsevier)"
+  },
+  {
+    "key": "pseudomonas_putida",
+    "file": "assets/micrographs/pseudomonas_aeruginosa_gram.jpg",
+    "resolvedFallbackKey": "pseudomonas_aeruginosa_gram",
+    "speciesName": "Pseudomonas putida",
+    "taxonomy": "Pseudomonadota › Pseudomonadaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Wiley)"
+  },
+  {
+    "key": "pseudomonas_fluorescens",
+    "file": "assets/micrographs/pseudomonas_aeruginosa_gram.jpg",
+    "resolvedFallbackKey": "pseudomonas_aeruginosa_gram",
+    "speciesName": "Pseudomonas fluorescens",
+    "taxonomy": "Pseudomonadota › Pseudomonadaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Wiley)"
+  },
+  {
+    "key": "acinetobacter_baumannii",
+    "file": "assets/micrographs/neisseria_meningitidis_gram.jpg",
+    "resolvedFallbackKey": "neisseria_meningitidis_gram",
+    "speciesName": "Acinetobacter baumannii",
+    "taxonomy": "Pseudomonadota › Moraxellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "acinetobacter_lwoffii",
+    "file": "assets/micrographs/neisseria_meningitidis_gram.jpg",
+    "resolvedFallbackKey": "neisseria_meningitidis_gram",
+    "speciesName": "Acinetobacter lwoffii",
+    "taxonomy": "Pseudomonadota › Moraxellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (CID)"
+  },
+  {
+    "key": "moraxella_catarrhalis",
+    "file": "assets/micrographs/neisseria_meningitidis_gram.jpg",
+    "resolvedFallbackKey": "neisseria_meningitidis_gram",
+    "speciesName": "Moraxella catarrhalis",
+    "taxonomy": "Pseudomonadota › Moraxellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "stenotrophomonas_maltophilia",
+    "file": "assets/micrographs/pseudomonas_aeruginosa_gram.jpg",
+    "resolvedFallbackKey": "pseudomonas_aeruginosa_gram",
+    "speciesName": "Stenotrophomonas maltophilia",
+    "taxonomy": "Pseudomonadota › Xanthomonadaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "burkholderia_cepacia",
+    "file": "assets/micrographs/pseudomonas_aeruginosa_gram.jpg",
+    "resolvedFallbackKey": "pseudomonas_aeruginosa_gram",
+    "speciesName": "Burkholderia cepacia",
+    "taxonomy": "Pseudomonadota › Burkholderiaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Nature)"
+  },
+  {
+    "key": "burkholderia_pseudomallei",
+    "file": "assets/micrographs/pseudomonas_aeruginosa_gram.jpg",
+    "resolvedFallbackKey": "pseudomonas_aeruginosa_gram",
+    "speciesName": "Burkholderia pseudomallei",
+    "taxonomy": "Pseudomonadota › Burkholderiaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Nature)"
+  },
+  {
+    "key": "alcaligenes_faecalis",
+    "file": "assets/micrographs/pseudomonas_aeruginosa_gram.jpg",
+    "resolvedFallbackKey": "pseudomonas_aeruginosa_gram",
+    "speciesName": "Alcaligenes faecalis",
+    "taxonomy": "Pseudomonadota › Alcaligenaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (JCM)"
+  },
+  {
+    "key": "haemophilus_parainfluenzae",
+    "file": "assets/micrographs/haemophilus_influenzae_gram.jpg",
+    "resolvedFallbackKey": "haemophilus_influenzae_gram",
+    "speciesName": "Haemophilus parainfluenzae",
+    "taxonomy": "Pseudomonadota › Pasteurellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (JCM)"
+  },
+  {
+    "key": "pasteurella_multocida",
+    "file": "assets/micrographs/haemophilus_influenzae_gram.jpg",
+    "resolvedFallbackKey": "haemophilus_influenzae_gram",
+    "speciesName": "Pasteurella multocida",
+    "taxonomy": "Pseudomonadota › Pasteurellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Nature)"
+  },
+  {
+    "key": "aggregatibacter_actinomycetemcomitans",
+    "file": "assets/micrographs/haemophilus_influenzae_gram.jpg",
+    "resolvedFallbackKey": "haemophilus_influenzae_gram",
+    "speciesName": "Aggregatibacter actinomycetemcomitans",
+    "taxonomy": "Pseudomonadota › Pasteurellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Wiley)"
+  },
+  {
+    "key": "eikenella_corrodens",
+    "file": "assets/micrographs/shigella_flexneri_gram.jpg",
+    "resolvedFallbackKey": "shigella_flexneri_gram",
+    "speciesName": "Eikenella corrodens",
+    "taxonomy": "Pseudomonadota › Neisseriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (CID)"
+  },
+  {
+    "key": "kingella_kingae",
+    "file": "assets/micrographs/haemophilus_influenzae_gram.jpg",
+    "resolvedFallbackKey": "haemophilus_influenzae_gram",
+    "speciesName": "Kingella kingae",
+    "taxonomy": "Pseudomonadota › Neisseriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "neisseria_gonorrhoeae",
+    "file": "assets/micrographs/neisseria_meningitidis_gram.jpg",
+    "resolvedFallbackKey": "neisseria_meningitidis_gram",
+    "speciesName": "Neisseria gonorrhoeae",
+    "taxonomy": "Pseudomonadota › Neisseriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Nature)"
+  },
+  {
+    "key": "bordetella_pertussis",
+    "file": "assets/micrographs/haemophilus_influenzae_gram.jpg",
+    "resolvedFallbackKey": "haemophilus_influenzae_gram",
+    "speciesName": "Bordetella pertussis",
+    "taxonomy": "Pseudomonadota › Alcaligenaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Nature)"
+  },
+  {
+    "key": "legionella_pneumophila",
+    "file": "assets/micrographs/haemophilus_influenzae_gram.jpg",
+    "resolvedFallbackKey": "haemophilus_influenzae_gram",
+    "speciesName": "Legionella pneumophila",
+    "taxonomy": "Pseudomonadota › Legionellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "coxiella_burnetii",
+    "file": "assets/micrographs/haemophilus_influenzae_gram.jpg",
+    "resolvedFallbackKey": "haemophilus_influenzae_gram",
+    "speciesName": "Coxiella burnetii",
+    "taxonomy": "Pseudomonadota › Coxiellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "brucella_melitensis",
+    "file": "assets/micrographs/haemophilus_influenzae_gram.jpg",
+    "resolvedFallbackKey": "haemophilus_influenzae_gram",
+    "speciesName": "Brucella melitensis",
+    "taxonomy": "Pseudomonadota › Brucellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (NEJM)"
+  },
+  {
+    "key": "bartonella_henselae",
+    "file": "assets/micrographs/haemophilus_influenzae_gram.jpg",
+    "resolvedFallbackKey": "haemophilus_influenzae_gram",
+    "speciesName": "Bartonella henselae",
+    "taxonomy": "Pseudomonadota › Bartonellaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (AAP)"
+  },
+  {
+    "key": "campylobacter_jejuni",
+    "file": "assets/micrographs/vibrio_cholerae_gram.jpg",
+    "resolvedFallbackKey": "vibrio_cholerae_gram",
+    "speciesName": "Campylobacter jejuni",
+    "taxonomy": "Campylobacterota › Campylobacteraceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Nature)"
+  },
+  {
+    "key": "bacteroides_fragilis",
+    "file": "assets/micrographs/shigella_flexneri_gram.jpg",
+    "resolvedFallbackKey": "shigella_flexneri_gram",
+    "speciesName": "Bacteroides fragilis",
+    "taxonomy": "Bacteroidota › Bacteroidaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (ASM CMR)"
+  },
+  {
+    "key": "fusobacterium_nucleatum",
+    "file": "assets/micrographs/shigella_flexneri_gram.jpg",
+    "resolvedFallbackKey": "shigella_flexneri_gram",
+    "speciesName": "Fusobacterium nucleatum",
+    "taxonomy": "Fusobacteriota › Fusobacteriaceae",
+    "source": "CDC Public Health Image Library (PHIL) / Scientific Open Literature (Cell)"
+  }
+]

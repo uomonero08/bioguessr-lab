@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BioGuessr Lab — Indovina la Specie di Batterio</title>
+  <meta name="description" content="Simulatore diagnostico di microbiologia: identifica 100 specie batteriche misteriose con microscopia ottica a 1000×, colorazioni di Gram, prove biochimiche e l'Albero Genealogico dei batteri." />
+  <meta name="theme-color" content="#0284c7" />
+
+  <!-- Open Graph / Meta per Condivisione su WhatsApp, Telegram, Social e Chat -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="BioGuessr Lab — Laboratorio di Diagnostica Microbiologica" />
+  <meta property="og:description" content="Mettiti alla prova come microbiologo: osserva colture in piastra, esegui colorazioni di Gram al microscopio 1000× e identifica 100 ceppi batterici!" />
+  <meta property="og:image" content="assets/micrographs/staphylococcus_aureus_gram.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="BioGuessr Lab — Indovina il Batterio Misterioso" />
+  <meta name="twitter:description" content="Simulatore clinico con 100 specie, microscopio 3D, micrografie reali e albero genealogico." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- MENU DI APERTURA / START SCREEN DEL LABORATORIO -->
+  <div class="start-screen-overlay" id="startScreen">
+    <div class="start-screen-backdrop" aria-hidden="true">
+      <div class="bio-floating-cells">
+        <span class="bio-cell cell-1">🧫</span>
+        <span class="bio-cell cell-2">⚗️</span>
+        <span class="bio-cell cell-3">🧬</span>
+        <span class="bio-cell cell-4">🔬</span>
+        <span class="bio-cell cell-5">🧪</span>
+      </div>
+    </div>
+
+    <div class="start-card glass-bubble-panel">
+      <div class="start-card-header">
+        <div class="start-brand-badge">
+          <span class="brand-circle-orb" aria-hidden="true">
+            <span class="petri-dot"></span>
+          </span>
+          <div>
+            <h1 class="start-brand-title">BioGuessr <span class="brand-tag">BSL-2</span></h1>
+            <p class="start-brand-sub">Microbiology &amp; Clinical Diagnostics Lab</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="start-body">
+        <p class="start-intro-text">
+          Benvenuto nel laboratorio di biosicurezza. Identifica l'isolato clinico misterioso attraverso prove biochimiche, microscopia a immersione e terreni differenziali prima di esaurire i 5 tentativi!
+        </p>
+
+        <!-- AZIONE PRINCIPALE: PLAY -->
+        <button type="button" class="start-play-btn sapphire-bubble" id="startPlayBtn">
+          <span class="play-icon-glow">▶</span>
+          <span class="play-label-group">
+            <span class="play-main-text">ENTRA IN LABORATORIO</span>
+            <span class="play-sub-text">Inizia protocollo diagnostico</span>
+          </span>
+          <span class="play-arrow">⚡</span>
+        </button>
+
+        <!-- PULSANTI SECONDARI: IMPOSTAZIONI & ATLANTE -->
+        <div class="start-secondary-actions">
+          <button type="button" class="start-action-btn crystal-bubble" id="startSettingsBtn">
+            <span>⚙️ Impostazioni Audio &amp; Lab</span>
+          </button>
+          <button type="button" class="start-action-btn teal-bubble" id="startAtlasQuickBtn">
+            <span>📘 Consulta Atlante 100 Specie</span>
+          </button>
+        </div>
+
+        <!-- PANNELLO IMPOSTAZIONI A SCOMPARSA -->
+        <div class="start-settings-drawer hidden" id="startSettingsDrawer">
+          <h3 class="settings-title">⚙️ Parametri della Postazione</h3>
+          
+          <div class="setting-row">
+            <div class="setting-info">
+              <label for="masterVolumeSlider" class="setting-label">🔊 Volume Audio di Laboratorio</label>
+              <span class="setting-desc">Regola l'intensità di pipette, cappa HEPA e torretta microscopica</span>
+            </div>
+            <div class="setting-ctrl">
+              <input type="range" id="masterVolumeSlider" min="0" max="100" value="80" />
+              <span class="slider-val-badge" id="masterVolumeVal">80%</span>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-label">🔇 Audio Generale</span>
+              <span class="setting-desc">Abilita o disabilita tutti i feedback sonori sintetizzati</span>
+            </div>
+            <div class="setting-ctrl">
+              <button type="button" class="pill-action-btn crystal-bubble" id="startSoundToggleBtn">
+                <span id="startSoundIcon">🔊 Attivo</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-label">🔬 Avvio in Modalità Realistica</span>
+              <span class="setting-desc">Mostra subito il bancone 3D e le micrografie ottiche reali</span>
+            </div>
+            <div class="setting-ctrl">
+              <label class="toggle-switch-lab">
+                <input type="checkbox" id="startRealisticToggle" />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-label">💨 Aspirazione Cappa Laminare</span>
+              <span class="setting-desc">Mantieni il flusso d'aria BSL-2 sempre attivo all'ingresso</span>
+            </div>
+            <div class="setting-ctrl">
+              <label class="toggle-switch-lab">
+                <input type="checkbox" id="startHoodAirToggle" checked />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="start-footer">
+        <span>BSL-2 Clinical Compliance · 100 Ceppi Batterici Certificati</span>
+        <button type="button" class="start-share-link" id="startShareBtn" title="Condividi il link del simulatore con colleghi o amici">
+          <span>🔗 Condividi Laboratorio</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- STRATO TRANSIZIONE MICROBIOLOGICA E CHIMICA (EFFETTO MICROSCOPIO + REAZIONE REAGENTI) -->
+    <div class="chemical-transition-curtain" id="chemTransitionCurtain" aria-hidden="true">
+      <div class="chem-reaction-layer">
+        <div class="microscope-lens-aperture">
+          <div class="iris-leaf"></div>
+        </div>
+        <div class="chem-bubbles-burst" id="chemBubblesContainer"></div>
+        <div class="chem-fluid-wash"></div>
+        <div class="chem-transition-label">
+          <span class="chem-spinner"></span>
+          <span class="chem-text">INOCULAZIONE CAMPIONE IN CORSO...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sfondo Laboratorio Sterile con Bolle Lucide Fluttuanti Animate -->
+  <div class="lab-bg-decor" aria-hidden="true">
+    <span class="floating-orb orb-1"></span>
+    <span class="floating-orb orb-2"></span>
+    <span class="floating-orb orb-3"></span>
+    <span class="floating-orb orb-4"></span>
+    <span class="floating-orb orb-5"></span>
+  </div>
+
+  <!-- HEADER A BOLLA LUCIDA DI LABORATORIO -->
+  <header class="lab-header">
+    <div class="brand-bubble sapphire-bubble">
+      <div class="brand-circle-orb" aria-hidden="true">
+        <span class="petri-dot"></span>
+      </div>
+      <div>
+        <h1 class="brand-title">BioGuessr <span class="brand-tag">BSL-2</span></h1>
+        <p class="brand-subtitle">Laboratorio Diagnostico · 100 Specie</p>
+      </div>
+    </div>
+
+    <!-- TASTO PRINCIPALE: MODALITÀ REALISTICA -->
+    <button
+      type="button"
+      class="realistic-toggle-bubble"
+      id="realisticModeBtn"
+      aria-pressed="false"
+      title="Attiva il Bancone 3D con Microscopio, Piastra Petri e Taccuino, schermate ravvicinate, semina automatica sotto cappa e micrografie scientifiche reali"
+    >
+      <span class="toggle-knob" id="realisticKnob">⚡</span>
+      <span class="toggle-copy">
+        <span class="toggle-kicker">Bancone 3D &amp; Foto Reali</span>
+        <strong id="realisticModeLabel">Modalità Realistica: OFF</strong>
+      </span>
+    </button>
+
+    <!-- CAPSULE PUNTEGGIO & 5 ERRORI -->
+    <div class="hud-stats">
+      <div class="hud-bubble sapphire-bubble" id="roundScoreCard" title="Ogni test o errore scala punti dal potenziale di questo campione">
+        <span class="hud-label">Punti Campione</span>
+        <div class="hud-value-wrap">
+          <span class="hud-value" id="potentialScoreEl">1000</span>
+          <span class="hud-unit">pt</span>
+          <span class="score-delta-anchor" id="scoreDeltaAnchor"></span>
+        </div>
+      </div>
+
+      <div class="hud-bubble sapphire-bubble" title="Massimo 5 errori consentiti">
+        <span class="hud-label">Errori (<span id="errorCountText">0/5</span>)</span>
+        <div class="life-vials" id="lifeVials" aria-label="Tentativi disponibili"></div>
+      </div>
+
+      <div class="hud-bubble crystal-bubble">
+        <span class="hud-label">Punteggio Totale</span>
+        <div class="hud-value-wrap">
+          <span class="hud-value dark-ink" id="totalScoreEl">0</span>
+          <span class="hud-unit dark-ink">pt</span>
+          <span class="hud-sub-badge" id="solvedCounterEl">0/100</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MENU DEI DUE QUADERNI + CONTROLLI RAPIDI -->
+    <div class="header-notebooks">
+      <button
+        type="button"
+        class="notebook-launch-btn sapphire-bubble"
+        id="openNotepadBtn"
+        title="Apri il Blocchetto Note per appuntare i test fatti, i risultati e le tue ipotesi"
+      >
+        <span class="nb-icon">📒</span>
+        <span class="hide-md">Blocchetto Note</span>
+        <span class="nb-counter-pill" id="notepadBadgeCount">0</span>
+      </button>
+
+      <button
+        type="button"
+        class="notebook-launch-btn teal-bubble"
+        id="openAtlasBtn"
+        title="Sfoglia il Quaderno Atlante dei Batteri con le 100 specie, l'albero genealogico e i metodi di riconoscimento"
+      >
+        <span class="nb-icon">📘</span>
+        <span class="hide-md">Atlante Batteri</span>
+      </button>
+
+      <button
+        type="button"
+        class="circle-bubble-btn crystal-bubble"
+        id="soundToggleBtn"
+        title="Attiva/Disattiva audio di laboratorio"
+      >
+        <span id="soundIcon">🔊</span>
+      </button>
+
+      <button
+        type="button"
+        class="pill-action-btn crystal-bubble"
+        id="shareAppBtn"
+        title="Condividi il simulatore con colleghi o amici"
+      >
+        <span>🔗</span> <span class="hide-sm">Condividi</span>
+      </button>
+
+      <button
+        type="button"
+        class="pill-action-btn crystal-bubble"
+        id="skipSampleBtn"
+        title="Analizza un nuovo isolato batterico misterioso"
+      >
+        <span>🔄</span> <span class="hide-sm">Nuovo</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- POSTAZIONE PRINCIPALE -->
+  <main class="workstation-grid">
+    <!-- COLONNA SINISTRA: RIQUADRO BANCONE 3D / PIASTRA SOPRA + SCRITTURA SOTTO -->
+    <section class="stage-column" aria-label="Area Osservazione e Diagnosi">
+      <!-- 1. RIQUADRO SUPERIORE A BOLLA LUCIDA -->
+      <div class="viewport-card glass-bubble-panel">
+        <div class="viewport-topbar">
+          <div class="sample-pill sapphire-bubble">
+            <span class="status-dot"></span>
+            <span class="sample-code" id="sampleCodeEl">ISOLATO CLINICO #01</span>
+          </div>
+
+          <!-- Controlli Cappa Biohazard BSL-2 + Schermo Intero Bancone 3D -->
+          <div class="hood-controls-bar hidden" id="hoodControlsBar">
+            <button
+              type="button"
+              class="hood-chip active"
+              id="hoodAirBtn"
+              title="Attiva/Disattiva aspirazione e filtro HEPA della Cappa a Flusso Laminare"
+            >
+              🌬️ Flusso Cappa: <strong id="hoodAirLabel">ON</strong>
+            </button>
+            <button
+              type="button"
+              class="hood-chip active"
+              id="hoodLightBtn"
+              title="Accendi/Spegni illuminazione LED della Cappa sul bancone 3D"
+            >
+              💡 Luce Cappa: <strong id="hoodLightLabel">ON</strong>
+            </button>
+            <button
+              type="button"
+              class="tool-chip sapphire-bubble"
+              id="benchFullscreenBtn"
+              title="Espandi tutto il Bancone di Laboratorio 3D a Schermo Intero"
+            >
+              ⛶ Schermo Intero
+            </button>
+          </div>
+
+          <div class="viewport-controls" id="inlineViewportControls">
+            <button
+              type="button"
+              class="tool-chip crystal-bubble"
+              id="backlightBtn"
+              title="Transilluminatore sotto la piastra Petri per osservare meglio gli aloni di emolisi"
+            >
+              🔦 Luce Trasmessa: <strong id="backlightState">OFF</strong>
+            </button>
+          </div>
+        </div>
+
+        <!-- Barra delle Viste Sbloccate (in Modalità Realistica cliccandole si apre la schermata dedicata!) -->
+        <div class="view-tabs-strip" id="unlockedViewsBar" role="tablist" aria-label="Viste disponibili"></div>
+
+        <!-- ==================================================================
+             A) BANCONE DI LABORATORIO 3D (ATTIVO SOLO IN MODALITÀ REALISTICA!)
+             Microscopio 3D + Piastra Petri davanti + Taccuino e Atlante sul banco
+             ================================================================== -->
+        <div class="bench3d-wrapper hidden" id="bench3dWrapper">
+          <div class="bench3d-stage" id="bench3dStage">
+            <canvas id="bench3dCanvas"></canvas>
+
+            <!-- Barra HUD Flottante attiva quando il Bancone 3D è a Schermo Intero -->
+            <div class="bench-fs-topbar" id="benchFsTopBar">
+              <div class="bench-fs-status sapphire-bubble">
+                <span class="status-dot"></span>
+                <strong id="fsSampleCodeEl">ISOLATO #01</strong>
+                <span class="bench3d-sep">·</span>
+                <span>⭐ <strong id="fsScoreEl">1000</strong> pt</span>
+                <span class="bench3d-sep">·</span>
+                <span>❤️ <strong id="fsErrorsEl">0/5</strong></span>
+              </div>
+
+              <div class="bench-fs-hood-group">
+                <button
+                  type="button"
+                  class="hood-chip active"
+                  id="fsHoodAirBtn"
+                  title="Accendi/Spegni aspirazione laminare HEPA della Cappa"
+                >
+                  🌬️ Flusso Cappa: <strong id="fsHoodAirLabel">ON</strong>
+                </button>
+                <button
+                  type="button"
+                  class="hood-chip active"
+                  id="fsHoodLightBtn"
+                  title="Accendi/Spegni luce LED della Cappa sul bancone 3D"
+                >
+                  💡 Luce Cappa: <strong id="fsHoodLightLabel">ON</strong>
+                </button>
+              </div>
+
+              <div class="bench-fs-actions">
+                <button type="button" class="fs-hud-btn sapphire-bubble" id="fsToggleTestsBtn">
+                  🧪 Menu Test
+                </button>
+                <button type="button" class="fs-hud-btn sapphire-bubble" id="fsToggleGuessBtn">
+                  🧬 Indovina Specie
+                </button>
+                <button type="button" class="fs-hud-btn crystal-bubble" id="fsOpenNotepadBtn">
+                  📒 Taccuino
+                </button>
+                <button type="button" class="fs-hud-btn teal-bubble" id="fsOpenAtlasBtn">
+                  📘 Atlante
+                </button>
+                <button
+                  type="button"
+                  class="fs-hud-btn exit-fs-btn crystal-bubble"
+                  id="fsExitFullscreenBtn"
+                  title="Torna alla vista standard (Esc)"
+                >
+                  🗗 Esci Schermo Intero
+                </button>
+              </div>
+            </div>
+
+            <!-- Badge superiore di stato sul Bancone 3D (nascosto in Schermo Intero) -->
+            <div class="bench3d-badge-top sapphire-bubble" id="benchStandardBadge">
+              <span>🔬 Bancone 3D Sotto Cappa</span>
+              <span class="bench3d-sep">·</span>
+              <span>Clicca su Microscopio, Piastra Petri, Taccuino o Interruttori Cappa</span>
+            </div>
+
+            <!-- Fumetto dinamico quando si passa il mouse sugli strumenti 3D -->
+            <div class="bench3d-hover-card sapphire-bubble hidden" id="bench3dTooltip">
+              <strong id="bench3dTooltipTitle">🔬 Microscopio Ottico 3D</strong>
+              <span id="bench3dTooltipSub">Clicca per aprire l’oculare</span>
+            </div>
+          </div>
+
+          <!-- Pulsanti rapidi delle Stazioni del Bancone 3D -->
+          <div class="bench3d-quick-bar" id="benchQuickActions">
+            <button type="button" class="bench-station-btn sapphire-bubble" id="benchOpenMicroscopeBtn">
+              🔬 Usa Microscopio 3D
+            </button>
+            <button type="button" class="bench-station-btn crystal-bubble" id="benchOpenPetriBtn">
+              🧫 Esamina Piastra Campione
+            </button>
+            <button type="button" class="bench-station-btn crystal-bubble" id="benchOpenNotepadBtn">
+              📒 Taccuino sul Banco
+            </button>
+            <button type="button" class="bench-station-btn teal-bubble" id="benchOpenAtlasBtn">
+              📘 Atlante sul Banco
+            </button>
+          </div>
+        </div>
+
+        <!-- ==================================================================
+             B) PALCOSCENICO 2D CLASSICO VELOCE (ATTIVO SOLO CON MODALITÀ REALISTICA: OFF)
+             ================================================================== -->
+        <div class="classic-stage-wrapper" id="classicStageWrapper">
+          <!-- Console Ottica del Microscopio (Modalità Rapida) -->
+          <div class="microscope-console sapphire-bubble hidden" id="microscopeConsole">
+            <div class="mc-group">
+              <span class="mc-label">Revolver Obiettivi:</span>
+              <div class="mc-objectives">
+                <button type="button" class="obj-btn" data-obj="10x">10×</button>
+                <button type="button" class="obj-btn" data-obj="40x">40×</button>
+                <button type="button" class="obj-btn active" data-obj="100x">100× Olio</button>
+              </div>
+            </div>
+
+            <div class="mc-group">
+              <label class="mc-slider-label" for="macroFocusSlider">
+                <span>⚙️ Macrometrica</span>
+                <input type="range" id="macroFocusSlider" min="10" max="90" step="0.5" value="50" />
+              </label>
+            </div>
+
+            <div class="mc-group">
+              <label class="mc-slider-label" for="microFocusSlider">
+                <span>🔍 Micrometrica</span>
+                <input type="range" id="microFocusSlider" min="-15" max="15" step="0.2" value="0" />
+              </label>
+            </div>
+
+            <div class="mc-group">
+              <label class="mc-slider-label" for="condenserSlider">
+                <span>☀️ Diaframma</span>
+                <input type="range" id="condenserSlider" min="55" max="135" step="1" value="100" />
+              </label>
+            </div>
+
+            <button type="button" class="mc-reset-btn" id="centerStageBtn" title="Ricentra il vetrino sul tavolino X/Y">
+              🎯 Centra
+            </button>
+          </div>
+
+          <!-- Fumetto a Bolla Lucida (Modalità Rapida fallback) -->
+          <div class="interactive-speech-bubble sapphire-bubble hidden" id="interactivePromptBubble">
+            <div class="speech-content">
+              <span class="speech-text" id="interactivePromptText">
+                💧 Usa la pipetta sul vetrino per aggiungere 3 gocce di H₂O₂!
+              </span>
+              <button type="button" class="skip-step-btn" id="completeStepFastBtn" title="Completa subito il passaggio">
+                Completa subito ⚡
+              </button>
+            </div>
+            <span class="speech-pointer" aria-hidden="true"></span>
+          </div>
+
+          <!-- PALCOSCENICO CANVAS CLASSICO -->
+          <div class="canvas-stage" id="canvasStage">
+            <canvas id="labCanvas"></canvas>
+            <div class="canvas-hint-pill sapphire-bubble" id="canvasHintPill">
+              🔍 Muovi il cursore sulla piastra per la Lente 5×
+            </div>
+            <div class="lab-loading-overlay hidden" id="labActionOverlay">
+              <div class="spinner-ring"></div>
+              <span id="labActionText">Preparazione campione...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fumetto Osservazione Scientifica Corrente -->
+        <div class="observation-banner sapphire-bubble" id="observationBanner">
+          <div class="obs-header">
+            <span class="obs-title" id="obsTitle">🧫 Piastra Petri Primaria (Isolamento a 37°C)</span>
+            <span class="obs-badge tone-info" id="obsBadge">OSSERVAZIONE GRATUITA</span>
+          </div>
+          <p class="obs-detail" id="obsDetail">
+            Caricamento morfologia coloniale in corso...
+          </p>
+        </div>
+      </div>
+
+      <!-- 2. ZONA DI SCRITTURA A BOLLA CON AUTOCOMPLETAMENTO (SOTTO IL BANCONE / PIASTRA PETRI) -->
+      <div class="guess-card glass-bubble-panel" id="guessCard">
+        <div class="guess-header">
+          <div>
+            <h2 class="guess-title">🧬 Indovina la Specie di Batterio</h2>
+            <p class="guess-subtitle">
+              Digita nella barra a bolla per vedere i suggerimenti tra le 100 specie comuni.
+            </p>
+          </div>
+          <div class="guess-header-right">
+            <div class="errors-pill" id="errorsSummaryPill">
+              Errori: <strong>0 / 5</strong>
+            </div>
+            <button
+              type="button"
+              class="fs-drawer-close-btn crystal-bubble"
+              id="closeFsGuessBtn"
+              title="Chiudi pannello diagnosi"
+              aria-label="Chiudi pannello diagnosi"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <form class="guess-form" id="guessForm" autocomplete="off">
+          <div class="autocomplete-wrapper">
+            <span class="input-icon" aria-hidden="true">🦠</span>
+            <input
+              type="text"
+              id="speciesInput"
+              class="species-input"
+              placeholder="Scrivi qui la specie (es. Staphylococcus aureus, E. coli, Vibrio...)"
+              aria-label="Nome della specie batterica"
+              aria-autocomplete="list"
+              aria-controls="suggestionsDropdown"
+            />
+            <button
+              type="button"
+              class="clear-input-btn hidden"
+              id="clearInputBtn"
+              title="Cancella testo"
+              aria-label="Cancella testo"
+            >
+              ✕
+            </button>
+
+            <ul class="suggestions-dropdown hidden" id="suggestionsDropdown" role="listbox"></ul>
+          </div>
+
+          <button type="submit" class="btn-primary-bubble sapphire-bubble" id="submitGuessBtn">
+            <span>Conferma Specie</span>
+            <span class="submit-arrow">→</span>
+          </button>
+        </form>
+
+        <!-- Bolle di suggerimento rapido -->
+        <div class="quick-suggestions-bar">
+          <span class="quick-label">Consigli rapidi:</span>
+          <div class="quick-chips" id="quickChipsContainer"></div>
+        </div>
+
+        <!-- Registro Errori (Max 5) -->
+        <div class="attempts-log" id="attemptsLog"></div>
+      </div>
+    </section>
+
+    <!-- COLONNA DESTRA: SCELTA TEST + ACCESSO RAPIDO AI QUADERNI -->
+    <aside class="workbench-column" id="workbenchColumn" aria-label="Strumentazione e Test Diagnostici">
+      <div class="tests-panel-card glass-bubble-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">🧪 Scegli i Test di Laboratorio</h2>
+            <p class="panel-subtitle">
+              Ogni test è un indizio diagnostico che scala punti dal campione corrente.
+            </p>
+          </div>
+          <div class="panel-header-right">
+            <span class="tests-used-badge sapphire-bubble" id="testsUsedBadge">0 test</span>
+            <button
+              type="button"
+              class="fs-drawer-close-btn crystal-bubble"
+              id="closeFsTestsBtn"
+              title="Chiudi pannello test"
+              aria-label="Chiudi pannello test"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <div class="category-tabs" role="tablist">
+          <button type="button" class="cat-tab active" data-category="stains" role="tab">
+            🔬 Colorazioni <span class="cat-count">4</span>
+          </button>
+          <button type="button" class="cat-tab" data-category="biochem" role="tab">
+            🫧 Biochimici <span class="cat-count">6</span>
+          </button>
+          <button type="button" class="cat-tab" data-category="media" role="tab">
+            🧫 Terreni <span class="cat-count">10</span>
+          </button>
+        </div>
+
+        <div class="tests-list" id="testsListContainer"></div>
+      </div>
+
+      <!-- RIEPILOGO COMPATTO + SCORCIATOIA AI DUE QUADERNI -->
+      <div class="mini-desk-card glass-bubble-panel">
+        <div class="mini-desk-header">
+          <div>
+            <h3 class="mini-desk-title">📋 Ultimi Risultati &amp; Quaderni</h3>
+            <p class="mini-desk-sub">Apri il Blocchetto Note per prendere appunti o consulta l’Atlante.</p>
+          </div>
+          <div class="mini-desk-btns">
+            <button type="button" class="mini-nb-btn sapphire-bubble" id="openNotepadDeskBtn">
+              📒 Apri Blocchetto
+            </button>
+            <button type="button" class="mini-nb-btn teal-bubble" id="openAtlasDeskBtn">
+              📘 Apri Atlante
+            </button>
+          </div>
+        </div>
+
+        <div class="recent-results-strip" id="recentResultsStrip">
+          <div class="empty-report-state" id="emptyRecentState">
+            Nessun test ancora eseguito su questo isolato. Usa le schede qui sopra per iniziare le analisi!
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- ========================================================================
+       SCHERMATA RAVVICINATA DI ISPEZIONE (SOLO IN MODALITÀ REALISTICA!)
+       Si apre usando il Microscopio 3D, esaminando la Piastra o eseguendo un test
+       ======================================================================== -->
+  <div
+    class="modal-backdrop inspection-backdrop hidden"
+    id="realisticInspectionModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="inspectionStationTitle"
+  >
+    <div class="inspection-window-card glass-bubble-panel" id="inspectionWindowCard">
+      <!-- Barra Superiore della Stazione Ravvicinata -->
+      <div class="inspection-topbar">
+        <div class="inspection-title-group">
+          <span class="inspection-kicker" id="inspectionStationKicker">POSTAZIONE OTTICA RAVVICINATA</span>
+          <h2 class="inspection-title" id="inspectionStationTitle">🔬 Visore Oculare del Microscopio (1000×)</h2>
+        </div>
+
+        <div class="inspection-top-actions">
+          <!-- Controlli Cappa BSL-2 dentro la schermata ravvicinata -->
+          <div class="hood-controls-bar hidden" id="modalHoodControlsBar">
+            <button type="button" class="hood-chip active" id="modalHoodAirBtn">
+              🌬️ Flusso Cappa: <strong id="modalHoodAirLabel">ON</strong>
+            </button>
+            <button type="button" class="hood-chip active" id="modalHoodLightBtn">
+              💡 Luce Cappa: <strong id="modalHoodLightLabel">ON</strong>
+            </button>
+          </div>
+
+          <button
+            type="button"
+            class="tool-chip sapphire-bubble hidden"
+            id="modalReplayStreakBtn"
+            title="Ripeti l’animazione della semina automatica a 4 quadranti sotto cappa"
+          >
+            ↻ Ripeti Semina
+          </button>
+
+          <button type="button" class="tool-chip crystal-bubble hidden" id="modalBacklightBtn">
+            🔦 Luce Trasmessa: <strong id="modalBacklightState">OFF</strong>
+          </button>
+
+          <button type="button" class="mini-nb-btn sapphire-bubble" id="modalOpenNotepadBtn" title="Apri il Taccuino per prendere appunti">
+            📒 Taccuino
+          </button>
+
+          <button type="button" class="back-to-bench-btn crystal-bubble" id="closeInspectionModalBtn">
+            ← Torna al Bancone 3D
+          </button>
+        </div>
+      </div>
+
+      <!-- Strip di navigazione rapida tra i campioni/vetrini sbloccati -->
+      <div class="view-tabs-strip" id="modalUnlockedViewsBar" role="tablist"></div>
+
+      <!-- Barra scelta colorazione rapida (mostrata se si apre il Microscopio 3D senza vetrini ancora pronti o per aggiungerne uno) -->
+      <div class="stain-quick-picker hidden" id="modalStainQuickBar">
+        <span class="stain-picker-label">🔬 Prepara o cambia vetrino sul tavolino:</span>
+        <div class="stain-picker-btns" id="modalStainButtons"></div>
+      </div>
+
+      <!-- Console Ottica Completa del Microscopio nella Schermata Dedicata -->
+      <div class="microscope-console sapphire-bubble hidden" id="modalMicroscopeConsole">
+        <div class="mc-group">
+          <span class="mc-label">Revolver Obiettivi:</span>
+          <div class="mc-objectives">
+            <button type="button" class="obj-btn" data-obj="10x">10×</button>
+            <button type="button" class="obj-btn" data-obj="40x">40×</button>
+            <button type="button" class="obj-btn active" data-obj="100x">100× Olio</button>
+          </div>
+        </div>
+
+        <div class="mc-group">
+          <label class="mc-slider-label" for="modalMacroFocusSlider">
+            <span>⚙️ Macrometrica</span>
+            <input type="range" id="modalMacroFocusSlider" min="10" max="90" step="0.5" value="50" />
+          </label>
+        </div>
+
+        <div class="mc-group">
+          <label class="mc-slider-label" for="modalMicroFocusSlider">
+            <span>🔍 Micrometrica (Fine)</span>
+            <input type="range" id="modalMicroFocusSlider" min="-15" max="15" step="0.2" value="0" />
+          </label>
+        </div>
+
+        <div class="mc-group">
+          <label class="mc-slider-label" for="modalCondenserSlider">
+            <span>☀️ Diaframma</span>
+            <input type="range" id="modalCondenserSlider" min="55" max="135" step="1" value="100" />
+          </label>
+        </div>
+
+        <button type="button" class="mc-reset-btn" id="modalCenterStageBtn" title="Ricentra il vetrino sul tavolino X/Y">
+          🎯 Centra
+        </button>
+      </div>
+
+      <!-- Fumetto Guida per Procedura Interattiva o Semina Automatica in Corso -->
+      <div class="interactive-speech-bubble sapphire-bubble hidden" id="modalPromptBubble">
+        <div class="speech-content">
+          <span class="speech-text" id="modalPromptText">
+            ➰ Semina automatica sotto cappa BSL-2 in corso...
+          </span>
+          <button type="button" class="skip-step-btn" id="modalCompleteFastBtn">
+            Completa subito ⚡
+          </button>
+        </div>
+        <span class="speech-pointer" aria-hidden="true"></span>
+      </div>
+
+      <!-- Palcoscenico ad Alta Definizione della Schermata Ravvicinata -->
+      <div class="canvas-stage inspection-canvas-stage" id="inspectionCanvasStage">
+        <canvas id="inspectionCanvas"></canvas>
+
+        <!-- Badge Fonte Scientifica Reale (visibile solo al Microscopio in Modalità Realistica, senza spoiler specie!) -->
+        <div class="micrograph-credit-pill hidden" id="micrographCreditPill">
+          📷 Micrografia Ottica Reale da Letteratura Scientifica (1000×)
+        </div>
+
+        <div class="canvas-hint-pill sapphire-bubble" id="modalCanvasHintPill">
+          🔍 Muovi il cursore sulla piastra per la Lente 5×
+        </div>
+      </div>
+
+      <!-- Referto / Osservazione nella Schermata Ravvicinata -->
+      <div class="observation-banner sapphire-bubble" id="modalObsBanner">
+        <div class="obs-header">
+          <span class="obs-title" id="modalObsTitle">🧫 Piastra Petri Primaria</span>
+          <span class="obs-badge tone-info" id="modalObsBadge">OSSERVAZIONE</span>
+        </div>
+        <p class="obs-detail" id="modalObsDetail"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       QUADERNO 1: BLOCCHETTO NOTE DI LABORATORIO (APPUNTI + RISULTATI + CHECKLIST)
+       ======================================================================== -->
+  <div class="drawer-backdrop hidden" id="notepadModal" role="dialog" aria-modal="true" aria-labelledby="notepadTitle">
+    <div class="spiral-notepad-sheet">
+      <!-- Anelli metallici a spirale in alto -->
+      <div class="spiral-rings-row" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+
+      <div class="notepad-header">
+        <div>
+          <span class="notepad-kicker">QUADERNO DI BANCO #1</span>
+          <h2 id="notepadTitle">📒 Blocchetto Note del Microbiologo</h2>
+        </div>
+        <button type="button" class="close-circle-btn" id="closeNotepadBtn" aria-label="Chiudi Blocchetto Note">✕</button>
+      </div>
+
+      <div class="notepad-tabs">
+        <button type="button" class="np-tab active" data-nptab="all_results">
+          🧪 Test &amp; Risultati (<span id="reportCountEl">0</span>)
+        </button>
+        <button type="button" class="np-tab" data-nptab="notes">
+          ✍️ I Miei Appunti
+        </button>
+        <button type="button" class="np-tab" data-nptab="checklist">
+          ✅ Escludi Specie (100)
+        </button>
+      </div>
+
+      <!-- Sezione 1: Tutti i Test Effettuati e Risultati -->
+      <div class="notepad-page" id="npResultsPage">
+        <div class="empty-notepad-msg" id="emptyReportState">
+          Non hai ancora registrato test per questo ceppo. Ogni colorazione, test della perossidasi o terreno inoculato verrà annotato automaticamente qui con tutti i dettagli!
+        </div>
+        <div class="notepad-results-list" id="reportItemsList"></div>
+      </div>
+
+      <!-- Sezione 2: Foglio a Righe per Appunti Liberi + Tag Rapidi -->
+      <div class="notepad-page hidden" id="npNotesPage">
+        <div class="quick-note-tags">
+          <span class="qtag-label">Aggiungi nota rapida:</span>
+          <button type="button" class="qtag-btn" data-note="• Gram + (viola) ">+ Gram+</button>
+          <button type="button" class="qtag-btn" data-note="• Gram − (rosa) ">+ Gram−</button>
+          <button type="button" class="qtag-btn" data-note="• Cocchi ">+ Cocchi</button>
+          <button type="button" class="qtag-btn" data-note="• Bacilli ">+ Bacilli</button>
+          <button type="button" class="qtag-btn" data-note="• Perossidasi/Catalasi (+) ">+ H₂O₂ (+)</button>
+          <button type="button" class="qtag-btn" data-note="• Perossidasi/Catalasi (−) ">+ H₂O₂ (−)</button>
+          <button type="button" class="qtag-btn" data-note="• Ossidasi (+) ">+ Ossidasi+</button>
+          <button type="button" class="qtag-btn" data-note="• Lattosio (+) ">+ Lattosio+</button>
+          <button type="button" class="qtag-btn" data-note="• H₂S centro nero (+) ">+ H₂S+</button>
+        </div>
+
+        <textarea
+          id="userLabNotesArea"
+          class="lined-paper-textarea"
+          placeholder="Scrivi qui le tue osservazioni sul ceppo misterioso, i test che vuoi fare o i sospetti rimasti..."
+        ></textarea>
+
+        <div class="notepad-notes-footer">
+          <span class="saved-hint">✓ Appunti salvati automaticamente per questo isolato</span>
+          <button type="button" class="clear-notes-link" id="clearNotesBtn">Pulisci pagina</button>
+        </div>
+      </div>
+
+      <!-- Sezione 3: Checklist Interattiva delle 100 Specie -->
+      <div class="notepad-page hidden" id="npChecklistPage">
+        <p class="checklist-intro">
+          Clicca <strong>✗</strong> per tirare una riga a penna sui batteri incompatibili coi test, oppure clicca il nome per inviarlo alla barra di risposta!
+        </p>
+        <div class="suspects-grid" id="suspectsGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       QUADERNO 2: L'ATLANTE DEI BATTERI (100 SPECIE, ALBERO GENEALOGICO & PROTOCOLLI)
+       ======================================================================== -->
+  <div class="modal-backdrop hidden" id="atlasModal" role="dialog" aria-modal="true" aria-labelledby="atlasModalTitle">
+    <div class="atlas-book-binder">
+      <!-- Dorso rilegato e segnalibri laterali -->
+      <div class="atlas-top-ribbon">
+        <div class="atlas-title-wrap">
+          <span class="atlas-kicker">QUADERNO SCIENTIFICO #2 · ENCICLOPEDIA &amp; FILOGENESI</span>
+          <h2 id="atlasModalTitle">📘 L’Atlante dei Batteri — 100 Specie &amp; Albero Genealogico</h2>
+        </div>
+        <button type="button" class="close-circle-btn" id="closeAtlasBtn" aria-label="Chiudi Atlante">✕</button>
+      </div>
+
+      <div class="atlas-controls-row">
+        <div class="atlas-bookmarks" role="tablist">
+          <button type="button" class="bookmark-tab active" data-atlasfilter="all">🦠 Tutte le 100 Specie</button>
+          <button type="button" class="bookmark-tab tree-tab-btn" data-atlasfilter="tree">🌳 Albero Genealogico</button>
+          <button type="button" class="bookmark-tab" data-atlasfilter="gpos_cocci">🟣 Cocchi Gram+</button>
+          <button type="button" class="bookmark-tab" data-atlasfilter="gpos_rods">🟢 Bacilli Gram+ &amp; BAAR</button>
+          <button type="button" class="bookmark-tab" data-atlasfilter="enterics">🌸 Enterobatteri (Ox −)</button>
+          <button type="button" class="bookmark-tab" data-atlasfilter="ox_pos">💧 Gram− Ossidasi +</button>
+          <button type="button" class="bookmark-tab" data-atlasfilter="anaerobes">🧪 Anaerobi &amp; Speciali</button>
+          <button type="button" class="bookmark-tab" data-atlasfilter="flowchart">🧭 Schemi &amp; Chiavi</button>
+        </div>
+
+        <div class="atlas-search-wrap" id="atlasSearchWrap">
+          <input
+            type="search"
+            id="atlasSearchInput"
+            class="atlas-search-input"
+            placeholder="Cerca tra 100 specie (es. aureo, Bacillota, ureasi, meningite, TCBS...)"
+          />
+          <span class="atlas-counter-pill" id="atlasSearchCountPill">100 / 100</span>
+        </div>
+      </div>
+
+      <!-- Barra dei Filtri Rapidi per Proprietà Bio-Microscopiche -->
+      <div class="atlas-chips-bar" id="atlasChipsBar">
+        <span class="chips-label">Filtra per marcatore:</span>
+        <button type="button" class="atlas-chip active" data-chip="all">Tutti (100)</button>
+        <button type="button" class="atlas-chip" data-chip="gram_pos">🟣 Gram +</button>
+        <button type="button" class="atlas-chip" data-chip="gram_neg">🌸 Gram −</button>
+        <button type="button" class="atlas-chip" data-chip="acid_fast">🔴 Ziehl / BAAR</button>
+        <button type="button" class="atlas-chip" data-chip="cocci">⚪ Cocchi</button>
+        <button type="button" class="atlas-chip" data-chip="bacilli">💊 Bacilli</button>
+        <button type="button" class="atlas-chip" data-chip="spores">🟢 Endospore (+)</button>
+        <button type="button" class="atlas-chip" data-chip="capsule">🛡️ Capsulati (+)</button>
+        <button type="button" class="atlas-chip" data-chip="catalase">🫧 Catalasi (+)</button>
+        <button type="button" class="atlas-chip" data-chip="oxidase">🟣 Ossidasi (+)</button>
+        <button type="button" class="atlas-chip" data-chip="urease">🩷 Ureasi (+)</button>
+        <button type="button" class="atlas-chip" data-chip="motile">⚡ Mobili (+)</button>
+        <button type="button" class="atlas-chip" data-chip="anaerobe">🕯️ Anaerobi Stretti</button>
+      </div>
+
+      <!-- 1. Pagina Schede Illustrate delle 100 Specie -->
+      <div class="atlas-book-pages" id="atlasSpeciesTab">
+        <div class="atlas-species-list" id="atlasSpeciesContainer"></div>
+      </div>
+
+      <!-- 2. Pagina ALBERO GENEALOGICO DEI BATTERI (Filogenesi & Tassonomia Completa) -->
+      <div class="atlas-book-pages hidden" id="atlasTreeTab">
+        <div class="tree-header-bar">
+          <div class="tree-meta-info">
+            <span class="tree-root-kicker">CLASSIFICAZIONE FILOGENETICA DEI PROCARIOTI</span>
+            <h3>🌳 Albero Tassonomico (Dominio ➔ Phylum ➔ Classe ➔ Ordine ➔ Famiglia ➔ Genere ➔ Specie)</h3>
+            <p>Esplora l'inquadramento evolutivo delle 100 specie batteriche. Clicca su ciascun nodo per espandere/comprimere i rami.</p>
+          </div>
+          <div class="tree-actions-wrap">
+            <input type="search" id="atlasTreeSearch" class="tree-search-input" placeholder="Filtra rami dell'albero (es. Firmicutes, Enterobacterales, Neisseria...)" />
+            <div class="tree-btn-group">
+              <button type="button" class="tree-ctrl-btn" id="atlasTreeExpandBtn">⊞ Espandi Tutto</button>
+              <button type="button" class="tree-ctrl-btn" id="atlasTreeCollapseBtn">⊟ Riduci Tutto</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tree-main-layout">
+          <div class="tree-hierarchy-container" id="atlasTreeRoot">
+            <!-- Gerarchia ad albero interattiva generata via JavaScript -->
+          </div>
+          <div class="tree-inspector-sidecard glass-bubble-panel" id="atlasTreeInspector">
+            <div class="tree-empty-inspector" id="treeEmptyInspector">
+              <span class="empty-icon">🔬</span>
+              <h4>Seleziona un nodo o una specie</h4>
+              <p>Clicca su una specie nell'albero per osservarne l'anteprima microscopica, la filogenesi, i test diagnostici e la letteratura scientifica.</p>
+            </div>
+            <div class="tree-spec-details hidden" id="treeSpecDetails"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagina Schemi Diagnostici -->
+      <div class="atlas-book-pages hidden" id="atlasFlowchartTab">
+        <div class="flowchart-grid">
+          <div class="flow-card">
+            <h3>1. Cocchi Gram-Positivi (Viola)</h3>
+            <ul>
+              <li><strong>Perossidasi / Catalasi (+):</strong> Genere <em>Staphylococcus</em> (a grappolo).
+                <ul>
+                  <li><strong>Coagulasi (+) &amp; MSA Giallo:</strong> <em>Staphylococcus aureus</em> (β-emolitico).</li>
+                  <li><strong>Coagulasi (−) &amp; MSA Rosa:</strong> <em>Staphylococcus epidermidis</em> (γ-emolitico, Novobiocina-S).</li>
+                </ul>
+              </li>
+              <li><strong>Perossidasi / Catalasi (−):</strong> <em>Streptococcus</em> ed <em>Enterococcus</em> (catene/coppie).
+                <ul>
+                  <li><strong>β-emolisi ampia + Bacitracina (S):</strong> <em>Streptococcus pyogenes</em>.</li>
+                  <li><strong>α-emolisi verde + Optochina (S) + Capsula (+):</strong> <em>Streptococcus pneumoniae</em>.</li>
+                  <li><strong>γ-emolisi + Agar Bile-Esculina NERO (+):</strong> <em>Enterococcus faecalis</em>.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div class="flow-card">
+            <h3>2. Bacilli Gram-Positivi &amp; Acido-Resistenti</h3>
+            <ul>
+              <li><strong>Endospore (+) &amp; Catalasi (+):</strong> <em>Bacillus cereus</em> (grandi bacilli mobili, β-emolisi, colonie a vetro smerigliato).</li>
+              <li><strong>Endospore (+) &amp; Catalasi (−) Anaerobio Obbligato:</strong> <em>Clostridium difficile</em> (crescita sul fondo del Tioglicolato).</li>
+              <li><strong>Endospore (−), Catalasi (+), Mobilità "a capriola" &amp; Bile-Esculina (+):</strong> <em>Listeria monocytogenes</em>.</li>
+              <li><strong>Ziehl-Neelsen Rosso Fucsina (+) &amp; Löwenstein-Jensen (+):</strong> <em>Mycobacterium tuberculosis</em> (colonie rugose a cavolfiore).</li>
+            </ul>
+          </div>
+
+          <div class="flow-card">
+            <h3>3. Enterobatteri Gram-Negativi (Ossidasi −)</h3>
+            <ul>
+              <li><strong>MacConkey Lattosio (+) [Colonie Rosa]:</strong>
+                <ul>
+                  <li><strong>EMB Verde Metallico + Indolo (+), Mobile:</strong> <em>Escherichia coli</em>.</li>
+                  <li><strong>Colonie Grandi Mucoidi, Capsula (+), Immobile, Ureasi (+):</strong> <em>Klebsiella pneumoniae</em>.</li>
+                </ul>
+              </li>
+              <li><strong>MacConkey Lattosio (−/Lento):</strong>
+                <ul>
+                  <li><strong>XLD Centro Nero (H₂S +), Mobile, Ureasi (−):</strong> <em>Salmonella enterica</em>.</li>
+                  <li><strong>XLD Colonie Rosse SENZA Nero (H₂S −), Immobile:</strong> <em>Shigella flexneri</em>.</li>
+                  <li><strong>Swarming concentrico + Ureasi Fucsia (+++) + H₂S (+):</strong> <em>Proteus mirabilis</em>.</li>
+                  <li><strong>Pigmento Rosso Corallo (Prodigiosina), H₂S (−), Ureasi (−):</strong> <em>Serratia marcescens</em>.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div class="flow-card">
+            <h3>4. Gram-Negativi Ossidasi Positivi (+)</h3>
+            <ul>
+              <li><strong>Diplococchi a chicco di caffè, Capsula (+):</strong> <em>Neisseria meningitidis</em> (cresce su Agar Sangue e Cioccolato).</li>
+              <li><strong>Coccobacilli pleomorfi esigenti (Fattori X+V):</strong> <em>Haemophilus influenzae</em> (cresce su Agar Cioccolato, NON su Agar Sangue).</li>
+              <li><strong>Bacilli dritti, Aerobio stretto, Agar Cetrimide Blu-Verde (+):</strong> <em>Pseudomonas aeruginosa</em>.</li>
+              <li><strong>Vibrioni curvi "a virgola", Indolo (+), Agar TCBS Giallo (+):</strong> <em>Vibrio cholerae</em>.</li>
+              <li><strong>Spirali/Ali di gabbiano, Microaerofilo, Ureasi Lampo (+++):</strong> <em>Helicobacter pylori</em>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODALE DOSSIER SCIENTIFICO COMPLETO & LETTERATURA DELLA SPECIE
+       ======================================================================== -->
+  <div class="modal-backdrop hidden" id="speciesDetailModal" role="dialog" aria-modal="true" aria-labelledby="detailSpeciesTitle">
+    <div class="modal-card species-detail-card glass-bubble-panel">
+      <div class="detail-top-bar">
+        <div class="detail-title-block">
+          <span class="detail-kicker" id="detailTaxonomyLineage">Dominio: Bacteria ➔ Phylum ➔ Classe ➔ Ordine ➔ Famiglia</span>
+          <h2 class="detail-name" id="detailSpeciesTitle"><em>Staphylococcus aureus</em></h2>
+          <span class="detail-aliases" id="detailSpeciesAliases"></span>
+        </div>
+        <div class="detail-top-right">
+          <span class="detail-bsl-badge" id="detailBslBadge">BSL-2</span>
+          <button type="button" class="close-circle-btn" id="closeSpeciesDetailBtn" aria-label="Chiudi Scheda">✕</button>
+        </div>
+      </div>
+
+      <div class="detail-content-layout">
+        <!-- Colonna Sinistra: Microscopia Ottica Reale e Piastra Primaria -->
+        <div class="detail-visuals-col">
+          <div class="detail-micro-card crystal-bubble">
+            <div class="detail-card-head">
+              <span class="dhead-icon">🔬</span>
+              <h4>Micrografia Ottica Reale (1000× Olio)</h4>
+            </div>
+            <div class="detail-canvas-box">
+              <canvas id="detailMicrographCanvas" width="340" height="240"></canvas>
+            </div>
+            <div class="detail-micro-caption" id="detailMicroCaption">
+              <!-- Fonte e didascalia scientifica del preparato -->
+            </div>
+          </div>
+
+          <div class="detail-plate-card crystal-bubble">
+            <div class="detail-card-head">
+              <span class="dhead-icon">🧫</span>
+              <h4>Morfologia della Colonia Primaria</h4>
+            </div>
+            <p id="detailPlateDesc" class="detail-plate-desc"></p>
+          </div>
+        </div>
+
+        <!-- Colonna Destra: Profilo Diagnostico, Terreni e Letteratura Scientifica -->
+        <div class="detail-info-col">
+          <!-- Profilo biochimico e microscopico -->
+          <div class="detail-section-block">
+            <h4 class="section-title">🧪 Metodo di Riconoscimento (Gold Standard)</h4>
+            <div class="detail-gold-box" id="detailGoldStandardBox"></div>
+            <div class="detail-markers-grid" id="detailMarkersGrid"></div>
+          </div>
+
+          <!-- Terreni differenziali e selettivi -->
+          <div class="detail-section-block">
+            <h4 class="section-title">🧫 Terreni Selettivi e Differenziali (10 Terreni)</h4>
+            <div class="detail-media-chips" id="detailMediaChips"></div>
+          </div>
+
+          <!-- Clinica, Patogenesi ed Epidemiologia -->
+          <div class="detail-section-block">
+            <h4 class="section-title">🩺 Inquadramento Clinico &amp; Patogenicità</h4>
+            <p id="detailClinicalOverview" class="detail-clinical-text"></p>
+            <div class="detail-diseases-tags" id="detailDiseasesTags"></div>
+          </div>
+
+          <!-- LETTERATURA SCIENTIFICA DI RIFERIMENTO -->
+          <div class="detail-section-block literature-section">
+            <h4 class="section-title">📚 Letteratura Scientifica di Riferimento &amp; Linee Guida</h4>
+            <div class="literature-cards-list" id="detailLiteratureList">
+              <!-- Inserite dinamicamente da app.js -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-footer-actions">
+        <button type="button" class="crystal-bubble-btn" id="detailCloseBottomBtn">Chiudi Scheda</button>
+        <button type="button" class="btn-bubble primary-sapphire-bubble" id="detailSelectForLabBtn">
+          <span>🎯 Seleziona questa Specie per la Diagnosi</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE DI FINE ROUND A BOLLA LUCIDA -->
+  <div class="modal-backdrop hidden" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="modalResultTitle">
+    <div class="modal-card result-modal-card glass-bubble-panel">
+      <div class="result-banner sapphire-bubble" id="modalResultBanner">
+        <span class="result-icon" id="modalResultIcon">🏆</span>
+        <div>
+          <span class="result-kicker" id="modalResultKicker">DIAGNOSI CONFERMATA</span>
+          <h2 class="result-species-title" id="modalResultTitle"><em>Staphylococcus aureus</em></h2>
+          <p class="result-taxonomy" id="modalResultTaxonomy"></p>
+        </div>
+      </div>
+
+      <div class="result-metrics-grid">
+        <div class="metric-box crystal-bubble">
+          <span class="metric-label">Punti Ottenuti</span>
+          <span class="metric-val accent-cobalt" id="modalScoreEarned">+850 pt</span>
+        </div>
+        <div class="metric-box crystal-bubble">
+          <span class="metric-label">Test Eseguiti</span>
+          <span class="metric-val dark-ink" id="modalTestsCount">2 test</span>
+        </div>
+        <div class="metric-box crystal-bubble">
+          <span class="metric-label">Errori Commessi</span>
+          <span class="metric-val dark-ink" id="modalErrorsCount">0 / 5</span>
+        </div>
+      </div>
+
+      <div class="scientific-dossier">
+        <div class="dossier-block">
+          <h3>🔬 Metodo di Riconoscimento Ottimale (Gold Standard)</h3>
+          <p id="modalGoldStandard"></p>
+        </div>
+        <div class="dossier-block">
+          <h3>🏥 Profilo Clinico &amp; Microbiologico</h3>
+          <p id="modalClinicalOverview"></p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="pill-action-btn crystal-bubble" id="shareResultBtn" title="Condividi il tuo risultato e sfida un collega">
+          <span>🔗 Condividi Diagnosi</span>
+        </button>
+        <button type="button" class="pill-action-btn crystal-bubble" id="inspectPlateAfterBtn">
+          👁️ Esamina ancora il banco
+        </button>
+        <button type="button" class="btn-primary-bubble sapphire-bubble" id="nextSampleModalBtn">
+          <span>Prossimo Batterio Misterioso</span>
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICA TOAST A BOLLA DI LABORATORIO -->
+  <div class="lab-toast hidden" id="labToast" role="status" aria-live="polite">
+    <span class="toast-icon">🔗</span>
+    <span class="toast-msg" id="labToastMsg">Link di laboratorio copiato negli appunti!</span>
+  </div>
+
+  <script src="js/vendor/three.min.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/bacteria-data.js"></script>
+  <script src="js/bench3d.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
