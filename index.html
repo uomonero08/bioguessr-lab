@@ -6,6 +6,13 @@
   <title>BioGuessr Lab — Indovina la Specie di Batterio</title>
   <meta name="description" content="Simulatore diagnostico di microbiologia: identifica 100 specie batteriche misteriose con microscopia ottica a 1000×, colorazioni di Gram, prove biochimiche e l'Albero Genealogico dei batteri." />
   <meta name="theme-color" content="#0284c7" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+  <!-- Content Security Policy (Protezione contro XSS, Clickjacking e Script injection) -->
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"
+  />
 
   <!-- Open Graph / Meta per Condivisione su WhatsApp, Telegram, Social e Chat -->
   <meta property="og:type" content="website" />

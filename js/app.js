@@ -337,17 +337,22 @@
 
   function loadPersistedStats() {
     try {
-      const saved = JSON.parse(localStorage.getItem('bioguessr_stats_v2') || 'null');
-      if (saved) {
-        state.totalScore = Number(saved.totalScore) || 0;
+      const raw = localStorage.getItem('bioguessr_stats_v2');
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (saved && typeof saved === 'object' && saved !== null) {
+        state.totalScore = Math.max(0, Math.min(10000000, Number(saved.totalScore) || 0));
         if (Array.isArray(saved.solvedIds)) {
-          state.solvedIds = new Set(saved.solvedIds);
+          const validIds = new Set(BACTERIA_DB.map((b) => b.id));
+          state.solvedIds = new Set(
+            saved.solvedIds.filter((id) => typeof id === 'string' && validIds.has(id))
+          );
         }
         if (typeof saved.realisticMode === 'boolean') {
           state.realisticMode = saved.realisticMode;
         }
-        if (typeof saved.masterVolume === 'number') {
-          state.masterVolume = saved.masterVolume;
+        if (typeof saved.masterVolume === 'number' && !isNaN(saved.masterVolume)) {
+          state.masterVolume = Math.max(0, Math.min(1, saved.masterVolume));
         }
       }
     } catch (_) {}
@@ -1262,7 +1267,7 @@
 
       const nameWrap = document.createElement('div');
       nameWrap.className = 'test-name-wrap';
-      nameWrap.innerHTML = `<span>${t.icon}</span><span>${t.name}</span>`;
+      nameWrap.innerHTML = `<span>${t.icon}</span><span>${escapeHtml(t.name)}</span>`;
 
       const rightPill = document.createElement('span');
       if (doneRes) {
@@ -1892,7 +1897,7 @@
         ${escapeHtml(sp.clinical.overview)}
       </p>
       <button type="button" class="tree-inspect-full-btn" id="treeInspectDossierBtn">
-        📖 Scheda Completa &amp; Letteratura (${sp.literature ? sp.literature.length : 0} Articoli)
+        📖 Scheda Completa &amp; Letteratura (${((sp.clinical && sp.clinical.literature) || sp.literature || []).length} Articoli)
       </button>
       <button type="button" class="tree-ctrl-btn" style="width:100%; margin-top:8px; background:#f0fdf4; border-color:#86efac; color:#166534;" id="treeSelectForGuessBtn">
         🎯 Seleziona per la Diagnosi
